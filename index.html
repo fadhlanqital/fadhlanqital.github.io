@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#090b10">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Fadhlan Qital — 2D Artist & Game Developer">
+  <meta property="og:description" content="Personal artwork, 2D game art, and game development projects by Fadhlan Qital.">
+  <meta property="og:image" content="https://fadhlanqital.github.io/assets/hero-portrait.webp">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="description" content="Fadhlan Qital — 2D Artist and Game Developer portfolio.">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <title>Fadhlan Qital — 2D Artist & Game Developer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,600;1,500;1,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="grain" aria-hidden="true"></div>
+  <header class="site-header" id="siteHeader">
+    <a class="brand" href="#home" aria-label="Fadhlan Qital home"><span class="brand-monogram">FQ<span>.</span></span><span class="brand-name">FADHLAN QITAL</span></a>
+    <button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation" aria-expanded="false"><i></i><i></i></button>
+    <nav class="main-nav" id="mainNav">
+      <a href="#home" data-nav="home">Home</a>
+      <a href="#personal-artwork" data-nav="personal-artwork">Personal Artwork</a>
+      <a href="#game-art" data-nav="game-art">2D Game Art</a>
+      <a href="#game-development" data-nav="game-development">Game Development</a>
+      <a href="#about" data-nav="about">About</a>
+      <a href="#contact" class="nav-contact">Let’s talk <span>↗</span></a>
+    </nav>
+  </header>
+
+  <main id="app" aria-live="polite"></main>
+
+  <footer class="site-footer">
+    <a class="brand" href="#home"><span class="brand-monogram">FQ<span>.</span></span><span class="brand-name">FADHLAN QITAL</span></a>
+    <span class="footer-role">2D ARTIST · GAME DEVELOPER</span>
+    <a href="#home" class="footer-top">BACK TO TOP ↑</a>
+    <span class="footer-copy">© 2026 FADHLAN QITAL</span>
+  </footer>
+
+  <div class="viewer" id="viewer" aria-hidden="true">
+    <button class="viewer-close" id="viewerClose" aria-label="Close artwork">×</button>
+    <button class="viewer-arrow viewer-prev" id="viewerPrev" aria-label="Previous artwork">←</button>
+    <figure><img id="viewerImage" src="" alt=""><figcaption id="viewerCaption"></figcaption></figure>
+    <button class="viewer-arrow viewer-next" id="viewerNext" aria-label="Next artwork">→</button>
+    <span class="viewer-help">← → NAVIGATE &nbsp; · &nbsp; ESC CLOSE</span>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

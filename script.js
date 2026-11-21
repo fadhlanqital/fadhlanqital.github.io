@@ -12,7 +12,7 @@ let previewAssetOverrides = {};
 const DEFAULT_APPEARANCE = {
   headingTextColor: '#f1f0f4', bodyTextColor: '#a7adbb', uiTextColor: '#e6e3ee', labelTextColor: '#b4acd8',
   captionTextColor: '#f5f3fb', captionBackgroundColor: '#080a10',
-  headingTextScale: 100, bodyTextSize: 13, uiTextSize: 12, labelTextSize: 10, captionTextSize: 11
+  headingTextScale: 100, featuredImageScale: 100, bodyTextSize: 13, uiTextSize: 12, labelTextSize: 10, captionTextSize: 11
 };
 const DEFAULT_SITE_LABELS = {
   brandHome: 'home', contentLoadError: 'Portfolio content could not be loaded. Please reload the page in a moment.',
@@ -45,6 +45,7 @@ function applyAppearance(site) {
   root.setProperty('--portfolio-caption-color', color(appearance.captionTextColor, DEFAULT_APPEARANCE.captionTextColor));
   root.setProperty('--portfolio-caption-background', color(appearance.captionBackgroundColor, DEFAULT_APPEARANCE.captionBackgroundColor));
   root.setProperty('--portfolio-heading-scale', String(Math.max(.85, Math.min(1.2, Number(appearance.headingTextScale) / 100 || 1))));
+  root.setProperty('--portfolio-featured-image-scale', String(Math.max(.4, Math.min(1, Number(appearance.featuredImageScale) / 100 || 1))));
   root.setProperty('--portfolio-body-size', size(appearance.bodyTextSize, 13, 12, 18));
   root.setProperty('--portfolio-ui-size', size(appearance.uiTextSize, 12, 10, 18));
   root.setProperty('--portfolio-label-size', size(appearance.labelTextSize, 10, 9, 15));

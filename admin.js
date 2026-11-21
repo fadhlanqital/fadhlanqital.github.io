@@ -20,7 +20,7 @@ let previewTimer = 0;
 const APPEARANCE_DEFAULTS = {
   headingTextColor: '#f1f0f4', bodyTextColor: '#a7adbb', uiTextColor: '#e6e3ee', labelTextColor: '#b4acd8',
   captionTextColor: '#f5f3fb', captionBackgroundColor: '#080a10',
-  headingTextScale: 100, bodyTextSize: 13, uiTextSize: 12, labelTextSize: 10, captionTextSize: 11
+  headingTextScale: 100, featuredImageScale: 100, bodyTextSize: 13, uiTextSize: 12, labelTextSize: 10, captionTextSize: 11
 };
 const DEFAULT_SITE_LABELS = {
   brandHome: 'home', contentLoadError: 'Portfolio content could not be loaded. Please reload the page in a moment.',
@@ -114,6 +114,7 @@ function applyAppearance(site, target = document.documentElement) {
   target.style.setProperty('--portfolio-caption-color', safeHexColor(appearance.captionTextColor, APPEARANCE_DEFAULTS.captionTextColor));
   target.style.setProperty('--portfolio-caption-background', safeHexColor(appearance.captionBackgroundColor, APPEARANCE_DEFAULTS.captionBackgroundColor));
   target.style.setProperty('--portfolio-heading-scale', String(number('headingTextScale', 100, 85, 120) / 100));
+  target.style.setProperty('--portfolio-featured-image-scale', String(number('featuredImageScale', 100, 40, 100) / 100));
   target.style.setProperty('--portfolio-body-size', `${number('bodyTextSize', 13, 12, 18)}px`);
   target.style.setProperty('--portfolio-ui-size', `${number('uiTextSize', 12, 10, 18)}px`);
   target.style.setProperty('--portfolio-label-size', `${number('labelTextSize', 10, 9, 15)}px`);
@@ -134,11 +135,12 @@ function renderAppearanceEditor() {
     ${field('site.appearance.captionTextColor', 'Warna teks caption gambar', 'color')}
     ${field('site.appearance.captionBackgroundColor', 'Warna latar caption gambar', 'color')}
     ${appearanceRange('site.appearance.headingTextScale', 'Ukuran judul', 85, 120, 'Skala semua judul utama. 100% adalah ukuran awal.', '%')}
+    ${appearanceRange('site.appearance.featuredImageScale', 'Ukuran gambar Featured Disciplines', 40, 100, 'Atur skala karya di dalam panel landscape. Background panel tetap.', '%')}
     ${appearanceRange('site.appearance.bodyTextSize', 'Ukuran teks isi', 12, 18, 'Berlaku untuk paragraf dan deskripsi.')}
     ${appearanceRange('site.appearance.uiTextSize', 'Ukuran navbar, tautan, filter, dan tombol', 10, 18, 'Berlaku pada menu utama, tab kategori, filter karya, tautan, dan tombol.')}
     ${appearanceRange('site.appearance.labelTextSize', 'Ukuran label dan metadata', 9, 15, 'Berlaku untuk label kecil, metadata, dan catatan kategori.')}
     ${appearanceRange('site.appearance.captionTextSize', 'Ukuran caption gambar', 10, 16, 'Berlaku untuk judul kecil pada gambar portofolio.')}
-  </div><div class="appearance-preview" id="appearancePreview"><div class="appearance-preview-art"><span class="appearance-preview-kicker">CONTOH JUDUL BAGIAN</span><p class="appearance-preview-body">Contoh teks isi portofolio untuk melihat ukuran dan warnanya.</p><a class="appearance-preview-link" href="#">CONTOH TAUTAN / TOMBOL ↗</a><span class="appearance-preview-label">LABEL KATEGORI · METADATA</span><span class="appearance-preview-caption">PERSONAL ARTWORK / CONTOH CAPTION</span></div></div></section>`;
+  </div><div class="appearance-preview" id="appearancePreview"><div class="appearance-preview-layout"><div class="appearance-preview-art"><span class="appearance-preview-kicker">CONTOH JUDUL BAGIAN</span><p class="appearance-preview-body">Contoh teks isi portofolio untuk melihat ukuran dan warnanya.</p><a class="appearance-preview-link" href="#">CONTOH TAUTAN / TOMBOL ↗</a><span class="appearance-preview-label">LABEL KATEGORI · METADATA</span><span class="appearance-preview-caption">PERSONAL ARTWORK / CONTOH CAPTION</span></div><div class="appearance-preview-image-example"><div class="appearance-preview-image-stage"><img class="appearance-preview-image" src="assets/personal-02.webp" alt="Contoh karya portrait di dalam panel landscape"></div><span class="appearance-preview-image-label">PREVIEW KARYA DALAM PANEL LANDSCAPE</span></div></div></div></section>`;
 }
 
 function field(path, label, type = 'text', hint = '') {

@@ -102,6 +102,9 @@
       "closeArtwork": "Close artwork",
       "previousArtwork": "Previous artwork",
       "nextArtwork": "Next artwork",
+      "artworkView": "Artwork view",
+      "slideView": "Slide view",
+      "gridView": "Grid view",
       "showImage": "Show image",
       "collectionCoverAlt": "collection cover",
       "projectArtworkAlt": "project artwork",
@@ -152,8 +155,8 @@
       "captionBackgroundColor": "#080a10",
       "headingTextScale": 110,
       "bodyTextSize": 15,
-      "uiTextSize": 11,
-      "labelTextSize": 15,
+      "uiTextSize": 12,
+      "labelTextSize": 13,
       "captionTextSize": 11
     }
   },

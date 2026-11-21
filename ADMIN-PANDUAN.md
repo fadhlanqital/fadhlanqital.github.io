@@ -20,7 +20,7 @@ Token hanya berada di memori tab admin selama halaman terbuka. Setelah tab ditut
 - Klik **Pratinjau website** untuk melihat seluruh tampilan draft di dalam dashboard. Anda dapat memeriksa mode desktop atau ponsel dan menjelajahi halaman website. Perubahan teks, warna, ukuran, kategori, proyek, serta gambar yang baru diunggah akan dipakai di pratinjau tanpa menerbitkannya.
 - **Kategori**: tambah, ubah nama, alamat halaman, teks carousel, judul halaman, deskripsi, serta tata letak galeri atau daftar proyek.
 - **Proyek & galeri**: tambah, edit, hapus, pilih kategori, atur urutan, tampilkan sebagai draft/publik, unggah gambar, ubah caption, dan susun seksi cerita.
-- Pada halaman kategori personal artwork dan 2D game art, klik gambar untuk membukanya dalam tampilan layar penuh. Di kategori game development, klik gambar cover untuk melihat ukuran penuh; tautan di kartu proyek membuka halaman detail.
+- Halaman kategori personal artwork dan 2D game art menyediakan pilihan **Slide view** dan **Grid view**. Klik karya pada kedua tampilan untuk membukanya dalam viewer layar penuh. Di kategori game development, klik gambar cover untuk melihat ukuran penuh; tautan di kartu proyek membuka halaman detail.
 - Gambar yang diunggah diubah menjadi WebP dengan dimensi terpanjang maksimal 2400 piksel. Perubahan dan penghapusan gambar yang tidak lagi dipakai diterbitkan dalam commit yang sama dengan JSON.
 
 Tekan **Terbitkan perubahan** untuk menyimpan satu commit ke branch `main`. Workflow GitHub Pages yang sudah ada akan menerbitkan ulang website. Perubahan biasanya muncul setelah deployment selesai.

@@ -1,6 +1,7 @@
 let portfolio = null;
 let categories = [];
 let currentCategoryFilter = 'all';
+let currentArtworkView = 'slide';
 let viewerCollection = [];
 let viewerIndex = 0;
 let suppressRailClick = false;
@@ -17,6 +18,7 @@ const DEFAULT_SITE_LABELS = {
   brandHome: 'home', contentLoadError: 'Portfolio content could not be loaded. Please reload the page in a moment.',
   openNavigation: 'Open navigation', closeNavigation: 'Close navigation',
   closeArtwork: 'Close artwork', previousArtwork: 'Previous artwork', nextArtwork: 'Next artwork',
+  artworkView: 'Artwork view', slideView: 'Slide view', gridView: 'Grid view',
   showImage: 'Show image', collectionCoverAlt: 'collection cover',
   projectArtworkAlt: 'project artwork', featuredArtworkAlt: 'featured artwork', featuredVisual: 'FEATURED VISUAL'
 };
@@ -200,8 +202,9 @@ function renderArtworkCategory(category, categoryProjects) {
   const total = projectsForPage.reduce((count, project) => count + (project.gallery || []).length, 0);
   const filterMarkup = projectsForPage.length > 1
     ? `<div class="filter-list"><button type="button" class="filter-btn ${currentCategoryFilter === 'all' ? 'active' : ''}" data-filter="all">${esc(category.filterLabel || 'ALL')} <span>${String(total).padStart(2, '0')}</span></button>${projectsForPage.map(project => `<button type="button" class="filter-btn ${currentCategoryFilter === project.id ? 'active' : ''}" data-filter="${esc(project.id)}">${esc(project.shortTitle)} <span>${String(project.gallery.length).padStart(2, '0')}</span></button>`).join('')}</div>`
-    : `<div class="filter-list"><span class="filter-btn active static-filter">${esc(category.filterLabel || category.name)} <span>${String(total).padStart(2, '0')}</span></span>${category.secondaryFilterLabel ? `<span class="filter-btn static-filter">${esc(category.secondaryFilterLabel)}</span>` : ''}</div>`;
-  return `<div class="page artworks-page ${category.id === 'personal' ? 'personal-artwork-page' : 'game-art-page'}"><section class="artworks-intro"><div><span class="eyebrow">${esc(category.pageEyebrow)} · ${String(total).padStart(2, '0')} ${esc(portfolio.site.labels.visuals)}</span><h1>${titleMarkup(category.pageTitle, category.pageEmphasis)}</h1></div><p>${esc(category.pageDescription)}</p></section><div class="artwork-controls">${filterMarkup}<span class="artwork-count"><b>${items.length}</b> / ${items.length} ${esc(portfolio.site.labels.visuals)}</span></div><section class="artwork-feature"><div class="artwork-feature-top"><span>${esc(category.collectionLabel || `${portfolio.site.labels.collection} / ${category.name.toUpperCase()}`)}</span><span>${esc(portfolio.site.labels.dragToExplore)}</span></div><div class="artwork-track-wrap"><div class="artwork-track" id="artworkTrack">${items.map((item, index) => `<figure class="artwork-slide" data-view-project="${esc(item.project.id)}" data-view-index="${item.index}" tabindex="0" role="button" aria-label="${esc(portfolio.site.labels.fullSize)}: ${esc(item.caption)}"><img src="${esc(asset(item.image))}" alt="${esc(item.project.shortTitle)} — ${esc(item.caption)}" draggable="false" loading="${index < 3 ? 'eager' : 'lazy'}"><figcaption>${esc(item.project.shortTitle).toUpperCase()} / ${esc(item.caption)}</figcaption><span class="slide-num">${String(index + 1).padStart(2, '0')} — ${String(items.length).padStart(2, '0')}</span></figure>`).join('')}</div></div><div class="artwork-track-bottom"><span>${esc(portfolio.site.labels.frameProgress)}</span><div class="artwork-progress"><span id="artProgress"></span></div><div class="art-track-nav"><button class="round-arrow" id="artPrev" aria-label="${esc(portfolio.site.labels.previous)}">←</button><button class="round-arrow" id="artNext" aria-label="${esc(portfolio.site.labels.next)}">→</button></div></div></section></div>`;
+    : `<div class="filter-list"><span class="filter-btn active static-filter">${esc(category.filterLabel || category.name)} <span>${String(total).padStart(2, '0')}</span></span>${category.secondaryFilterLabel ? `<span class="filter-note">${esc(category.secondaryFilterLabel)}</span>` : ''}</div>`;
+  const viewToggle = `<div class="artwork-view-toggle" role="group" aria-label="${esc(portfolio.site.labels.artworkView)}"><button class="artwork-view-button ${currentArtworkView === 'slide' ? 'is-active' : ''}" type="button" data-artwork-view="slide" aria-pressed="${currentArtworkView === 'slide'}">${esc(portfolio.site.labels.slideView)}</button><button class="artwork-view-button ${currentArtworkView === 'grid' ? 'is-active' : ''}" type="button" data-artwork-view="grid" aria-pressed="${currentArtworkView === 'grid'}">${esc(portfolio.site.labels.gridView)}</button></div>`;
+  return `<div class="page artworks-page ${category.id === 'personal' ? 'personal-artwork-page' : 'game-art-page'}"><section class="artworks-intro"><div><span class="eyebrow">${esc(category.pageEyebrow)} · ${String(total).padStart(2, '0')} ${esc(portfolio.site.labels.visuals)}</span><h1>${titleMarkup(category.pageTitle, category.pageEmphasis)}</h1></div><p>${esc(category.pageDescription)}</p></section><div class="artwork-controls">${filterMarkup}${viewToggle}<span class="artwork-count"><b>${items.length}</b> / ${items.length} ${esc(portfolio.site.labels.visuals)}</span></div><section class="artwork-feature ${currentArtworkView === 'grid' ? 'is-grid' : ''}"><div class="artwork-feature-top"><span>${esc(category.collectionLabel || `${portfolio.site.labels.collection} / ${category.name.toUpperCase()}`)}</span><span>${esc(portfolio.site.labels.dragToExplore)}</span></div><div class="artwork-track-wrap"><div class="artwork-track" id="artworkTrack">${items.map((item, index) => `<figure class="artwork-slide" data-view-project="${esc(item.project.id)}" data-view-index="${item.index}" tabindex="0" role="button" aria-label="${esc(portfolio.site.labels.fullSize)}: ${esc(item.caption)}"><img src="${esc(asset(item.image))}" alt="${esc(item.project.shortTitle)} — ${esc(item.caption)}" draggable="false" loading="${index < 3 ? 'eager' : 'lazy'}"><figcaption>${esc(item.project.shortTitle).toUpperCase()} / ${esc(item.caption)}</figcaption><span class="slide-num">${String(index + 1).padStart(2, '0')} — ${String(items.length).padStart(2, '0')}</span></figure>`).join('')}</div></div><div class="artwork-track-bottom"><span>${esc(portfolio.site.labels.frameProgress)}</span><div class="artwork-progress"><span id="artProgress"></span></div><div class="art-track-nav"><button class="round-arrow" id="artPrev" aria-label="${esc(portfolio.site.labels.previous)}">←</button><button class="round-arrow" id="artNext" aria-label="${esc(portfolio.site.labels.next)}">→</button></div></div></section></div>`;
 }
 
 function renderProjectCategory(category, categoryProjects) {
@@ -271,7 +274,7 @@ function render(page, id = '') {
   if (validPage === 'home') app.innerHTML = renderHome();
   else if (validPage === 'about') app.innerHTML = renderAbout();
   else if (validPage === 'project') app.innerHTML = renderProject(id);
-  else { currentCategoryFilter = 'all'; app.innerHTML = renderCategory(category); }
+  else { currentCategoryFilter = 'all'; currentArtworkView = 'slide'; app.innerHTML = renderCategory(category); }
   const currentProject = validPage === 'project' ? allProjects().find(project => project.id === id) : null;
   if (currentProject) document.title = `${currentProject.title} — ${portfolio.site.brandName}`;
   else document.title = validPage === 'home' ? portfolio.site.title : `${category?.name || portfolio.site.about.navLabel} — ${portfolio.site.brandName}`;
@@ -353,11 +356,13 @@ function setupFeaturedCarousel() {
     const item = items[imageIndex];
     imageTrigger.dataset.viewProject = item.projectId; imageTrigger.dataset.viewIndex = String(item.index);
     imageTrigger.setAttribute('aria-label', `${portfolio.site.labels.fullSize}: ${item.projectName} — ${item.caption}`);
-    image.alt = `${item.projectName} — ${item.caption}`; image.classList.remove('image-change'); image.src = asset(item.image); void image.offsetWidth; image.classList.add('image-change');
+    image.alt = `${item.projectName} — ${item.caption}`; image.classList.remove('image-change'); stage.classList.remove('is-portrait'); image.src = asset(item.image); if (image.complete && image.naturalWidth) syncImageOrientation(); void image.offsetWidth; image.classList.add('image-change');
     imageCurrent.textContent = String(imageIndex + 1).padStart(2, '0'); imageTotal.textContent = String(items.length).padStart(2, '0');
     stageLabel.textContent = `${item.projectName} / ${item.caption}`; renderThumbnails();
     if (resetTimer) { stopTimer(); remaining = duration; schedule(); }
   }
+  function syncImageOrientation() { stage.classList.toggle('is-portrait', image.naturalHeight > image.naturalWidth); }
+  image.addEventListener('load', syncImageOrientation);
   function showCategory(next) {
     categoryIndex = (next + featured.length) % featured.length; activeCategory = featured[categoryIndex];
     categoryTabs.forEach((tab, index) => { const active = index === categoryIndex; tab.classList.toggle('is-active', active); tab.setAttribute('aria-selected', String(active)); tab.tabIndex = active ? 0 : -1; });
@@ -389,12 +394,13 @@ function setupFeaturedCarousel() {
   categoryTabs.forEach((tab, index) => tab.addEventListener('keydown', event => {
     if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') { event.preventDefault(); const direction = event.key === 'ArrowRight' ? 1 : -1; const next = (index + direction + featured.length) % featured.length; showCategory(next); categoryTabs[next].focus(); }
   }));
+  if (image.complete && image.naturalWidth) syncImageOrientation();
   showCategory(0); syncPause();
   return () => { stopTimer(); document.removeEventListener('visibilitychange', visibilityHandler); };
 }
 
 function setupArtworkRail() {
-  const track = $('#artworkTrack'); if (!track) return;
+  const track = $('#artworkTrack'); if (!track || $('.artwork-feature')?.classList.contains('is-grid')) return;
   const progress = $('#artProgress');
   const update = () => { const max = track.scrollWidth - track.clientWidth; const ratio = max > 0 ? track.scrollLeft / max : 0; progress.style.width = `${Math.max(8, ratio * 100)}%`; };
   track.addEventListener('scroll', update, { passive: true }); update();
@@ -425,6 +431,8 @@ function stepViewer(direction) { if (!viewerCollection.length) return; viewerInd
 app.addEventListener('click', event => {
   const filter = event.target.closest('[data-filter]');
   if (filter) { currentCategoryFilter = filter.dataset.filter; const category = categories.find(item => item.slug === location.hash.slice(1)); app.innerHTML = renderCategory(category); setupArtworkRail(); return; }
+  const artworkView = event.target.closest('[data-artwork-view]');
+  if (artworkView) { currentArtworkView = artworkView.dataset.artworkView; const category = categories.find(item => item.slug === location.hash.slice(1)); app.innerHTML = renderCategory(category); setupArtworkRail(); return; }
   const image = event.target.closest('[data-view-project]');
   if (image) { if (suppressRailClick || suppressFeaturedClick) { event.preventDefault(); return; } openViewer(image.dataset.viewProject, Number(image.dataset.viewIndex), image.dataset.viewSrc || '', image.dataset.viewCaption || ''); }
 });

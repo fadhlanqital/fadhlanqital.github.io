@@ -26,6 +26,7 @@ const DEFAULT_SITE_LABELS = {
   brandHome: 'home', contentLoadError: 'Portfolio content could not be loaded. Please reload the page in a moment.',
   openNavigation: 'Open navigation', closeNavigation: 'Close navigation',
   closeArtwork: 'Close artwork', previousArtwork: 'Previous artwork', nextArtwork: 'Next artwork',
+  artworkView: 'Artwork view', slideView: 'Slide view', gridView: 'Grid view',
   showImage: 'Show image', collectionCoverAlt: 'collection cover',
   projectArtworkAlt: 'project artwork', featuredArtworkAlt: 'featured artwork', featuredVisual: 'FEATURED VISUAL'
 };

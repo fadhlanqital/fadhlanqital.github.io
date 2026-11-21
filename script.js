@@ -6,6 +6,13 @@ let viewerIndex = 0;
 let suppressRailClick = false;
 let suppressFeaturedClick = false;
 let featuredCarouselCleanup = null;
+let adminPreviewDataReceived = false;
+let previewAssetOverrides = {};
+const DEFAULT_APPEARANCE = {
+  headingTextColor: '#f1f0f4', bodyTextColor: '#a7adbb', labelTextColor: '#b4acd8',
+  captionTextColor: '#f5f3fb', captionBackgroundColor: '#080a10',
+  bodyTextSize: 13, labelTextSize: 10, captionTextSize: 11
+};
 
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
@@ -15,6 +22,22 @@ const menuToggle = $('#menuToggle');
 const viewer = $('#viewer');
 const viewerImage = $('#viewerImage');
 const viewerCaption = $('#viewerCaption');
+const adminPreviewMode = new URLSearchParams(location.search).get('adminPreview') === '1';
+
+function applyAppearance(site) {
+  const appearance = { ...DEFAULT_APPEARANCE, ...(site.appearance || {}) };
+  const color = (value, fallback) => /^#[0-9a-f]{6}$/i.test(String(value || '')) ? value : fallback;
+  const size = (value, fallback, min, max) => `${Math.max(min, Math.min(max, Number(value) || fallback))}px`;
+  const root = document.documentElement.style;
+  root.setProperty('--portfolio-heading-color', color(appearance.headingTextColor, DEFAULT_APPEARANCE.headingTextColor));
+  root.setProperty('--portfolio-body-color', color(appearance.bodyTextColor, DEFAULT_APPEARANCE.bodyTextColor));
+  root.setProperty('--portfolio-label-color', color(appearance.labelTextColor, DEFAULT_APPEARANCE.labelTextColor));
+  root.setProperty('--portfolio-caption-color', color(appearance.captionTextColor, DEFAULT_APPEARANCE.captionTextColor));
+  root.setProperty('--portfolio-caption-background', color(appearance.captionBackgroundColor, DEFAULT_APPEARANCE.captionBackgroundColor));
+  root.setProperty('--portfolio-body-size', size(appearance.bodyTextSize, 13, 12, 18));
+  root.setProperty('--portfolio-label-size', size(appearance.labelTextSize, 10, 9, 15));
+  root.setProperty('--portfolio-caption-size', size(appearance.captionTextSize, 11, 10, 16));
+}
 
 function esc(value = '') {
   return String(value).replace(/[&<>"']/g, char => ({
@@ -24,6 +47,7 @@ function esc(value = '') {
 
 function asset(source = '') {
   if (!source) return '';
+  if (previewAssetOverrides[source]) return previewAssetOverrides[source];
   if (/^(https?:|data:|blob:|\/|\.\/)/i.test(source)) return source;
   if (source.startsWith('assets/')) return source;
   if (/\.[a-z0-9]{2,5}$/i.test(source)) return source;
@@ -59,6 +83,7 @@ function imageButton(project, index, extra = '') {
 
 function updateChrome() {
   const site = portfolio.site;
+  applyAppearance(site);
   document.title = site.title;
   document.documentElement.lang = site.language || 'en';
   const metaDescription = $('meta[name="description"]');
@@ -387,12 +412,24 @@ document.addEventListener('keydown', event => { if (!viewer.classList.contains('
 window.addEventListener('hashchange', route);
 window.addEventListener('scroll', () => $('#siteHeader').classList.toggle('scrolled', window.scrollY > 25), { passive: true });
 
+function renderPortfolioData(data) {
+  if (!data?.site || !Array.isArray(data.categories) || !Array.isArray(data.projects)) return;
+  portfolio = data;
+  categories = data.categories;
+  updateChrome();
+  route();
+}
+
+window.addEventListener('message', event => {
+  if (!adminPreviewMode || event.source !== window.parent || event.origin !== location.origin || event.data?.type !== 'portfolio-admin-preview') return;
+  adminPreviewDataReceived = true;
+  previewAssetOverrides = event.data.assets && typeof event.data.assets === 'object' ? event.data.assets : {};
+  renderPortfolioData(event.data.content);
+});
+
 fetch(`portfolio-content.json?v=${Date.now()}`, { cache: 'no-store' })
   .then(response => { if (!response.ok) throw new Error('Konten portofolio tidak dapat dimuat.'); return response.json(); })
   .then(data => {
-    portfolio = data;
-    categories = data.categories || [];
-    updateChrome();
-    route();
+    if (!adminPreviewDataReceived) renderPortfolioData(data);
   })
-  .catch(error => { console.error(error); app.innerHTML = '<section class="page"><p>Konten portofolio belum dapat dimuat. Muat ulang halaman beberapa saat lagi.</p></section>'; });
+  .catch(error => { if (adminPreviewDataReceived) return; console.error(error); app.innerHTML = '<section class="page"><p>Konten portofolio belum dapat dimuat. Muat ulang halaman beberapa saat lagi.</p></section>'; });

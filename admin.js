@@ -15,6 +15,13 @@ let selectedProjectId = '';
 let selectedProjectRef = null;
 let pendingUploads = [];
 let pendingDeletes = new Set();
+let localPreviewAssets = new Map();
+let previewTimer = 0;
+const APPEARANCE_DEFAULTS = {
+  headingTextColor: '#f1f0f4', bodyTextColor: '#a7adbb', labelTextColor: '#b4acd8',
+  captionTextColor: '#f5f3fb', captionBackgroundColor: '#080a10',
+  bodyTextSize: 13, labelTextSize: 10, captionTextSize: 11
+};
 
 function escapeHtml(value = '') {
   return String(value).replace(/[&<>"']/g, char => ({
@@ -73,6 +80,46 @@ function setPath(object, path, value) {
   const last = parts.pop();
   const target = parts.reduce((item, key) => item[key], object);
   target[last] = value;
+}
+
+function normalizeAppearance(site) {
+  site.appearance = { ...APPEARANCE_DEFAULTS, ...(site.appearance || {}) };
+  return site.appearance;
+}
+
+function safeHexColor(value, fallback) {
+  return /^#[0-9a-f]{6}$/i.test(String(value || '')) ? value : fallback;
+}
+
+function applyAppearance(site, target = document.documentElement) {
+  const appearance = normalizeAppearance(site);
+  const number = (key, fallback, min, max) => Math.max(min, Math.min(max, Number(appearance[key]) || fallback));
+  target.style.setProperty('--portfolio-heading-color', safeHexColor(appearance.headingTextColor, APPEARANCE_DEFAULTS.headingTextColor));
+  target.style.setProperty('--portfolio-body-color', safeHexColor(appearance.bodyTextColor, APPEARANCE_DEFAULTS.bodyTextColor));
+  target.style.setProperty('--portfolio-label-color', safeHexColor(appearance.labelTextColor, APPEARANCE_DEFAULTS.labelTextColor));
+  target.style.setProperty('--portfolio-caption-color', safeHexColor(appearance.captionTextColor, APPEARANCE_DEFAULTS.captionTextColor));
+  target.style.setProperty('--portfolio-caption-background', safeHexColor(appearance.captionBackgroundColor, APPEARANCE_DEFAULTS.captionBackgroundColor));
+  target.style.setProperty('--portfolio-body-size', `${number('bodyTextSize', 13, 12, 18)}px`);
+  target.style.setProperty('--portfolio-label-size', `${number('labelTextSize', 10, 9, 15)}px`);
+  target.style.setProperty('--portfolio-caption-size', `${number('captionTextSize', 11, 10, 16)}px`);
+}
+
+function appearanceRange(path, label, min, max, hint) {
+  const value = Number(getPath(portfolio, path) ?? min);
+  return `<label class="field appearance-range"><span class="field-label">${escapeHtml(label)}<output data-range-output="${escapeHtml(path)}">${value}px</output></span><input type="range" min="${min}" max="${max}" step="1" value="${value}" data-path="${escapeHtml(path)}"><small>${escapeHtml(hint)}</small></label>`;
+}
+
+function renderAppearanceEditor() {
+  return `<section class="settings-group appearance-settings"><div class="group-heading"><div><h2>Tampilan teks dan warna</h2><p>Atur keterbacaan website. Perubahan tersimpan saat Anda menekan Terbitkan perubahan.</p></div></div><div class="field-grid">
+    ${field('site.appearance.headingTextColor', 'Warna judul', 'color')}
+    ${field('site.appearance.bodyTextColor', 'Warna teks isi', 'color')}
+    ${field('site.appearance.labelTextColor', 'Warna label dan metadata', 'color')}
+    ${field('site.appearance.captionTextColor', 'Warna teks caption gambar', 'color')}
+    ${field('site.appearance.captionBackgroundColor', 'Warna latar caption gambar', 'color')}
+    ${appearanceRange('site.appearance.bodyTextSize', 'Ukuran teks isi', 12, 18, 'Berlaku untuk paragraf dan deskripsi.')}
+    ${appearanceRange('site.appearance.labelTextSize', 'Ukuran label dan metadata', 9, 15, 'Berlaku untuk label kecil, kategori, dan keterangan.')}
+    ${appearanceRange('site.appearance.captionTextSize', 'Ukuran caption gambar', 10, 16, 'Berlaku untuk judul kecil pada gambar portofolio.')}
+  </div><div class="appearance-preview" id="appearancePreview"><div class="appearance-preview-art"><span class="appearance-preview-kicker">CONTOH JUDUL BAGIAN</span><p class="appearance-preview-body">Contoh teks isi portofolio untuk melihat ukuran dan warnanya.</p><span class="appearance-preview-caption">PERSONAL ARTWORK / CONTOH CAPTION</span></div></div></section>`;
 }
 
 function field(path, label, type = 'text', hint = '') {
@@ -142,7 +189,7 @@ function renderSiteEditor() {
     if (type === 'project-select') return projectSelectField(path, label);
     return field(path, label, type);
   }).join('')}</div></section>`).join('');
-  return `${groupMarkup}${renderContactsEditor()}`;
+  return `${renderAppearanceEditor()}${groupMarkup}${renderContactsEditor()}`;
 }
 
 function renderContactsEditor() {
@@ -201,15 +248,51 @@ function imageFieldForProjectCover(project) {
 
 function publicAsset(value = '') {
   if (!value) return '';
+  if (localPreviewAssets.has(value)) return localPreviewAssets.get(value);
   if (/^(https?:|data:|blob:|\/|\.\/)/i.test(value)) return value;
   if (value.startsWith('assets/')) return value;
   if (/\.[a-z0-9]{2,5}$/i.test(value)) return value;
   return `assets/${value}.webp`;
 }
 
+function sendSitePreview() {
+  if (!portfolio) return;
+  const frame = $('#portfolioPreview');
+  if (!frame?.dataset.ready || !frame.contentWindow) return;
+  const content = JSON.parse(JSON.stringify(portfolio, (key, value) => key === '_new' ? undefined : value));
+  frame.contentWindow.postMessage({
+    type: 'portfolio-admin-preview',
+    content,
+    assets: Object.fromEntries(localPreviewAssets)
+  }, location.origin);
+}
+
+function scheduleSitePreview() {
+  clearTimeout(previewTimer);
+  previewTimer = setTimeout(sendSitePreview, 120);
+}
+
+function openSitePreview() {
+  const overlay = $('#previewOverlay');
+  const frame = $('#portfolioPreview');
+  overlay.hidden = false;
+  document.body.classList.add('preview-open');
+  if (!frame.getAttribute('src')) frame.src = new URL('index.html?adminPreview=1#home', location.href).href;
+  else scheduleSitePreview();
+  $('#closePreviewButton').focus();
+}
+
+function closeSitePreview() {
+  $('#previewOverlay').hidden = true;
+  document.body.classList.remove('preview-open');
+  $('#previewButton').focus();
+}
+
 function renderEditor() {
   $$('.editor-tab').forEach(button => button.classList.toggle('is-active', button.dataset.tab === activeTab));
   editorContent.innerHTML = activeTab === 'site' ? renderSiteEditor() : activeTab === 'categories' ? renderCategoriesEditor() : renderProjectsEditor();
+  updateAppearancePreview();
+  scheduleSitePreview();
 }
 
 async function connect(token) {
@@ -217,6 +300,7 @@ async function connect(token) {
   const response = await githubRequest(`/contents/${apiPath(CONTENT_PATH)}?ref=${encodeURIComponent(BRANCH)}`);
   const parsed = JSON.parse(decodeBase64Utf8(response.content));
   if (!Array.isArray(parsed.categories) || !Array.isArray(parsed.projects) || !parsed.site) throw new Error('Struktur portfolio-content.json belum sesuai.');
+  normalizeAppearance(parsed.site);
   portfolio = parsed;
   pendingUploads = [];
   pendingDeletes = new Set();
@@ -246,6 +330,8 @@ function isAssetReferenced(path) {
 function queueUnusedAsset(path) {
   const repoPath = repositoryAssetPath(path);
   if (!repoPath || isAssetReferenced(repoPath)) return;
+  const previewUrl = localPreviewAssets.get(repoPath);
+  if (previewUrl) { URL.revokeObjectURL(previewUrl); localPreviewAssets.delete(repoPath); }
   const pending = pendingUploads.findIndex(upload => upload.path === repoPath);
   if (pending >= 0) pendingUploads.splice(pending, 1);
   else pendingDeletes.add(repoPath);
@@ -255,8 +341,13 @@ function updateFromInput(target, eventType = 'change') {
   if (target.dataset.path) {
     const path = target.dataset.path;
     const oldValue = getPath(portfolio, path);
-    const value = target.dataset.lines === 'true' ? target.value.split(/\r?\n/).map(line => line.trim()).filter(Boolean) : target.value;
+    const value = target.dataset.lines === 'true' ? target.value.split(/\r?\n/).map(line => line.trim()).filter(Boolean) : target.type === 'range' ? Number(target.value) : target.value;
     setPath(portfolio, path, value);
+    if (target.type === 'range') {
+      const output = $$('[data-range-output]', editorContent).find(item => item.dataset.rangeOutput === path);
+      if (output) output.textContent = `${value}px`;
+    }
+    if (path.startsWith('site.appearance.')) updateAppearancePreview();
     if (target.closest('.image-control') && eventType === 'change') {
       const originalValue = target.dataset.originalAsset || oldValue;
       if (originalValue !== value) queueUnusedAsset(originalValue);
@@ -320,6 +411,12 @@ function updateFromInput(target, eventType = 'change') {
     const project = getCurrentProject(); const section = project?.detail?.sections?.[Number(target.dataset.storyIndex)];
     if (section) section[target.dataset.storyField] = target.value;
   }
+}
+
+function updateAppearancePreview() {
+  if (!portfolio?.site) return;
+  const preview = $('#appearancePreview', editorContent);
+  if (preview) applyAppearance(portfolio.site, preview);
 }
 
 function addCategory() {
@@ -419,7 +516,9 @@ function imageSlug(name) {
 async function stageImage(file) {
   const blob = await optimizeImage(file);
   const path = `assets/${imageSlug(file.name)}-${Date.now().toString(36)}.webp`;
-  pendingUploads.push({ path, content: encodeBase64(await blob.arrayBuffer()) });
+  const previewUrl = URL.createObjectURL(blob);
+  pendingUploads.push({ path, content: encodeBase64(await blob.arrayBuffer()), previewUrl });
+  localPreviewAssets.set(path, previewUrl);
   return path;
 }
 
@@ -556,17 +655,37 @@ $('#connectForm').addEventListener('submit', async event => {
   } finally { button.disabled = false; }
 });
 
-editorContent.addEventListener('input', event => updateFromInput(event.target, event.type));
+editorContent.addEventListener('input', event => { updateFromInput(event.target, event.type); scheduleSitePreview(); });
 editorContent.addEventListener('change', event => {
   const input = event.target;
   if (input.type === 'file') { handleImageUpload(input); return; }
-  if (input.dataset.storyImages !== undefined) { handleStoryImages(input); return; }
+  if (input.dataset.storyImages !== undefined) { handleStoryImages(input); scheduleSitePreview(); return; }
   updateFromInput(input, event.type);
+  scheduleSitePreview();
 });
 editor.addEventListener('click', handleEditorClick);
 $('#publishButton').addEventListener('click', publishChanges);
+$('#previewButton').addEventListener('click', openSitePreview);
+$('#closePreviewButton').addEventListener('click', closeSitePreview);
+$('#portfolioPreview').addEventListener('load', event => {
+  event.currentTarget.dataset.ready = 'true';
+  sendSitePreview();
+});
+$$('[data-preview-size]').forEach(button => button.addEventListener('click', () => {
+  const isMobile = button.dataset.previewSize === 'mobile';
+  $('#portfolioPreview').classList.toggle('is-mobile', isMobile);
+  $$('[data-preview-size]').forEach(option => {
+    const selected = option === button;
+    option.classList.toggle('is-active', selected);
+    option.setAttribute('aria-pressed', String(selected));
+  });
+}));
+$('#previewOverlay').addEventListener('click', event => { if (event.target.id === 'previewOverlay') closeSitePreview(); });
+document.addEventListener('keydown', event => { if (event.key === 'Escape' && !$('#previewOverlay').hidden) closeSitePreview(); });
 $('#logoutButton').addEventListener('click', () => {
   githubToken = ''; portfolio = null; pendingUploads = []; pendingDeletes.clear();
+  localPreviewAssets.forEach(url => URL.revokeObjectURL(url)); localPreviewAssets.clear();
+  $('#previewOverlay').hidden = true; document.body.classList.remove('preview-open');
   selectedProjectRef = null; selectedProjectId = '';
   editor.hidden = true; gate.hidden = false; activeTab = 'site';
   status($('#gateStatus'), 'Koneksi diputus.');

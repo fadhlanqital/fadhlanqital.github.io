@@ -42,7 +42,7 @@
     <section class="editor card" id="editor" hidden>
       <div class="editor-heading">
         <div><span class="eyebrow">TERHUBUNG KE fadhlanqital.github.io</span><h1>Konten portofolio</h1><p>Edit lewat formulir. Tombol terbitkan menyimpan satu commit ke repositori.</p></div>
-        <div class="heading-actions"><button class="button button-quiet" id="logoutButton" type="button">Putuskan koneksi</button></div>
+        <div class="heading-actions"><button class="button button-quiet" id="previewButton" type="button">Pratinjau website</button><button class="button button-quiet" id="logoutButton" type="button">Putuskan koneksi</button></div>
       </div>
       <nav class="editor-tabs" aria-label="Bagian editor">
         <button type="button" class="editor-tab is-active" data-tab="site">Website</button>
@@ -57,5 +57,20 @@
     </section>
     <footer class="admin-footer">Konten publik tetap hanya-baca. Hak mengubah berkas diberikan oleh token GitHub yang Anda masukkan.</footer>
   </main>
+  <div class="preview-overlay" id="previewOverlay" hidden>
+    <section class="preview-dialog" role="dialog" aria-modal="true" aria-labelledby="previewTitle">
+      <div class="preview-toolbar">
+        <div><strong id="previewTitle">Pratinjau website</strong><small>Perubahan saat ini · belum diterbitkan</small></div>
+        <div class="preview-toolbar-actions">
+          <div class="preview-size-switch" role="group" aria-label="Ukuran pratinjau">
+            <button class="is-active" type="button" data-preview-size="desktop" aria-pressed="true">Desktop</button>
+            <button type="button" data-preview-size="mobile" aria-pressed="false">Ponsel</button>
+          </div>
+          <button class="button button-quiet button-small" id="closePreviewButton" type="button">Tutup pratinjau</button>
+        </div>
+      </div>
+      <div class="preview-frame-wrap"><iframe id="portfolioPreview" title="Pratinjau portofolio" loading="lazy"></iframe></div>
+    </section>
+  </div>
 </body>
 </html>

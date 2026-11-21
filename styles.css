@@ -652,3 +652,24 @@ body{background:#090b10;color:var(--white)}
   .hero-intro,.featured-preview-copy p,.personal-heading p,.artworks-intro p,.dev-intro p,
   .dev-copy p,.story-pair .story-pair-copy p,.about-copy p:not(.lead),.project-narrative p{font-size:12px}
 }
+
+/* Dashboard-controlled typography and text colors */
+#app h1,#app h2,#app h3{color:var(--portfolio-heading-color,#f1f0f4)}
+#app p{color:var(--portfolio-body-color,#a7adbb);font-size:var(--portfolio-body-size,13px)}
+#app .eyebrow,#app .micro,#app .hero-index,#app .statement-band .statement-top,#app .statement-band .statement-foot,
+#app .featured-preview-top,#app .featured-category-num,#app .featured-category-name,#app .featured-category-count,
+#app .featured-preview-caption,#app .featured-preview-caption span,#app .featured-page,#app .featured-pause,#app .featured-autoplay-note,
+#app .artwork-feature-top,#app .artwork-slide .slide-num,#app .artwork-bottom,#app .dev-meta,
+#app .cutscene-index,#app .fact span,#app .project-end,#app .personal-foot,#app .visual-corner,
+#app .story-plate-head span,#app .project-opening-index,#app .artwork-count,#app .about-image figcaption,
+#app .featured-image-hint,.site-footer .footer-role,.site-footer .footer-top,.site-footer .footer-copy,.viewer-help{
+  color:var(--portfolio-label-color,#b4acd8);
+  font-size:var(--portfolio-label-size,10px);
+}
+#app .artwork-slide figcaption,#app .featured-stage-foot,.viewer figcaption{
+  color:var(--portfolio-caption-color,#f5f3fb);
+  font-size:var(--portfolio-caption-size,11px);
+}
+#app .artwork-slide figcaption,#app .featured-stage-foot,.viewer figcaption{
+  background:var(--portfolio-caption-background,#080a10);
+}

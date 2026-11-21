@@ -15,7 +15,9 @@ Token hanya berada di memori tab admin selama halaman terbuka. Setelah tab ditut
 
 ## Mengubah konten
 
-- **Website**: identitas, teks beranda, gambar hero, About, keahlian, kontak, navigasi, footer, label, dan metadata.
+- **Website**: identitas, teks beranda, gambar hero, About, keahlian, kontak, navigasi, footer, label, metadata, serta bagian **Tampilan teks dan warna**.
+- **Tampilan teks dan warna**: atur ukuran teks isi, label/metadata, dan caption gambar. Pilih warna judul, teks isi, label, serta teks dan latar caption. Contoh di bawah pengaturan akan berubah sebagai pratinjau.
+- Klik **Pratinjau website** untuk melihat seluruh tampilan draft di dalam dashboard. Anda dapat memeriksa mode desktop atau ponsel dan menjelajahi halaman website. Perubahan teks, warna, ukuran, kategori, proyek, serta gambar yang baru diunggah akan dipakai di pratinjau tanpa menerbitkannya.
 - **Kategori**: tambah, ubah nama, alamat halaman, teks carousel, judul halaman, deskripsi, serta tata letak galeri atau daftar proyek.
 - **Proyek & galeri**: tambah, edit, hapus, pilih kategori, atur urutan, tampilkan sebagai draft/publik, unggah gambar, ubah caption, dan susun seksi cerita.
 - Gambar yang diunggah diubah menjadi WebP dengan dimensi terpanjang maksimal 2400 piksel. Perubahan dan penghapusan gambar yang tidak lagi dipakai diterbitkan dalam commit yang sama dengan JSON.

@@ -582,3 +582,73 @@ body{background:#090b10;color:var(--white)}
   .cutscene-sequence{padding-inline:18px}
   .cutscene-frame .story-image{height:70vw;min-height:230px}
 }
+
+/* Readability refinements */
+.artwork-slide figcaption{
+  max-width:min(78%,560px);
+  background:rgba(8,10,16,.9);
+  border:1px solid rgba(232,229,247,.22);
+  border-radius:5px;
+  color:#f5f3fb;
+  font-size:11px;
+  font-weight:600;
+  line-height:1.5;
+  overflow-wrap:anywhere;
+  backdrop-filter:blur(8px);
+}
+.featured-stage-foot{
+  left:28px;
+  right:28px;
+  bottom:18px;
+  padding:8px 11px;
+  border:1px solid rgba(232,229,247,.18);
+  border-radius:6px;
+  background:rgba(7,9,15,.82);
+  color:#f1eff8;
+  font-size:9px;
+  letter-spacing:.09em;
+}
+.featured-image-hint{
+  padding:7px 9px;
+  border:1px solid rgba(232,229,247,.16);
+  border-radius:5px;
+  background:rgba(7,9,15,.78);
+  color:#f1eff8;
+  font-size:9px;
+}
+.eyebrow,.micro,.hero-index,.statement-band .statement-top,.statement-band .statement-foot,
+.featured-preview-top,.featured-category-num,.featured-category-name,.featured-counter,
+.featured-preview-caption,.featured-page,.featured-pause,.featured-autoplay-note,.featured-cta,
+.filter-btn,.artwork-feature-top,.artwork-slide .slide-num,.artwork-bottom,.dev-meta,
+.cutscene-index,.fact span,.project-end,.viewer figcaption,.viewer-help,
+.footer-role,.footer-top,.footer-copy,.personal-foot,.visual-corner{
+  font-size:10px;
+}
+.featured-category-count{font-size:9px}
+.featured-thumb span{font-size:9px}
+.featured-preview-copy .eyebrow{font-size:10px}
+.featured-preview-caption span:last-child{font-size:9px}
+.featured-image-autoplay .featured-autoplay-note{font-size:9px}
+.hero-intro,.featured-preview-copy p,.personal-heading p,.artworks-intro p,.dev-intro p,
+.dev-copy p,.story-pair .story-pair-copy p,.about-copy p:not(.lead),.project-narrative p{
+  font-size:13px;
+}
+
+@media(max-width:700px){
+  .eyebrow,.micro,.hero-index,.statement-band .statement-top,.statement-band .statement-foot,
+  .featured-preview-top,.featured-category-num,.featured-counter,.featured-preview-caption,
+  .featured-page,.featured-pause,.featured-autoplay-note,.featured-cta,.filter-btn,
+  .artwork-feature-top,.artwork-slide .slide-num,.artwork-bottom,.dev-meta,.cutscene-index,
+  .fact span,.project-end,.viewer figcaption,.viewer-help,.footer-role,.footer-top,.footer-copy,
+  .personal-foot,.visual-corner{font-size:9px}
+  .featured-category-name{font-size:8px}
+  .featured-category-count{font-size:8px}
+  .featured-preview-copy .eyebrow{font-size:9px}
+  .featured-image-autoplay .featured-autoplay-note{font-size:8px}
+  .featured-stage-foot{left:14px;right:14px;bottom:12px;padding:7px 8px;font-size:8px;line-height:1.45}
+  .featured-image-hint{top:14px;right:14px;max-width:68%;font-size:8px;line-height:1.45}
+  .featured-preview-caption span:last-child{font-size:8px}
+  .artwork-slide figcaption{left:11px;bottom:11px;font-size:10px}
+  .hero-intro,.featured-preview-copy p,.personal-heading p,.artworks-intro p,.dev-intro p,
+  .dev-copy p,.story-pair .story-pair-copy p,.about-copy p:not(.lead),.project-narrative p{font-size:12px}
+}

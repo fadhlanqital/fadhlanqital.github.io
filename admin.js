@@ -135,8 +135,8 @@ function renderAppearanceEditor() {
     ${field('site.appearance.captionBackgroundColor', 'Warna latar caption gambar', 'color')}
     ${appearanceRange('site.appearance.headingTextScale', 'Ukuran judul', 85, 120, 'Skala semua judul utama. 100% adalah ukuran awal.', '%')}
     ${appearanceRange('site.appearance.bodyTextSize', 'Ukuran teks isi', 12, 18, 'Berlaku untuk paragraf dan deskripsi.')}
-    ${appearanceRange('site.appearance.uiTextSize', 'Ukuran tautan dan tombol', 10, 18, 'Berlaku untuk navigasi, tautan, filter, dan tombol teks.')}
-    ${appearanceRange('site.appearance.labelTextSize', 'Ukuran label dan metadata', 9, 15, 'Berlaku untuk label kecil, kategori, dan keterangan.')}
+    ${appearanceRange('site.appearance.uiTextSize', 'Ukuran navbar, tautan, filter, dan tombol', 10, 18, 'Berlaku pada menu utama, tab kategori, filter karya, tautan, dan tombol.')}
+    ${appearanceRange('site.appearance.labelTextSize', 'Ukuran label dan metadata', 9, 15, 'Berlaku untuk label kecil, metadata, dan catatan kategori.')}
     ${appearanceRange('site.appearance.captionTextSize', 'Ukuran caption gambar', 10, 16, 'Berlaku untuk judul kecil pada gambar portofolio.')}
   </div><div class="appearance-preview" id="appearancePreview"><div class="appearance-preview-art"><span class="appearance-preview-kicker">CONTOH JUDUL BAGIAN</span><p class="appearance-preview-body">Contoh teks isi portofolio untuk melihat ukuran dan warnanya.</p><a class="appearance-preview-link" href="#">CONTOH TAUTAN / TOMBOL ↗</a><span class="appearance-preview-label">LABEL KATEGORI · METADATA</span><span class="appearance-preview-caption">PERSONAL ARTWORK / CONTOH CAPTION</span></div></div></section>`;
 }

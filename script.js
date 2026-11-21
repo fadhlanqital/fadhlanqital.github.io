@@ -356,12 +356,12 @@ function setupFeaturedCarousel() {
     const item = items[imageIndex];
     imageTrigger.dataset.viewProject = item.projectId; imageTrigger.dataset.viewIndex = String(item.index);
     imageTrigger.setAttribute('aria-label', `${portfolio.site.labels.fullSize}: ${item.projectName} — ${item.caption}`);
-    image.alt = `${item.projectName} — ${item.caption}`; image.classList.remove('image-change'); stage.classList.remove('is-portrait'); image.src = asset(item.image); if (image.complete && image.naturalWidth) syncImageOrientation(); void image.offsetWidth; image.classList.add('image-change');
+    image.alt = `${item.projectName} — ${item.caption}`; image.classList.remove('image-change', 'is-portrait'); image.src = asset(item.image); if (image.complete && image.naturalWidth) syncImageOrientation(); void image.offsetWidth; image.classList.add('image-change');
     imageCurrent.textContent = String(imageIndex + 1).padStart(2, '0'); imageTotal.textContent = String(items.length).padStart(2, '0');
     stageLabel.textContent = `${item.projectName} / ${item.caption}`; renderThumbnails();
     if (resetTimer) { stopTimer(); remaining = duration; schedule(); }
   }
-  function syncImageOrientation() { stage.classList.toggle('is-portrait', image.naturalHeight > image.naturalWidth); }
+  function syncImageOrientation() { image.classList.toggle('is-portrait', image.naturalHeight > image.naturalWidth); }
   image.addEventListener('load', syncImageOrientation);
   function showCategory(next) {
     categoryIndex = (next + featured.length) % featured.length; activeCategory = featured[categoryIndex];

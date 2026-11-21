@@ -130,6 +130,16 @@
     "meta": {
       "openGraphImage": "assets/hero-portrait.webp",
       "favicon": "favicon.svg"
+    },
+    "appearance": {
+      "headingTextColor": "#f1f0f4",
+      "bodyTextColor": "#a7adbb",
+      "labelTextColor": "#b4acd8",
+      "captionTextColor": "#f5f3fb",
+      "captionBackgroundColor": "#080a10",
+      "bodyTextSize": 15,
+      "labelTextSize": 10,
+      "captionTextSize": 12
     }
   },
   "categories": [

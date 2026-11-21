@@ -18,9 +18,16 @@ let pendingDeletes = new Set();
 let localPreviewAssets = new Map();
 let previewTimer = 0;
 const APPEARANCE_DEFAULTS = {
-  headingTextColor: '#f1f0f4', bodyTextColor: '#a7adbb', labelTextColor: '#b4acd8',
+  headingTextColor: '#f1f0f4', bodyTextColor: '#a7adbb', uiTextColor: '#e6e3ee', labelTextColor: '#b4acd8',
   captionTextColor: '#f5f3fb', captionBackgroundColor: '#080a10',
-  bodyTextSize: 13, labelTextSize: 10, captionTextSize: 11
+  headingTextScale: 100, bodyTextSize: 13, uiTextSize: 12, labelTextSize: 10, captionTextSize: 11
+};
+const DEFAULT_SITE_LABELS = {
+  brandHome: 'home', contentLoadError: 'Portfolio content could not be loaded. Please reload the page in a moment.',
+  openNavigation: 'Open navigation', closeNavigation: 'Close navigation',
+  closeArtwork: 'Close artwork', previousArtwork: 'Previous artwork', nextArtwork: 'Next artwork',
+  showImage: 'Show image', collectionCoverAlt: 'collection cover',
+  projectArtworkAlt: 'project artwork', featuredArtworkAlt: 'featured artwork', featuredVisual: 'FEATURED VISUAL'
 };
 
 function escapeHtml(value = '') {
@@ -87,6 +94,11 @@ function normalizeAppearance(site) {
   return site.appearance;
 }
 
+function normalizeSiteLabels(site) {
+  site.labels = { ...DEFAULT_SITE_LABELS, ...(site.labels || {}) };
+  return site.labels;
+}
+
 function safeHexColor(value, fallback) {
   return /^#[0-9a-f]{6}$/i.test(String(value || '')) ? value : fallback;
 }
@@ -96,30 +108,36 @@ function applyAppearance(site, target = document.documentElement) {
   const number = (key, fallback, min, max) => Math.max(min, Math.min(max, Number(appearance[key]) || fallback));
   target.style.setProperty('--portfolio-heading-color', safeHexColor(appearance.headingTextColor, APPEARANCE_DEFAULTS.headingTextColor));
   target.style.setProperty('--portfolio-body-color', safeHexColor(appearance.bodyTextColor, APPEARANCE_DEFAULTS.bodyTextColor));
+  target.style.setProperty('--portfolio-ui-color', safeHexColor(appearance.uiTextColor, APPEARANCE_DEFAULTS.uiTextColor));
   target.style.setProperty('--portfolio-label-color', safeHexColor(appearance.labelTextColor, APPEARANCE_DEFAULTS.labelTextColor));
   target.style.setProperty('--portfolio-caption-color', safeHexColor(appearance.captionTextColor, APPEARANCE_DEFAULTS.captionTextColor));
   target.style.setProperty('--portfolio-caption-background', safeHexColor(appearance.captionBackgroundColor, APPEARANCE_DEFAULTS.captionBackgroundColor));
+  target.style.setProperty('--portfolio-heading-scale', String(number('headingTextScale', 100, 85, 120) / 100));
   target.style.setProperty('--portfolio-body-size', `${number('bodyTextSize', 13, 12, 18)}px`);
+  target.style.setProperty('--portfolio-ui-size', `${number('uiTextSize', 12, 10, 18)}px`);
   target.style.setProperty('--portfolio-label-size', `${number('labelTextSize', 10, 9, 15)}px`);
   target.style.setProperty('--portfolio-caption-size', `${number('captionTextSize', 11, 10, 16)}px`);
 }
 
-function appearanceRange(path, label, min, max, hint) {
+function appearanceRange(path, label, min, max, hint, unit = 'px') {
   const value = Number(getPath(portfolio, path) ?? min);
-  return `<label class="field appearance-range"><span class="field-label">${escapeHtml(label)}<output data-range-output="${escapeHtml(path)}">${value}px</output></span><input type="range" min="${min}" max="${max}" step="1" value="${value}" data-path="${escapeHtml(path)}"><small>${escapeHtml(hint)}</small></label>`;
+  return `<label class="field appearance-range"><span class="field-label">${escapeHtml(label)}<output data-range-output="${escapeHtml(path)}" data-unit="${escapeHtml(unit)}">${value}${escapeHtml(unit)}</output></span><input type="range" min="${min}" max="${max}" step="1" value="${value}" data-path="${escapeHtml(path)}" data-unit="${escapeHtml(unit)}"><small>${escapeHtml(hint)}</small></label>`;
 }
 
 function renderAppearanceEditor() {
   return `<section class="settings-group appearance-settings"><div class="group-heading"><div><h2>Tampilan teks dan warna</h2><p>Atur keterbacaan website. Perubahan tersimpan saat Anda menekan Terbitkan perubahan.</p></div></div><div class="field-grid">
     ${field('site.appearance.headingTextColor', 'Warna judul', 'color')}
     ${field('site.appearance.bodyTextColor', 'Warna teks isi', 'color')}
+    ${field('site.appearance.uiTextColor', 'Warna tautan dan tombol', 'color')}
     ${field('site.appearance.labelTextColor', 'Warna label dan metadata', 'color')}
     ${field('site.appearance.captionTextColor', 'Warna teks caption gambar', 'color')}
     ${field('site.appearance.captionBackgroundColor', 'Warna latar caption gambar', 'color')}
+    ${appearanceRange('site.appearance.headingTextScale', 'Ukuran judul', 85, 120, 'Skala semua judul utama. 100% adalah ukuran awal.', '%')}
     ${appearanceRange('site.appearance.bodyTextSize', 'Ukuran teks isi', 12, 18, 'Berlaku untuk paragraf dan deskripsi.')}
+    ${appearanceRange('site.appearance.uiTextSize', 'Ukuran tautan dan tombol', 10, 18, 'Berlaku untuk navigasi, tautan, filter, dan tombol teks.')}
     ${appearanceRange('site.appearance.labelTextSize', 'Ukuran label dan metadata', 9, 15, 'Berlaku untuk label kecil, kategori, dan keterangan.')}
     ${appearanceRange('site.appearance.captionTextSize', 'Ukuran caption gambar', 10, 16, 'Berlaku untuk judul kecil pada gambar portofolio.')}
-  </div><div class="appearance-preview" id="appearancePreview"><div class="appearance-preview-art"><span class="appearance-preview-kicker">CONTOH JUDUL BAGIAN</span><p class="appearance-preview-body">Contoh teks isi portofolio untuk melihat ukuran dan warnanya.</p><span class="appearance-preview-caption">PERSONAL ARTWORK / CONTOH CAPTION</span></div></div></section>`;
+  </div><div class="appearance-preview" id="appearancePreview"><div class="appearance-preview-art"><span class="appearance-preview-kicker">CONTOH JUDUL BAGIAN</span><p class="appearance-preview-body">Contoh teks isi portofolio untuk melihat ukuran dan warnanya.</p><a class="appearance-preview-link" href="#">CONTOH TAUTAN / TOMBOL ↗</a><span class="appearance-preview-label">LABEL KATEGORI · METADATA</span><span class="appearance-preview-caption">PERSONAL ARTWORK / CONTOH CAPTION</span></div></div></section>`;
 }
 
 function field(path, label, type = 'text', hint = '') {
@@ -166,7 +184,7 @@ function renderSiteEditor() {
       ['site.home.personalCoverLabel', 'Teks pada gambar koleksi'], ['site.home.personalFooterLabel', 'Teks bawah koleksi'],
       ['site.home.personalFooterLink', 'Tautan bawah koleksi'], ['site.home.spotlightEyebrow', 'Label proyek pilihan'],
       ['site.home.spotlightTitle', 'Judul proyek pilihan'], ['site.home.spotlightEmphasis', 'Judul miring proyek pilihan'],
-      ['site.home.spotlightDescription', 'Deskripsi proyek pilihan', 'textarea'], ['site.home.spotlightImageAlt', 'Alt gambar desktop'],
+      ['site.home.spotlightDescription', 'Deskripsi proyek pilihan', 'textarea'], ['site.home.spotlightLink', 'Teks tautan proyek pilihan'], ['site.home.spotlightImageAlt', 'Alt gambar desktop'],
       ['site.home.spotlightMobileImageAlt', 'Alt gambar mobile'], ['site.home.spotlightRibbon', 'Teks pita proyek pilihan'],
       ['site.home.categorySummaryEyebrow', 'Label ringkasan kategori'], ['site.home.categorySummaryTitle', 'Judul ringkasan kategori'],
       ['site.home.categorySummaryEmphasis', 'Judul miring ringkasan kategori'], ['site.home.categorySummaryDescription', 'Deskripsi ringkasan kategori', 'textarea']
@@ -182,7 +200,7 @@ function renderSiteEditor() {
       ['site.about.contactEyebrow', 'Label kontak'], ['site.about.contactTitle', 'Judul kontak'],
       ['site.about.contactEmphasis', 'Judul kontak miring'], ['site.about.image', 'Foto profil', 'image']
     ] },
-    { title: 'Label antarmuka website', fields: Object.entries(portfolio.site.labels).map(([key]) => [`site.labels.${key}`, key]) }
+    { title: 'Label antarmuka website', fields: Object.entries(portfolio.site.labels).map(([key]) => [`site.labels.${key}`, key.replace(/([A-Z])/g, ' $1').replace(/^./, first => first.toUpperCase())]) }
   ];
   const groupMarkup = groups.map(group => `<section class="settings-group"><div class="group-heading"><div><h2>${escapeHtml(group.title)}</h2></div></div><div class="field-grid">${group.fields.map(([path, label, type = 'text']) => {
     if (type === 'image') return imageField(path, label);
@@ -301,6 +319,7 @@ async function connect(token) {
   const parsed = JSON.parse(decodeBase64Utf8(response.content));
   if (!Array.isArray(parsed.categories) || !Array.isArray(parsed.projects) || !parsed.site) throw new Error('Struktur portfolio-content.json belum sesuai.');
   normalizeAppearance(parsed.site);
+  normalizeSiteLabels(parsed.site);
   portfolio = parsed;
   pendingUploads = [];
   pendingDeletes = new Set();
@@ -345,7 +364,7 @@ function updateFromInput(target, eventType = 'change') {
     setPath(portfolio, path, value);
     if (target.type === 'range') {
       const output = $$('[data-range-output]', editorContent).find(item => item.dataset.rangeOutput === path);
-      if (output) output.textContent = `${value}px`;
+      if (output) output.textContent = `${value}${target.dataset.unit || 'px'}`;
     }
     if (path.startsWith('site.appearance.')) updateAppearancePreview();
     if (target.closest('.image-control') && eventType === 'change') {

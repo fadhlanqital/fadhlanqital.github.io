@@ -9,9 +9,16 @@ let featuredCarouselCleanup = null;
 let adminPreviewDataReceived = false;
 let previewAssetOverrides = {};
 const DEFAULT_APPEARANCE = {
-  headingTextColor: '#f1f0f4', bodyTextColor: '#a7adbb', labelTextColor: '#b4acd8',
+  headingTextColor: '#f1f0f4', bodyTextColor: '#a7adbb', uiTextColor: '#e6e3ee', labelTextColor: '#b4acd8',
   captionTextColor: '#f5f3fb', captionBackgroundColor: '#080a10',
-  bodyTextSize: 13, labelTextSize: 10, captionTextSize: 11
+  headingTextScale: 100, bodyTextSize: 13, uiTextSize: 12, labelTextSize: 10, captionTextSize: 11
+};
+const DEFAULT_SITE_LABELS = {
+  brandHome: 'home', contentLoadError: 'Portfolio content could not be loaded. Please reload the page in a moment.',
+  openNavigation: 'Open navigation', closeNavigation: 'Close navigation',
+  closeArtwork: 'Close artwork', previousArtwork: 'Previous artwork', nextArtwork: 'Next artwork',
+  showImage: 'Show image', collectionCoverAlt: 'collection cover',
+  projectArtworkAlt: 'project artwork', featuredArtworkAlt: 'featured artwork', featuredVisual: 'FEATURED VISUAL'
 };
 
 const $ = (selector, root = document) => root.querySelector(selector);
@@ -31,10 +38,13 @@ function applyAppearance(site) {
   const root = document.documentElement.style;
   root.setProperty('--portfolio-heading-color', color(appearance.headingTextColor, DEFAULT_APPEARANCE.headingTextColor));
   root.setProperty('--portfolio-body-color', color(appearance.bodyTextColor, DEFAULT_APPEARANCE.bodyTextColor));
+  root.setProperty('--portfolio-ui-color', color(appearance.uiTextColor, DEFAULT_APPEARANCE.uiTextColor));
   root.setProperty('--portfolio-label-color', color(appearance.labelTextColor, DEFAULT_APPEARANCE.labelTextColor));
   root.setProperty('--portfolio-caption-color', color(appearance.captionTextColor, DEFAULT_APPEARANCE.captionTextColor));
   root.setProperty('--portfolio-caption-background', color(appearance.captionBackgroundColor, DEFAULT_APPEARANCE.captionBackgroundColor));
+  root.setProperty('--portfolio-heading-scale', String(Math.max(.85, Math.min(1.2, Number(appearance.headingTextScale) / 100 || 1))));
   root.setProperty('--portfolio-body-size', size(appearance.bodyTextSize, 13, 12, 18));
+  root.setProperty('--portfolio-ui-size', size(appearance.uiTextSize, 12, 10, 18));
   root.setProperty('--portfolio-label-size', size(appearance.labelTextSize, 10, 9, 15));
   root.setProperty('--portfolio-caption-size', size(appearance.captionTextSize, 11, 10, 16));
 }
@@ -83,6 +93,7 @@ function imageButton(project, index, extra = '') {
 
 function updateChrome() {
   const site = portfolio.site;
+  site.labels = { ...DEFAULT_SITE_LABELS, ...(site.labels || {}) };
   applyAppearance(site);
   document.title = site.title;
   document.documentElement.lang = site.language || 'en';
@@ -102,7 +113,7 @@ function updateChrome() {
     const name = $('.brand-name', brand);
     if (monogram) monogram.textContent = site.brandMonogram;
     if (name) name.textContent = site.brandName;
-    brand.setAttribute('aria-label', `${site.brandName} home`);
+    brand.setAttribute('aria-label', `${site.brandName} ${site.labels.brandHome}`);
   });
   nav.innerHTML = [
     `<a href="#home" data-nav="home">${esc(site.navigation.home)}</a>`,
@@ -114,6 +125,10 @@ function updateChrome() {
   $('.footer-copy').textContent = site.copyright;
   $('.footer-top').textContent = site.navigation.footerTop;
   $('.viewer-help').textContent = site.navigation.viewerHelp;
+  menuToggle.setAttribute('aria-label', site.labels.openNavigation);
+  $('#viewerClose').setAttribute('aria-label', site.labels.closeArtwork);
+  $('#viewerPrev').setAttribute('aria-label', site.labels.previousArtwork);
+  $('#viewerNext').setAttribute('aria-label', site.labels.nextArtwork);
 }
 
 function featuredCategories() {
@@ -156,7 +171,7 @@ function renderFeaturedCarousel() {
         <span class="featured-image-hint">${esc(portfolio.site.labels.featuredImageHint)}</span>
       </div>
     </div>
-    <div class="featured-preview-bottom"><div class="featured-preview-caption"><span>${esc(portfolio.site.labels.imagePreview)}</span><span id="featuredPreviewHint">${esc(portfolio.site.labels.browseWorksPrefix)} ${category.items.length} ${esc(portfolio.site.labels.browseWorksSuffix)}</span></div><div class="featured-thumbnails" id="featuredThumbnails" role="group" aria-label="${esc(portfolio.site.labels.chooseCategory)}">${category.items.slice(0, 5).map((thumb, index) => `<button type="button" class="featured-thumb ${index === 0 ? 'is-active' : ''}" data-inner-index="${index}" aria-label="Show image ${index + 1}: ${esc(thumb.caption)}" aria-pressed="${index === 0}"><img src="${esc(asset(thumb.image))}" alt="" loading="lazy"><span>${String(index + 1).padStart(2, '0')}</span></button>`).join('')}</div><div class="featured-image-autoplay"><span class="featured-autoplay-note"><span class="autoplay-dot"></span> ${esc(portfolio.site.labels.imagePreview)}</span><button class="featured-pause" id="featuredPause" type="button" aria-label="${esc(portfolio.site.labels.pause)}">Ⅱ <span>${esc(portfolio.site.labels.pause)}</span></button></div></div>
+    <div class="featured-preview-bottom"><div class="featured-preview-caption"><span>${esc(portfolio.site.labels.imagePreview)}</span><span id="featuredPreviewHint">${esc(portfolio.site.labels.browseWorksPrefix)} ${category.items.length} ${esc(portfolio.site.labels.browseWorksSuffix)}</span></div><div class="featured-thumbnails" id="featuredThumbnails" role="group" aria-label="${esc(portfolio.site.labels.chooseCategory)}">${category.items.slice(0, 5).map((thumb, index) => `<button type="button" class="featured-thumb ${index === 0 ? 'is-active' : ''}" data-inner-index="${index}" aria-label="${esc(portfolio.site.labels.showImage)} ${index + 1}: ${esc(thumb.caption)}" aria-pressed="${index === 0}"><img src="${esc(asset(thumb.image))}" alt="" loading="lazy"><span>${String(index + 1).padStart(2, '0')}</span></button>`).join('')}</div><div class="featured-image-autoplay"><span class="featured-autoplay-note"><span class="autoplay-dot"></span> ${esc(portfolio.site.labels.imagePreview)}</span><button class="featured-pause" id="featuredPause" type="button" aria-label="${esc(portfolio.site.labels.pause)}">Ⅱ <span>${esc(portfolio.site.labels.pause)}</span></button></div></div>
   </section>`;
 }
 
@@ -170,7 +185,7 @@ function renderHome() {
   const spotlightCategory = categoryForProject(spotlight);
   const personalSection = personal ? `<section class="personal-chapter">
       <div class="personal-heading reveal"><div><span class="eyebrow">${esc(home.personalEyebrow)} · ${personalGallery.length} ${esc(portfolio.site.labels.visuals)}</span><h2>${titleMarkup(home.personalTitle, home.personalEmphasis)}</h2></div><p>${esc(home.personalDescription)}</p></div>
-      <div class="personal-composition"><a class="personal-main-visual" href="#${esc(personalCategory.slug)}" aria-label="${esc(home.personalCoverLabel)}"><img src="${esc(asset(personal.cover || personalGallery[0]?.image))}" alt="${esc(personal.shortTitle)} collection cover"><span class="visual-corner">${esc(home.personalCoverLabel)}</span></a><div class="personal-side-visuals">${sideIndexes.map((index, position) => imageButton(personal, index, position === 0 ? 'personal-sketch' : 'personal-study')).join('')}<div class="personal-side-copy"><span class="micro">${esc(home.personalSideLabel)}</span><h3>${titleMarkup(home.personalSideTitle, home.personalSideEmphasis)}</h3><a class="link-arrow" href="#${esc(personalCategory.slug)}">${esc(home.personalLink)} <span>↗</span></a></div></div></div>
+      <div class="personal-composition"><a class="personal-main-visual" href="#${esc(personalCategory.slug)}" aria-label="${esc(home.personalCoverLabel)}"><img src="${esc(asset(personal.cover || personalGallery[0]?.image))}" alt="${esc(personal.shortTitle)} ${esc(portfolio.site.labels.collectionCoverAlt)}"><span class="visual-corner">${esc(home.personalCoverLabel)}</span></a><div class="personal-side-visuals">${sideIndexes.map((index, position) => imageButton(personal, index, position === 0 ? 'personal-sketch' : 'personal-study')).join('')}<div class="personal-side-copy"><span class="micro">${esc(home.personalSideLabel)}</span><h3>${titleMarkup(home.personalSideTitle, home.personalSideEmphasis)}</h3><a class="link-arrow" href="#${esc(personalCategory.slug)}">${esc(home.personalLink)} <span>↗</span></a></div></div></div>
       <div class="personal-foot"><span>${esc(home.personalFooterLabel)} · ${personalGallery.length} ${esc(portfolio.site.labels.visuals)}</span><a href="#${esc(personalCategory.slug)}">${esc(home.personalFooterLink)}</a></div>
     </section>` : '';
   const spotlightSection = spotlight ? `<section class="feature-chapter"><div class="chapter-head reveal"><div><span class="eyebrow">${esc(home.spotlightEyebrow)}</span><h2>${titleMarkup(home.spotlightTitle, home.spotlightEmphasis)}</h2></div><p>${esc(home.spotlightDescription)}</p></div><a class="feature-cover" href="#project/${esc(spotlight.id)}" aria-label="${esc(portfolio.site.labels.openProject)} ${esc(spotlight.title)}"><img class="desktop-feature-art" src="${esc(asset(spotlight.cover || spotlight.gallery[0]?.image))}" alt="${esc(home.spotlightImageAlt)}"><img class="mobile-feature-art" src="${esc(asset(spotlight.gallery[0]?.image || spotlight.cover))}" alt="${esc(home.spotlightMobileImageAlt)}"><div class="feature-cover-copy"><span class="eyebrow">${esc(spotlightCategory?.featuredLabel || '')}${spotlight.year ? ` · ${esc(spotlight.year)}` : ''}</span><h3>${esc(spotlight.shortTitle)}</h3><p>${esc(spotlight.subtitle)}</p><span class="link-arrow">${esc(home.spotlightLink)} <span>↗</span></span></div></a><div class="chapter-ribbon"><span>${esc(home.spotlightRibbon)}</span><strong>${esc(portfolio.site.labels.projectIndex)} ${String(allProjects().indexOf(spotlight) + 1).padStart(2, '0')} / ${String(allProjects().length).padStart(2, '0')}</strong><span>${esc(home.spotlightLink).toUpperCase()} ↗</span></div></section>` : '';
@@ -186,11 +201,15 @@ function renderArtworkCategory(category, categoryProjects) {
   const filterMarkup = projectsForPage.length > 1
     ? `<div class="filter-list"><button type="button" class="filter-btn ${currentCategoryFilter === 'all' ? 'active' : ''}" data-filter="all">${esc(category.filterLabel || 'ALL')} <span>${String(total).padStart(2, '0')}</span></button>${projectsForPage.map(project => `<button type="button" class="filter-btn ${currentCategoryFilter === project.id ? 'active' : ''}" data-filter="${esc(project.id)}">${esc(project.shortTitle)} <span>${String(project.gallery.length).padStart(2, '0')}</span></button>`).join('')}</div>`
     : `<div class="filter-list"><span class="filter-btn active static-filter">${esc(category.filterLabel || category.name)} <span>${String(total).padStart(2, '0')}</span></span>${category.secondaryFilterLabel ? `<span class="filter-btn static-filter">${esc(category.secondaryFilterLabel)}</span>` : ''}</div>`;
-  return `<div class="page artworks-page ${category.id === 'personal' ? 'personal-artwork-page' : 'game-art-page'}"><section class="artworks-intro"><div><span class="eyebrow">${esc(category.pageEyebrow)} · ${String(total).padStart(2, '0')} ${esc(portfolio.site.labels.visuals)}</span><h1>${titleMarkup(category.pageTitle, category.pageEmphasis)}</h1></div><p>${esc(category.pageDescription)}</p></section><div class="artwork-controls">${filterMarkup}<span class="artwork-count"><b>${items.length}</b> / ${items.length} ${esc(portfolio.site.labels.visuals)}</span></div><section class="artwork-feature"><div class="artwork-feature-top"><span>${esc(category.collectionLabel || `${portfolio.site.labels.collection} / ${category.name.toUpperCase()}`)}</span><span>${esc(portfolio.site.labels.dragToExplore)}</span></div><div class="artwork-track-wrap"><div class="artwork-track" id="artworkTrack">${items.map((item, index) => `<figure class="artwork-slide" data-view-project="${esc(item.project.id)}" data-view-index="${item.index}" tabindex="0" role="button" aria-label="${esc(portfolio.site.labels.fullSize)}: ${esc(item.caption)}"><img src="${esc(asset(item.image))}" alt="${esc(item.project.shortTitle)} — ${esc(item.caption)}" loading="${index < 3 ? 'eager' : 'lazy'}"><figcaption>${esc(item.project.shortTitle).toUpperCase()} / ${esc(item.caption)}</figcaption><span class="slide-num">${String(index + 1).padStart(2, '0')} — ${String(items.length).padStart(2, '0')}</span></figure>`).join('')}</div></div><div class="artwork-track-bottom"><span>${esc(portfolio.site.labels.frameProgress)}</span><div class="artwork-progress"><span id="artProgress"></span></div><div class="art-track-nav"><button class="round-arrow" id="artPrev" aria-label="${esc(portfolio.site.labels.previous)}">←</button><button class="round-arrow" id="artNext" aria-label="${esc(portfolio.site.labels.next)}">→</button></div></div></section></div>`;
+  return `<div class="page artworks-page ${category.id === 'personal' ? 'personal-artwork-page' : 'game-art-page'}"><section class="artworks-intro"><div><span class="eyebrow">${esc(category.pageEyebrow)} · ${String(total).padStart(2, '0')} ${esc(portfolio.site.labels.visuals)}</span><h1>${titleMarkup(category.pageTitle, category.pageEmphasis)}</h1></div><p>${esc(category.pageDescription)}</p></section><div class="artwork-controls">${filterMarkup}<span class="artwork-count"><b>${items.length}</b> / ${items.length} ${esc(portfolio.site.labels.visuals)}</span></div><section class="artwork-feature"><div class="artwork-feature-top"><span>${esc(category.collectionLabel || `${portfolio.site.labels.collection} / ${category.name.toUpperCase()}`)}</span><span>${esc(portfolio.site.labels.dragToExplore)}</span></div><div class="artwork-track-wrap"><div class="artwork-track" id="artworkTrack">${items.map((item, index) => `<figure class="artwork-slide" data-view-project="${esc(item.project.id)}" data-view-index="${item.index}" tabindex="0" role="button" aria-label="${esc(portfolio.site.labels.fullSize)}: ${esc(item.caption)}"><img src="${esc(asset(item.image))}" alt="${esc(item.project.shortTitle)} — ${esc(item.caption)}" draggable="false" loading="${index < 3 ? 'eager' : 'lazy'}"><figcaption>${esc(item.project.shortTitle).toUpperCase()} / ${esc(item.caption)}</figcaption><span class="slide-num">${String(index + 1).padStart(2, '0')} — ${String(items.length).padStart(2, '0')}</span></figure>`).join('')}</div></div><div class="artwork-track-bottom"><span>${esc(portfolio.site.labels.frameProgress)}</span><div class="artwork-progress"><span id="artProgress"></span></div><div class="art-track-nav"><button class="round-arrow" id="artPrev" aria-label="${esc(portfolio.site.labels.previous)}">←</button><button class="round-arrow" id="artNext" aria-label="${esc(portfolio.site.labels.next)}">→</button></div></div></section></div>`;
 }
 
 function renderProjectCategory(category, categoryProjects) {
-  return `<div class="page dev-page"><section class="dev-intro"><div><span class="eyebrow">${esc(category.pageEyebrow)}</span><h1>${titleMarkup(category.pageTitle, category.pageEmphasis)}</h1></div><p>${esc(category.pageDescription)}</p></section><div class="dev-project-stack">${categoryProjects.length ? categoryProjects.map((project, index) => `<a class="dev-project" href="#project/${esc(project.id)}"><div class="dev-visual"><img src="${esc(asset(project.cover || project.gallery[0]?.image))}" alt="${esc(project.shortTitle)} project artwork"></div><div class="dev-copy" data-number="${String(index + 1).padStart(2, '0')}"><div><span class="dev-meta">${esc(project.year)} &nbsp; / &nbsp; ${esc(category.featuredLabel)}</span><h2>${esc(project.title)}</h2><p>${esc(project.description)}</p></div><div class="dev-project-link"><span>${esc(project.subtitle || project.role)}</span><span>↗</span></div></div></a>`).join('') : `<p>${esc(portfolio.site.labels.noProjects)}</p>`}</div></div>`;
+  return `<div class="page dev-page"><section class="dev-intro"><div><span class="eyebrow">${esc(category.pageEyebrow)}</span><h1>${titleMarkup(category.pageTitle, category.pageEmphasis)}</h1></div><p>${esc(category.pageDescription)}</p></section><div class="dev-project-stack">${categoryProjects.length ? categoryProjects.map((project, index) => {
+    const cover = project.cover || project.gallery[0]?.image || '';
+    const caption = project.shortTitle || project.title;
+    return `<article class="dev-project"><button class="dev-visual" type="button" data-view-project="${esc(project.id)}" data-view-index="0" data-view-src="${esc(cover)}" data-view-caption="${esc(caption)}" aria-label="${esc(portfolio.site.labels.fullSize)}: ${esc(caption)}"><img src="${esc(asset(cover))}" alt="${esc(caption)} ${esc(portfolio.site.labels.projectArtworkAlt)}" draggable="false"></button><div class="dev-copy" data-number="${String(index + 1).padStart(2, '0')}"><div><span class="dev-meta">${esc(project.year)} &nbsp; / &nbsp; ${esc(category.featuredLabel)}</span><h2>${esc(project.title)}</h2><p>${esc(project.description)}</p></div><a class="dev-project-link" href="#project/${esc(project.id)}"><span>${esc(project.subtitle || project.role)}</span><span aria-hidden="true">↗</span></a></div></article>`;
+  }).join('') : `<p>${esc(portfolio.site.labels.noProjects)}</p>`}</div></div>`;
 }
 
 function renderCategory(category) {
@@ -224,9 +243,9 @@ function renderProject(id) {
     [labels.year, project.year], [labels.role, project.role], [labels.discipline, category?.name],
     [project.contribution ? labels.contribution : labels.visuals, project.contribution || `${String(project.gallery.length).padStart(2, '0')} ${labels.selectedPieces}`]
   ].filter(([, value]) => value);
-  const sections = detail.sections?.length ? detail.sections : [{ title: '01 / FEATURED VISUAL', subtitle: project.shortTitle, layout: 'wide', images: project.gallery.map((_, index) => index) }];
+  const sections = detail.sections?.length ? detail.sections : [{ title: `01 / ${labels.featuredVisual}`, subtitle: project.shortTitle, layout: 'wide', images: project.gallery.map((_, index) => index) }];
   const yearLabel = project.year ? ` · ${esc(project.year)}` : '';
-  return `<div class="page project-page"><section class="project-opening"><img src="${esc(asset(project.cover || project.gallery[0]?.image))}" alt="${esc(project.title)} — featured artwork"><span class="project-opening-index">${esc(labels.projectIndex)} ${String(allProjects().indexOf(project) + 1).padStart(2, '0')} / ${String(allProjects().length).padStart(2, '0')}</span><div class="project-opening-copy"><span class="eyebrow">${esc(category?.featuredLabel || category?.name || '')}${yearLabel}</span><h1>${esc(project.shortTitle)}</h1><p>${esc(project.subtitle)}</p></div></section><div class="project-facts">${facts.map(([label, value]) => `<div class="fact"><span>${esc(label)}</span><strong>${esc(value)}</strong></div>`).join('')}</div><section class="project-narrative"><h2>${esc(detail.narrativeTitle || project.shortTitle)}</h2><p>${esc(detail.narrative || project.description)}</p></section>${sections.map((section, index) => renderStorySection(project, section, index)).join('')}<div class="project-end"><a href="#${esc(category?.slug || 'home')}"><span>←</span> ${esc(portfolio.site.labels.backToCategory)} · ${esc(category?.name || '')}</a>${projectList.length > 1 ? `<a href="#project/${esc(previous.id)}">${esc(portfolio.site.labels.previousProject)}</a><a href="#project/${esc(next.id)}">${esc(portfolio.site.labels.nextProject)} <span>↗</span></a>` : ''}</div></div>`;
+  return `<div class="page project-page"><section class="project-opening"><img src="${esc(asset(project.cover || project.gallery[0]?.image))}" alt="${esc(project.title)} — ${esc(labels.featuredArtworkAlt)}"><span class="project-opening-index">${esc(labels.projectIndex)} ${String(allProjects().indexOf(project) + 1).padStart(2, '0')} / ${String(allProjects().length).padStart(2, '0')}</span><div class="project-opening-copy"><span class="eyebrow">${esc(category?.featuredLabel || category?.name || '')}${yearLabel}</span><h1>${esc(project.shortTitle)}</h1><p>${esc(project.subtitle)}</p></div></section><div class="project-facts">${facts.map(([label, value]) => `<div class="fact"><span>${esc(label)}</span><strong>${esc(value)}</strong></div>`).join('')}</div><section class="project-narrative"><h2>${esc(detail.narrativeTitle || project.shortTitle)}</h2><p>${esc(detail.narrative || project.description)}</p></section>${sections.map((section, index) => renderStorySection(project, section, index)).join('')}<div class="project-end"><a href="#${esc(category?.slug || 'home')}"><span>←</span> ${esc(portfolio.site.labels.backToCategory)} · ${esc(category?.name || '')}</a>${projectList.length > 1 ? `<a href="#project/${esc(previous.id)}">${esc(portfolio.site.labels.previousProject)}</a><a href="#project/${esc(next.id)}">${esc(portfolio.site.labels.nextProject)} <span>↗</span></a>` : ''}</div></div>`;
 }
 
 function renderAbout() {
@@ -326,7 +345,7 @@ function setupFeaturedCarousel() {
     const start = Math.max(0, Math.min(imageIndex - 2, items.length - count));
     thumbnails.innerHTML = items.slice(start, start + count).map((item, offset) => {
       const actual = start + offset; const active = actual === imageIndex;
-      return `<button type="button" class="featured-thumb ${active ? 'is-active' : ''}" data-inner-index="${actual}" aria-label="Show image ${actual + 1}: ${esc(item.caption)}" aria-pressed="${active}"><img src="${esc(asset(item.image))}" alt="" loading="lazy"><span>${String(actual + 1).padStart(2, '0')}</span></button>`;
+      return `<button type="button" class="featured-thumb ${active ? 'is-active' : ''}" data-inner-index="${actual}" aria-label="${esc(portfolio.site.labels.showImage)} ${actual + 1}: ${esc(item.caption)}" aria-pressed="${active}"><img src="${esc(asset(item.image))}" alt="" loading="lazy"><span>${String(actual + 1).padStart(2, '0')}</span></button>`;
     }).join('');
   }
   function showImage(next, resetTimer = true) {
@@ -382,15 +401,21 @@ function setupArtworkRail() {
   $('#artPrev').addEventListener('click', () => track.scrollBy({ left: -track.clientWidth * .78, behavior: 'smooth' }));
   $('#artNext').addEventListener('click', () => track.scrollBy({ left: track.clientWidth * .78, behavior: 'smooth' }));
   let down = false; let startX = 0; let scrollLeft = 0;
-  track.addEventListener('pointerdown', event => { down = true; startX = event.clientX; scrollLeft = track.scrollLeft; track.classList.add('dragging'); track.setPointerCapture(event.pointerId); });
+  track.addEventListener('pointerdown', event => { down = true; startX = event.clientX; scrollLeft = track.scrollLeft; track.classList.add('dragging'); const slide = event.target.closest('[data-view-project]'); if (slide?.setPointerCapture) slide.setPointerCapture(event.pointerId); });
   track.addEventListener('pointermove', event => { if (!down) return; if (Math.abs(event.clientX - startX) > 5) suppressRailClick = true; track.scrollLeft = scrollLeft - (event.clientX - startX); });
   const end = () => { down = false; track.classList.remove('dragging'); if (suppressRailClick) setTimeout(() => suppressRailClick = false, 140); };
-  track.addEventListener('pointerup', end); track.addEventListener('pointercancel', end); track.addEventListener('pointerleave', end);
+  track.addEventListener('pointerup', end); track.addEventListener('pointercancel', end);
 }
 
-function openViewer(projectId, index) {
+function openViewer(projectId, index, sourceOverride = '', captionOverride = '') {
   const project = allProjects().find(item => item.id === projectId); if (!project) return;
-  viewerCollection = project.gallery.map(image => ({ src: asset(image.image), caption: image.caption, alt: `${project.shortTitle} — ${image.caption}` }));
+  const gallery = [...(project.gallery || [])];
+  if (sourceOverride) {
+    const match = gallery.findIndex(image => asset(image.image) === asset(sourceOverride));
+    if (match >= 0) index = match;
+    else { gallery.unshift({ image: sourceOverride, caption: captionOverride || project.shortTitle }); index = 0; }
+  }
+  viewerCollection = gallery.map(image => ({ src: asset(image.image), caption: image.caption, alt: `${project.shortTitle} — ${image.caption}` }));
   viewerIndex = Math.max(0, Math.min(index, viewerCollection.length - 1)); updateViewer(); viewer.classList.add('open'); viewer.setAttribute('aria-hidden', 'false'); document.body.classList.add('locked');
 }
 function updateViewer() { const item = viewerCollection[viewerIndex]; if (!item) return; viewerImage.src = item.src; viewerImage.alt = item.alt; viewerCaption.textContent = `${item.caption} · ${viewerIndex + 1} / ${viewerCollection.length}`; }
@@ -401,11 +426,11 @@ app.addEventListener('click', event => {
   const filter = event.target.closest('[data-filter]');
   if (filter) { currentCategoryFilter = filter.dataset.filter; const category = categories.find(item => item.slug === location.hash.slice(1)); app.innerHTML = renderCategory(category); setupArtworkRail(); return; }
   const image = event.target.closest('[data-view-project]');
-  if (image) { if (suppressRailClick || suppressFeaturedClick) { event.preventDefault(); return; } openViewer(image.dataset.viewProject, Number(image.dataset.viewIndex)); }
+  if (image) { if (suppressRailClick || suppressFeaturedClick) { event.preventDefault(); return; } openViewer(image.dataset.viewProject, Number(image.dataset.viewIndex), image.dataset.viewSrc || '', image.dataset.viewCaption || ''); }
 });
 app.addEventListener('keydown', event => { const image = event.target.closest('[data-view-project][role="button"]'); if (image && (event.key === 'Enter' || event.key === ' ')) { event.preventDefault(); openViewer(image.dataset.viewProject, Number(image.dataset.viewIndex)); } });
-menuToggle.addEventListener('click', () => { const open = nav.classList.toggle('open'); menuToggle.setAttribute('aria-expanded', String(open)); });
-nav.addEventListener('click', event => { if (event.target.closest('a')) { nav.classList.remove('open'); menuToggle.setAttribute('aria-expanded', 'false'); } });
+menuToggle.addEventListener('click', () => { const open = nav.classList.toggle('open'); menuToggle.setAttribute('aria-expanded', String(open)); menuToggle.setAttribute('aria-label', open ? portfolio.site.labels.closeNavigation : portfolio.site.labels.openNavigation); });
+nav.addEventListener('click', event => { if (event.target.closest('a')) { nav.classList.remove('open'); menuToggle.setAttribute('aria-expanded', 'false'); menuToggle.setAttribute('aria-label', portfolio.site.labels.openNavigation); } });
 $('#viewerClose').addEventListener('click', closeViewer); $('#viewerPrev').addEventListener('click', () => stepViewer(-1)); $('#viewerNext').addEventListener('click', () => stepViewer(1));
 viewer.addEventListener('click', event => { if (event.target === viewer) closeViewer(); });
 document.addEventListener('keydown', event => { if (!viewer.classList.contains('open')) return; if (event.key === 'Escape') closeViewer(); if (event.key === 'ArrowLeft') stepViewer(-1); if (event.key === 'ArrowRight') stepViewer(1); });
@@ -414,6 +439,7 @@ window.addEventListener('scroll', () => $('#siteHeader').classList.toggle('scrol
 
 function renderPortfolioData(data) {
   if (!data?.site || !Array.isArray(data.categories) || !Array.isArray(data.projects)) return;
+  data.site.labels = { ...DEFAULT_SITE_LABELS, ...(data.site.labels || {}) };
   portfolio = data;
   categories = data.categories;
   updateChrome();
@@ -432,4 +458,4 @@ fetch(`portfolio-content.json?v=${Date.now()}`, { cache: 'no-store' })
   .then(data => {
     if (!adminPreviewDataReceived) renderPortfolioData(data);
   })
-  .catch(error => { if (adminPreviewDataReceived) return; console.error(error); app.innerHTML = '<section class="page"><p>Konten portofolio belum dapat dimuat. Muat ulang halaman beberapa saat lagi.</p></section>'; });
+  .catch(error => { if (adminPreviewDataReceived) return; console.error(error); app.innerHTML = `<section class="page"><p>${esc(DEFAULT_SITE_LABELS.contentLoadError)}</p></section>`; });

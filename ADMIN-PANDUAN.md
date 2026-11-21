@@ -15,11 +15,12 @@ Token hanya berada di memori tab admin selama halaman terbuka. Setelah tab ditut
 
 ## Mengubah konten
 
-- **Website**: identitas, teks beranda, gambar hero, About, keahlian, kontak, navigasi, footer, label, metadata, serta bagian **Tampilan teks dan warna**.
-- **Tampilan teks dan warna**: atur ukuran teks isi, label/metadata, dan caption gambar. Pilih warna judul, teks isi, label, serta teks dan latar caption. Contoh di bawah pengaturan akan berubah sebagai pratinjau.
+- **Website**: identitas, teks beranda, gambar hero, About, keahlian, kontak, navigasi, footer, label antarmuka, metadata, serta bagian **Tampilan teks dan warna**. Label antarmuka mencakup petunjuk aksesibilitas yang sebelumnya tertulis di kode.
+- **Tampilan teks dan warna**: atur skala judul, ukuran teks isi, tautan/tombol, label/metadata, dan caption gambar. Pilih warna untuk judul, teks isi, tautan/tombol, label, serta teks dan latar caption. Contoh di bawah pengaturan berubah sebagai pratinjau.
 - Klik **Pratinjau website** untuk melihat seluruh tampilan draft di dalam dashboard. Anda dapat memeriksa mode desktop atau ponsel dan menjelajahi halaman website. Perubahan teks, warna, ukuran, kategori, proyek, serta gambar yang baru diunggah akan dipakai di pratinjau tanpa menerbitkannya.
 - **Kategori**: tambah, ubah nama, alamat halaman, teks carousel, judul halaman, deskripsi, serta tata letak galeri atau daftar proyek.
 - **Proyek & galeri**: tambah, edit, hapus, pilih kategori, atur urutan, tampilkan sebagai draft/publik, unggah gambar, ubah caption, dan susun seksi cerita.
+- Pada halaman kategori personal artwork dan 2D game art, klik gambar untuk membukanya dalam tampilan layar penuh. Di kategori game development, klik gambar cover untuk melihat ukuran penuh; tautan di kartu proyek membuka halaman detail.
 - Gambar yang diunggah diubah menjadi WebP dengan dimensi terpanjang maksimal 2400 piksel. Perubahan dan penghapusan gambar yang tidak lagi dipakai diterbitkan dalam commit yang sama dengan JSON.
 
 Tekan **Terbitkan perubahan** untuk menyimpan satu commit ke branch `main`. Workflow GitHub Pages yang sudah ada akan menerbitkan ulang website. Perubahan biasanya muncul setelah deployment selesai.

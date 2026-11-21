@@ -95,6 +95,18 @@
       ]
     },
     "labels": {
+      "brandHome": "home",
+      "contentLoadError": "Portfolio content could not be loaded. Please reload the page in a moment.",
+      "openNavigation": "Open navigation",
+      "closeNavigation": "Close navigation",
+      "closeArtwork": "Close artwork",
+      "previousArtwork": "Previous artwork",
+      "nextArtwork": "Next artwork",
+      "showImage": "Show image",
+      "collectionCoverAlt": "collection cover",
+      "projectArtworkAlt": "project artwork",
+      "featuredArtworkAlt": "featured artwork",
+      "featuredVisual": "FEATURED VISUAL",
       "openProject": "Explore project",
       "featuredImageHint": "CLICK IMAGE TO VIEW FULL SIZE ↗",
       "imagePreview": "IMAGE PREVIEW",
@@ -134,12 +146,15 @@
     "appearance": {
       "headingTextColor": "#f1f0f4",
       "bodyTextColor": "#a7adbb",
+      "uiTextColor": "#e6e3ee",
       "labelTextColor": "#b4acd8",
       "captionTextColor": "#f5f3fb",
       "captionBackgroundColor": "#080a10",
+      "headingTextScale": 110,
       "bodyTextSize": 15,
-      "labelTextSize": 10,
-      "captionTextSize": 12
+      "uiTextSize": 11,
+      "labelTextSize": 15,
+      "captionTextSize": 11
     }
   },
   "categories": [

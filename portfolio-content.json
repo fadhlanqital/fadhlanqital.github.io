@@ -154,6 +154,7 @@
       "captionTextColor": "#f5f3fb",
       "captionBackgroundColor": "#080a10",
       "headingTextScale": 110,
+      "featuredImageScale": 75,
       "bodyTextSize": 15,
       "uiTextSize": 12,
       "labelTextSize": 13,

@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#090b10">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob: https:; connect-src 'self' https://api.github.com; font-src 'self'; form-action 'self'; object-src 'none'; base-uri 'none'">
+  <title>Admin Portfolio — Fadhlan Qital</title>
+  <link rel="stylesheet" href="admin.css">
+  <script src="admin.js" defer></script>
+</head>
+<body>
+  <main class="admin-shell">
+    <header class="topbar">
+      <a class="brand" href="index.html"><span class="brand-mark">FQ.</span><span><strong>PORTFOLIO ADMIN</strong><small>EDITOR KONTEN STATIS</small></span></a>
+      <a class="public-link" href="index.html">Lihat website <span>↗</span></a>
+    </header>
+
+    <section class="gate card" id="githubGate">
+      <span class="eyebrow">TANPA DATABASE</span>
+      <h1>Kelola portofolio<br><em>langsung dari sini.</em></h1>
+      <p>Isi portofolio disimpan sebagai berkas di repositori GitHub Anda. Setiap kali diterbitkan, GitHub Pages akan membangun ulang website.</p>
+      <form id="connectForm" class="connect-form">
+        <label for="githubToken">Fine-grained personal access token GitHub</label>
+        <input id="githubToken" type="password" autocomplete="off" spellcheck="false" placeholder="github_pat_…" required>
+        <button class="button button-primary" type="submit" id="connectButton">Hubungkan editor</button>
+        <p class="form-note">Token hanya dipakai selama halaman admin ini terbuka. Token tidak ditulis ke berkas website atau penyimpanan browser.</p>
+      </form>
+      <details class="token-help">
+        <summary>Cara membuat token khusus untuk editor ini</summary>
+        <ol>
+          <li>Buka GitHub <strong>Settings → Developer settings → Personal access tokens → Fine-grained tokens</strong>.</li>
+          <li>Buat token untuk pemilik repositori <strong>fadhlanqital</strong> dan pilih repositori <strong>fadhlanqital.github.io</strong>.</li>
+          <li>Di <strong>Repository permissions</strong>, beri <strong>Contents: Read and write</strong>. Biarkan izin lain tetap tidak diberikan.</li>
+          <li>Buat token, salin, lalu tempel di kolom di atas. Jangan kirim token ke orang lain.</li>
+        </ol>
+      </details>
+      <p class="status" id="gateStatus" role="status" aria-live="polite"></p>
+    </section>
+
+    <section class="editor card" id="editor" hidden>
+      <div class="editor-heading">
+        <div><span class="eyebrow">TERHUBUNG KE fadhlanqital.github.io</span><h1>Konten portofolio</h1><p>Edit lewat formulir. Tombol terbitkan menyimpan satu commit ke repositori.</p></div>
+        <div class="heading-actions"><button class="button button-quiet" id="logoutButton" type="button">Putuskan koneksi</button></div>
+      </div>
+      <nav class="editor-tabs" aria-label="Bagian editor">
+        <button type="button" class="editor-tab is-active" data-tab="site">Website</button>
+        <button type="button" class="editor-tab" data-tab="categories">Kategori</button>
+        <button type="button" class="editor-tab" data-tab="projects">Proyek & galeri</button>
+      </nav>
+      <div id="editorContent" class="editor-content"></div>
+      <div class="publish-bar">
+        <p id="saveStatus" role="status" aria-live="polite">Perubahan tersimpan di formulir; klik Terbitkan untuk menampilkannya di website.</p>
+        <button class="button button-primary" type="button" id="publishButton">Terbitkan perubahan</button>
+      </div>
+    </section>
+    <footer class="admin-footer">Konten publik tetap hanya-baca. Hak mengubah berkas diberikan oleh token GitHub yang Anda masukkan.</footer>
+  </main>
+</body>
+</html>

@@ -1,0 +1,315 @@
+{
+  "site": {
+    "title": "Fadhlan Qital — 2D Artist & Game Developer",
+    "language": "en",
+    "description": "Fadhlan Qital — 2D Artist and Game Developer portfolio.",
+    "brandName": "FADHLAN QITAL",
+    "brandMonogram": "FQ.",
+    "navigation": {
+      "home": "Home",
+      "about": "About",
+      "contact": "Let’s talk",
+      "footerTop": "BACK TO TOP ↑",
+      "viewerHelp": "← → NAVIGATE · ESC CLOSE"
+    },
+    "footerRole": "2D ARTIST · GAME DEVELOPER",
+    "copyright": "© 2026 FADHLAN QITAL",
+    "home": {
+      "heroIndex": "PORTFOLIO 2025—2026 · INDONESIA",
+      "heroKicker": "2D ARTIST & GAME DEVELOPER",
+      "heroTitle": "Worlds beyond",
+      "heroEmphasis": "the familiar.",
+      "heroIntro": "I'm Fadhlan Qital. I create illustrations, 2D game assets and interactive experiences, drawn to surreal ideas, atmospheric spaces and expressive visual storytelling.",
+      "heroImage": "hero-portrait",
+      "heroImageAlt": "Original illustrated character artwork by Fadhlan Qital",
+      "heroSideNote": "A PERSONAL COLLECTION OF ART & INTERACTIVE WORLDS",
+      "heroPrimaryCta": "Explore personal artwork",
+      "heroSecondaryCta": "Meet the artist",
+      "heroScrollLabel": "SCROLL TO EXPLORE",
+      "spotlightProjectId": "anima",
+      "statementEyebrow": "01 / CREATIVE PRACTICE",
+      "statementMeta": "REALITY × IMAGINATION",
+      "statement": "Art, atmosphere & worlds beyond the familiar.",
+      "statementFooter": "PERSONAL ARTWORK · GAME ART · GAME DEVELOPMENT",
+      "featuredTopLeft": "FQ / FEATURED DISCIPLINES",
+      "featuredTopRight": "THREE WORLDS · ONE PORTFOLIO",
+      "personalEyebrow": "02 / FIRST COLLECTION",
+      "personalTitle": "Personal",
+      "personalEmphasis": "Artwork.",
+      "personalDescription": "Personal illustrations, sketchbook explorations and environment studies — including selected work from the Independent Study Program.",
+      "personalSideLabel": "PERSONAL COLLECTION",
+      "personalSideTitle": "Fragments of",
+      "personalSideEmphasis": "other worlds.",
+      "personalLink": "View all personal artwork",
+      "personalCoverLabel": "ENTER COLLECTION ↗",
+      "personalFooterLabel": "PERSONAL ILLUSTRATION · SKETCHBOOK · INDEPENDENT STUDY",
+      "personalFooterLink": "OPEN PERSONAL ARTWORK ↗",
+      "spotlightEyebrow": "03 / 2D GAME ART",
+      "spotlightTitle": "A world to",
+      "spotlightEmphasis": "step into.",
+      "spotlightDescription": "Visual work for Anima: The Fallen Heroes & Mystic Forest — from environment artwork to characters, assets and cutscenes.",
+      "spotlightImageAlt": "Anima — environment artwork",
+      "spotlightMobileImageAlt": "Anima — forest artwork",
+      "spotlightLink": "Explore project",
+      "spotlightRibbon": "CHARACTER · SPRITE · GAMEPLAY · CUTSCENE",
+      "categorySummaryEyebrow": "04 / THREE CREATIVE DISCIPLINES",
+      "categorySummaryTitle": "Three paths,",
+      "categorySummaryEmphasis": "one visual world.",
+      "categorySummaryDescription": "Explore each side of the portfolio separately: personal expression, production-ready 2D game art, and interactive game development."
+    },
+    "about": {
+      "navLabel": "About",
+      "eyebrow": "04 / ABOUT THE ARTIST",
+      "titleLine": "Hello,",
+      "titleEmphasis": "I'm Fadhlan.",
+      "image": "profile-photo",
+      "imageAlt": "Portrait of Fadhlan Qital",
+      "lead": "I create visual stories and interactive experiences.",
+      "paragraphOne": "I work on concept art, illustrations and 2D game assets, while also developing game mechanics and features using Unity and C#.",
+      "paragraphTwo": "I enjoy exploring ideas through characters, environments and expressive visuals. On the development side, I build games from prototype to release, including puzzle games, word games and small-scale independent projects.",
+      "skillsTitle": "Tools & creative focus",
+      "skills": ["UNITY", "2D ART", "ILLUSTRATION", "GAME ASSETS", "ANIMATION", "C#"],
+      "contactEyebrow": "05 / CONTACT",
+      "contactTitle": "Let's make",
+      "contactEmphasis": "something memorable.",
+      "contacts": [
+        {"label":"Email","value":"112fadhlanikhtiari@gmail.com","href":"mailto:112fadhlanikhtiari@gmail.com","newWindow":false},
+        {"label":"DeviantArt","value":"DeviantArt","href":"https://www.deviantart.com/m0ngrell","newWindow":true},
+        {"label":"Instagram","value":"Instagram","href":"https://www.instagram.com/fadhlanchaos/","newWindow":true},
+        {"label":"Telepon","value":"+62 811 1028 083","href":"tel:+628111028083","newWindow":false}
+      ]
+    },
+    "labels": {
+      "openProject": "Explore project",
+      "featuredImageHint": "CLICK IMAGE TO VIEW FULL SIZE ↗",
+      "imagePreview": "IMAGE PREVIEW",
+      "previous": "Previous",
+      "next": "Next",
+      "pause": "PAUSE",
+      "play": "PLAY",
+      "dragToExplore": "DRAG OR SCROLL TO EXPLORE →",
+      "noProjects": "No published projects in this category yet.",
+      "projectNotFound": "This project may have been removed or is not published.",
+      "backToCategory": "Back to category",
+      "previousProject": "Previous project",
+      "nextProject": "Next project",
+      "fullSize": "View full size",
+      "works": "WORKS",
+      "visuals": "VISUALS",
+      "portfolioPreparing": "PORTFOLIO CONTENT IS BEING PREPARED",
+      "chooseCategory": "Choose portfolio category",
+      "categoryNavigation": "Category navigation",
+      "artworkPreviews": "Artwork previews. Use arrows or swipe to browse images.",
+      "year": "YEAR",
+      "role": "ROLE",
+      "discipline": "DISCIPLINE",
+      "contribution": "CONTRIBUTION",
+      "selectedPieces": "selected pieces",
+      "collection": "COLLECTION",
+      "projectIndex": "PROJECT",
+      "visualSequence": "SEQUENCE",
+      "browseWorksPrefix": "BROWSE",
+      "browseWorksSuffix": "WORKS IN THIS CATEGORY",
+      "frameProgress": "ONE FRAME AT A TIME"
+    },
+    "meta": {
+      "openGraphImage": "assets/hero-portrait.webp",
+      "favicon": "favicon.svg"
+    }
+  },
+  "categories": [
+    {
+      "id": "personal",
+      "slug": "personal-artwork",
+      "name": "Personal Artwork",
+      "navLabel": "Personal Artwork",
+      "layout": "artwork-rail",
+      "featuredLabel": "PERSONAL ARTWORK",
+      "featuredKicker": "01 / PERSONAL COLLECTION",
+      "featuredTitle": "Personal",
+      "featuredEmphasis": "Artwork.",
+      "featuredDescription": "Personal illustrations, sketchbook explorations and selected environment studies from the Independent Study Program.",
+      "featuredCta": "EXPLORE PERSONAL ARTWORK",
+      "pageEyebrow": "01 / PERSONAL COLLECTION",
+      "pageTitle": "Personal",
+      "pageEmphasis": "Artwork.",
+      "pageDescription": "Personal illustrations, sketchbook explorations and selected environment studies from the Independent Study Program. A collection of visual experiments and worlds shaped by personal curiosity.",
+      "collectionLabel": "COLLECTION / PERSONAL ARTWORK",
+      "filterLabel": "PERSONAL ARTWORK",
+      "secondaryFilterLabel": "INDEPENDENT STUDY INCLUDED"
+    },
+    {
+      "id": "game-art",
+      "slug": "game-art",
+      "name": "2D Game Art",
+      "navLabel": "2D Game Art",
+      "layout": "artwork-rail",
+      "featuredLabel": "2D GAME ART",
+      "featuredKicker": "02 / GAME ART & ILLUSTRATION",
+      "featuredTitle": "2D Game",
+      "featuredEmphasis": "Artist.",
+      "featuredDescription": "Character concepts, 2D game assets, sprite animation and cutscene artwork from Anima and POLRI Quiz Game.",
+      "featuredCta": "EXPLORE GAME ART",
+      "pageEyebrow": "02 / GAME ART COLLECTION",
+      "pageTitle": "2D Game",
+      "pageEmphasis": "Art.",
+      "pageDescription": "Artwork created for interactive projects: character concepts, environment visuals, sprite assets, animation and cutscene illustrations. Explore the work in each game project.",
+      "collectionLabel": "COLLECTION / 2D GAME ART",
+      "filterLabel": "ALL GAME ART"
+    },
+    {
+      "id": "development",
+      "slug": "game-development",
+      "name": "Game Development",
+      "navLabel": "Game Development",
+      "layout": "project-list",
+      "featuredLabel": "GAME DEVELOPMENT",
+      "featuredKicker": "03 / INTERACTIVE PROJECTS",
+      "featuredTitle": "Game",
+      "featuredEmphasis": "Development.",
+      "featuredDescription": "Selected gameplay screens and interface previews from Paranoia Activity, Digtrix and MataKata.",
+      "featuredCta": "EXPLORE GAME PROJECTS",
+      "pageEyebrow": "03 / INTERACTIVE PROJECTS",
+      "pageTitle": "From idea",
+      "pageEmphasis": "to play.",
+      "pageDescription": "Personal and company game projects developed by Fadhlan. Each case study presents selected game screens, gameplay views and interface visuals."
+    }
+  ],
+  "projects": [
+    {
+      "id": "personal-artworks",
+      "title": "Personal Artwork",
+      "shortTitle": "Personal Artwork",
+      "category": "personal",
+      "year": "",
+      "role": "Personal Artwork",
+      "contribution": "",
+      "subtitle": "Personal illustration · Independent Study · Visual exploration",
+      "description": "A combined collection of personal projects and environment illustrations from the Independent Study Program under the Kampus Merdeka Initiative.",
+      "cover": "study-05",
+      "sortOrder": 0,
+      "published": true,
+      "gallery": [
+        {"image":"personal-01","caption":"Personal Artwork 01"}, {"image":"personal-02","caption":"Personal Artwork 02"}, {"image":"personal-03","caption":"Personal Artwork 03"}, {"image":"personal-04","caption":"Personal Artwork 04"}, {"image":"personal-05","caption":"Personal Artwork 05"}, {"image":"personal-06","caption":"Personal Artwork 06"}, {"image":"personal-07","caption":"Personal Artwork 07"}, {"image":"personal-08","caption":"Personal Artwork 08"},
+        {"image":"study-01","caption":"Independent Study — Forest Study 01"}, {"image":"study-02","caption":"Independent Study — Forest Study 02"}, {"image":"study-03","caption":"Independent Study — Forest Study 03"}, {"image":"study-04","caption":"Independent Study — Forest Study 04"}, {"image":"study-05","caption":"Independent Study — Forest Study 05"}
+      ],
+      "detail": {
+        "narrativeTitle": "Personal collection.",
+        "narrative": "This collection brings together personal projects and illustrations from the Independent Study Program under the Kampus Merdeka Initiative.",
+        "sections": [
+          {"title":"01 / PERSONAL PROJECTS","subtitle":"PERSONAL ARTWORK","layout":"wide","images":[0,1,2,3,4,5,6,7]},
+          {"title":"02 / INDEPENDENT STUDY","subtitle":"KAMPUS MERDEKA INITIATIVE","layout":"wide","images":[8,9,10,11,12]}
+        ]
+      }
+    },
+    {
+      "id": "anima",
+      "title": "Anima: The Fallen Heroes & Mystic Forest",
+      "shortTitle": "Anima",
+      "category": "game-art",
+      "year": "2024",
+      "role": "Game Artist / Illustrator",
+      "contribution": "",
+      "subtitle": "Character concept · Sprite assets · Gameplay · Cutscenes",
+      "description": "Selected visual work for Anima: The Fallen Heroes & Mystic Forest, including character concept art, sprite character assets, gameplay visuals and cutscene illustrations.",
+      "cover": "anima-forest-art",
+      "sortOrder": 1,
+      "published": true,
+      "gallery": [
+        {"image":"anima-forest-art","caption":"Mystic forest environment"}, {"image":"anima-wide","caption":"Environment artwork"}, {"image":"anima-character","caption":"Character concept"}, {"image":"anima-sprite-01","caption":"Sprite character asset"}, {"image":"anima-sprite-02","caption":"Sprite character asset"}, {"image":"anima-sprite-03","caption":"Sprite animation sheet"}, {"image":"anima-sprite-04","caption":"Sprite animation sheet"}, {"image":"anima-sprite-05","caption":"Character sprite"}, {"image":"anima-sprite-06","caption":"Character sprite"}, {"image":"anima-sprite-07","caption":"Character sprite"}, {"image":"anima-gameplay","caption":"Gameplay"}, {"image":"anima-cutscene-01","caption":"Cutscene illustration"}, {"image":"anima-cutscene-02","caption":"Cutscene illustration"}, {"image":"anima-cutscene-03","caption":"Cutscene illustration"}, {"image":"anima-cutscene-04","caption":"Cutscene illustration"}, {"image":"anima-cutscene-05","caption":"Cutscene illustration"}, {"image":"anima-divider","caption":"Game visual artwork"}
+      ],
+      "detail": {
+        "narrativeTitle": "Visual contributions.",
+        "narrative": "Selected visual work for Anima: The Fallen Heroes & Mystic Forest, presented through character concepts, sprite assets, gameplay visuals, cutscenes and environment artwork.",
+        "sections": [
+          {"title":"01 / CHARACTER CONCEPT","subtitle":"ANIMA / THE FALLEN HEROES & MYSTIC FOREST","layout":"wide","images":[2]},
+          {"title":"02 / SPRITE CHARACTER ASSETS","subtitle":"ANIMA / THE FALLEN HEROES & MYSTIC FOREST","layout":"asset-strip","images":[3,4,5,6,7,8,9]},
+          {"title":"03 / GAMEPLAY VISUAL","subtitle":"ANIMA / THE FALLEN HEROES & MYSTIC FOREST","layout":"wide","images":[10]},
+          {"title":"04 / CINEMATIC STORY SEQUENCE","subtitle":"Five cutscene illustrations presented in portfolio order.","layout":"sequence","images":[11,12,13,14,15]},
+          {"title":"05 / ENVIRONMENT & ADDITIONAL VISUALS","subtitle":"ANIMA / THE FALLEN HEROES & MYSTIC FOREST","layout":"asset-strip","images":[0,1,16]}
+        ]
+      }
+    },
+    {
+      "id": "polri-quiz",
+      "title": "POLRI Quiz Game",
+      "shortTitle": "POLRI Quiz Game",
+      "category": "game-art",
+      "year": "2025",
+      "role": "Game Artist / Illustrator / Animator",
+      "contribution": "",
+      "subtitle": "Company project · Prototype",
+      "description": "Visual and animation asset contributions for the POLRI Quiz Game prototype, presented through character artwork and animation asset boards.",
+      "cover": "polri-01",
+      "sortOrder": 2,
+      "published": true,
+      "gallery": [
+        {"image":"polri-01","caption":"Character animation asset"}, {"image":"polri-02","caption":"Character animation asset"}, {"image":"polri-03","caption":"Animation sprite sheet"}, {"image":"polri-04","caption":"Animation sprite sheet"}, {"image":"polri-05","caption":"Character animation asset"}, {"image":"polri-06","caption":"Character animation asset"}, {"image":"polri-07","caption":"Animation sprite sheet"}, {"image":"polri-08","caption":"Animation sprite sheet"}
+      ],
+      "detail": {
+        "narrativeTitle": "Animation assets.",
+        "narrative": "Visual and animation asset contributions for the POLRI Quiz Game prototype. The boards are presented as still images because separate playable animation files are not part of the portfolio assets.",
+        "sections": [
+          {"title":"01 / CHARACTER IN MOTION","subtitle":"POLRI QUIZ GAME · PROTOTYPE","layout":"paired","images":[0,1]},
+          {"title":"02 / ANIMATION ASSET BOARD","subtitle":"POLRI QUIZ GAME · PROTOTYPE","layout":"paired","images":[2,3]},
+          {"title":"03 / CHARACTER ANIMATION","subtitle":"POLRI QUIZ GAME · PROTOTYPE","layout":"paired","images":[4,5]},
+          {"title":"04 / SPRITE SHEET","subtitle":"POLRI QUIZ GAME · PROTOTYPE","layout":"paired","images":[6,7]}
+        ]
+      }
+    },
+    {
+      "id": "paranoia",
+      "title": "Paranoia Activity",
+      "shortTitle": "Paranoia Activity",
+      "category": "development",
+      "year": "2024",
+      "role": "Game Developer",
+      "contribution": "Overall game development",
+      "subtitle": "Personal project",
+      "description": "A personal game development project. Fadhlan’s role covered overall game development. The portfolio presents the title screen and selected first-person gameplay views.",
+      "cover": "paranoia-01",
+      "sortOrder": 3,
+      "published": true,
+      "gallery": [
+        {"image":"paranoia-01","caption":"Gameplay environment"}, {"image":"paranoia-02","caption":"Gameplay screen"}, {"image":"paranoia-03","caption":"Game title screen"}, {"image":"paranoia-04","caption":"Game environment"}, {"image":"paranoia-05","caption":"Gameplay detail"}, {"image":"paranoia-06","caption":"Gameplay detail"}, {"image":"paranoia-07","caption":"Game visual"}
+      ],
+      "detail": {"narrativeTitle":"Game development.","narrative":"A personal game development project presented through its title screen and selected first-person gameplay views.","sections":[{"title":"01 / FEATURED VISUAL","subtitle":"PARANOIA ACTIVITY","layout":"wide","images":[0]},{"title":"GAME SHOWCASE / 02","subtitle":"PARANOIA ACTIVITY","layout":"wide","images":[1,2,3,4,5,6]}]}
+    },
+    {
+      "id": "digitrix",
+      "title": "Digtrix",
+      "shortTitle": "Digtrix",
+      "category": "development",
+      "year": "2025",
+      "role": "Game Developer",
+      "contribution": "Overall game development",
+      "subtitle": "Company project · Available on Play Store",
+      "description": "A company game project presented in the portfolio as available on the Play Store. Fadhlan contributed to the overall game development. The showcase includes the game identity, menu and selected numerical puzzle gameplay screens.",
+      "cover": "digitrix-05",
+      "sortOrder": 4,
+      "published": true,
+      "gallery": [
+        {"image":"digitrix-01","caption":"Game screen"}, {"image":"digitrix-02","caption":"Game screen"}, {"image":"digitrix-03","caption":"Game screen"}, {"image":"digitrix-04","caption":"Game logo and interface"}, {"image":"digitrix-05","caption":"Game interface overview"}
+      ],
+      "detail": {"narrativeTitle":"Game development.","narrative":"A company game project available on the Play Store. The portfolio presents the game identity, menu and selected numerical puzzle gameplay screens.","sections":[{"title":"01 / FEATURED VISUAL","subtitle":"DIGTRIX","layout":"wide","images":[0]},{"title":"GAME SHOWCASE / 02","subtitle":"DIGTRIX","layout":"wide","images":[1,2,3,4]}]}
+    },
+    {
+      "id": "matakata",
+      "title": "MataKata",
+      "shortTitle": "MataKata",
+      "category": "development",
+      "year": "2025",
+      "role": "Game Developer",
+      "contribution": "Overall game development",
+      "subtitle": "Company project · Available on Play Store",
+      "description": "A company game project listed in the original portfolio as available on the Play Store. Fadhlan contributed to the overall game development. The showcase includes the game identity, menu and selected word puzzle gameplay screens.",
+      "cover": "matakata-04",
+      "sortOrder": 5,
+      "published": true,
+      "gallery": [
+        {"image":"matakata-01","caption":"Game logo"}, {"image":"matakata-02","caption":"Gameplay interface"}, {"image":"matakata-03","caption":"Game title screen"}, {"image":"matakata-04","caption":"Game interface overview"}, {"image":"matakata-05","caption":"Gameplay screen"}
+      ],
+      "detail": {"narrativeTitle":"Game development.","narrative":"A company game project available on the Play Store. The portfolio presents the game identity, menu and selected word puzzle gameplay screens.","sections":[{"title":"01 / FEATURED VISUAL","subtitle":"MATAKATA","layout":"wide","images":[0]},{"title":"GAME SHOWCASE / 02","subtitle":"MATAKATA","layout":"wide","images":[1,2,3,4]}]}
+    }
+  ]
+}

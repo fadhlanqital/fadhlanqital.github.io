@@ -8,9 +8,15 @@
 5. About
 
 ## Content separation
-- **Personal Artwork — 13 visuals:** 8 personal illustrations/sketchbook pieces plus 5 Independent Study environment illustrations. These remain together as the personal collection.
-- **2D Game Art — 25 visuals:** Anima (17) and POLRI Quiz Game (8). The page has filters for All 2D Game Art, Anima, and POLRI Quiz Game.
+- **Personal Artwork — 12 visuals:** The illustrations and Independent Study work remain together as one collection.
+- **2D Game Art — 24 visuals:** Anima (16) and POLRI Quiz Game (8) appear as separate project entries. Each entry links to its own case-study page; selecting its cover opens the image viewer.
 - **Game Development — 17 visuals:** Paranoia Activity (7), Digtrix (5), and MataKata (5).
+
+## Home structure
+- Hero introduces the artist and links to the personal collection and About page.
+- Selected Works presents the personal collection, two 2D game art projects, and one game development project with visible project links and metadata.
+- Featured Disciplines remains a visual carousel for browsing the three category archives.
+- The standalone statement band, repeated Personal Artwork chapter, Anima-only spotlight, and duplicate text-only category list have been removed.
 
 ## Navigation behavior
 - The featured category carousel links to the matching discipline page.

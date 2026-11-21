@@ -178,22 +178,36 @@ function renderFeaturedCarousel() {
   </section>`;
 }
 
+function renderHomeWorkCard(project, index, collectionCategory = null) {
+  if (!project) return '';
+  const category = categoryForProject(project);
+  const cover = project.cover || project.gallery?.[0]?.image || '';
+  const collection = Boolean(collectionCategory);
+  const href = collection ? `#${esc(collectionCategory.slug)}` : `#project/${esc(project.id)}`;
+  const imageCount = project.gallery?.length || 0;
+  const cardLabel = collection ? (portfolio.site.home.personalLink || 'Explore collection') : (portfolio.site.home.spotlightLink || portfolio.site.labels.openProject);
+  const meta = [project.year, project.role].filter(Boolean).join(' · ');
+  const metaMarkup = !collection && meta ? `<span>${esc(meta)}</span>` : '';
+  return `<article class="home-work-card reveal"><a class="home-work-image" href="${href}" aria-label="${esc(cardLabel)}: ${esc(project.title)}"><img src="${esc(asset(cover))}" alt="${esc(project.shortTitle || project.title)} — ${esc(portfolio.site.labels.featuredArtworkAlt)}" loading="lazy"><span class="home-work-number">${String(index + 1).padStart(2, '0')}</span><span class="home-work-count">${String(imageCount).padStart(2, '0')} ${esc(portfolio.site.labels.visuals)}</span></a><div class="home-work-copy"><span class="eyebrow">${esc(collection ? 'PERSONAL COLLECTION' : category?.featuredLabel || category?.name || '')}</span><h3>${esc(project.shortTitle || project.title)}</h3><p>${esc(project.subtitle || project.description || '')}</p><div class="home-work-meta">${metaMarkup}<a href="${href}">${esc(cardLabel)} <span aria-hidden="true">↗</span></a></div></div></article>`;
+}
+
 function renderHome() {
   const home = portfolio.site.home;
-  const personalCategory = categories.find(category => category.id === 'personal') || categories.find(category => category.layout === 'artwork-rail');
-  const personal = visibleProjects(personalCategory?.id)[0];
-  const personalGallery = personal?.gallery || [];
-  const sideIndexes = [3, 10].map(index => Math.min(index, Math.max(0, personalGallery.length - 1))).filter((index, position, list) => personalGallery.length && list.indexOf(index) === position);
-  const spotlight = visibleProjects().find(project => project.id === home.spotlightProjectId) || visibleProjects('game-art')[0] || visibleProjects()[0];
-  const spotlightCategory = categoryForProject(spotlight);
-  const personalSection = personal ? `<section class="personal-chapter">
-      <div class="personal-heading reveal"><div><span class="eyebrow">${esc(home.personalEyebrow)} · ${personalGallery.length} ${esc(portfolio.site.labels.visuals)}</span><h2>${titleMarkup(home.personalTitle, home.personalEmphasis)}</h2></div><p>${esc(home.personalDescription)}</p></div>
-      <div class="personal-composition"><a class="personal-main-visual" href="#${esc(personalCategory.slug)}" aria-label="${esc(home.personalCoverLabel)}"><img src="${esc(asset(personal.cover || personalGallery[0]?.image))}" alt="${esc(personal.shortTitle)} ${esc(portfolio.site.labels.collectionCoverAlt)}"><span class="visual-corner">${esc(home.personalCoverLabel)}</span></a><div class="personal-side-visuals">${sideIndexes.map((index, position) => imageButton(personal, index, position === 0 ? 'personal-sketch' : 'personal-study')).join('')}<div class="personal-side-copy"><span class="micro">${esc(home.personalSideLabel)}</span><h3>${titleMarkup(home.personalSideTitle, home.personalSideEmphasis)}</h3><a class="link-arrow" href="#${esc(personalCategory.slug)}">${esc(home.personalLink)} <span>↗</span></a></div></div></div>
-      <div class="personal-foot"><span>${esc(home.personalFooterLabel)} · ${personalGallery.length} ${esc(portfolio.site.labels.visuals)}</span><a href="#${esc(personalCategory.slug)}">${esc(home.personalFooterLink)}</a></div>
-    </section>` : '';
-  const spotlightSection = spotlight ? `<section class="feature-chapter"><div class="chapter-head reveal"><div><span class="eyebrow">${esc(home.spotlightEyebrow)}</span><h2>${titleMarkup(home.spotlightTitle, home.spotlightEmphasis)}</h2></div><p>${esc(home.spotlightDescription)}</p></div><a class="feature-cover" href="#project/${esc(spotlight.id)}" aria-label="${esc(portfolio.site.labels.openProject)} ${esc(spotlight.title)}"><img class="desktop-feature-art" src="${esc(asset(spotlight.cover || spotlight.gallery[0]?.image))}" alt="${esc(home.spotlightImageAlt)}"><img class="mobile-feature-art" src="${esc(asset(spotlight.gallery[0]?.image || spotlight.cover))}" alt="${esc(home.spotlightMobileImageAlt)}"><div class="feature-cover-copy"><span class="eyebrow">${esc(spotlightCategory?.featuredLabel || '')}${spotlight.year ? ` · ${esc(spotlight.year)}` : ''}</span><h3>${esc(spotlight.shortTitle)}</h3><p>${esc(spotlight.subtitle)}</p><span class="link-arrow">${esc(home.spotlightLink)} <span>↗</span></span></div></a><div class="chapter-ribbon"><span>${esc(home.spotlightRibbon)}</span><strong>${esc(portfolio.site.labels.projectIndex)} ${String(allProjects().indexOf(spotlight) + 1).padStart(2, '0')} / ${String(allProjects().length).padStart(2, '0')}</strong><span>${esc(home.spotlightLink).toUpperCase()} ↗</span></div></section>` : '';
-  const categoryRows = categories.map((category, index) => `<a class="discipline-row" href="#${esc(category.slug)}"><span class="discipline-num">${String(index + 1).padStart(2, '0')}</span><h3>${esc(category.name)}</h3><p>${esc(category.featuredDescription)}</p><span class="row-arrow">↗</span></a>`).join('');
-  return `<div class="page home-page"><section class="home-hero"><div class="hero-copy"><div class="hero-index">${esc(home.heroIndex)}</div><span class="eyebrow">${esc(home.heroKicker)}</span><h1>${titleMarkup(home.heroTitle, home.heroEmphasis)}</h1><p class="hero-intro">${esc(home.heroIntro)}</p><div class="hero-ctas"><a class="button-light" href="#${esc(personalCategory?.slug || 'about')}">${esc(home.heroPrimaryCta)} <span>↗</span></a><a class="link-arrow" href="#about">${esc(home.heroSecondaryCta)} <span>↗</span></a></div></div><figure class="hero-art"><img src="${esc(asset(home.heroImage))}" alt="${esc(home.heroImageAlt)}"></figure><span class="hero-side-note">${esc(home.heroSideNote)}</span><a class="hero-scroll" href="#statement">${esc(home.heroScrollLabel)}</a><span class="hero-orbit orbit-one" aria-hidden="true"></span><span class="hero-orbit orbit-two" aria-hidden="true"></span></section>${renderFeaturedCarousel()}<section class="statement-band" id="statement"><div class="statement-top"><span>${esc(home.statementEyebrow)}</span><span>${esc(home.statementMeta)}</span></div><blockquote class="reveal">${esc(home.statement)}</blockquote><div class="statement-foot">${esc(home.statementFooter)}</div></section>${personalSection}${spotlightSection}<section class="dual-chapter"><div class="dual-chapter-head reveal"><div><span class="eyebrow">${esc(home.categorySummaryEyebrow)}</span><h2>${titleMarkup(home.categorySummaryTitle, home.categorySummaryEmphasis)}</h2></div><p>${esc(home.categorySummaryDescription)}</p></div><div class="discipline-list">${categoryRows}</div></section></div>`;
+  const personalCategory = categories.find(category => category.id === 'personal') || categories.find(category => category.slug === 'personal-artwork');
+  const gameArtCategory = categories.find(category => category.id === 'game-art') || categories.find(category => category.slug === 'game-art');
+  const developmentCategory = categories.find(category => category.id === 'development') || categories.find(category => category.slug === 'game-development');
+  const personalCollection = visibleProjects(personalCategory?.id)[0];
+  const gameArtProjects = visibleProjects(gameArtCategory?.id);
+  const featuredGameArt = gameArtProjects.find(project => project.id === home.spotlightProjectId) || gameArtProjects[0];
+  const otherGameArt = gameArtProjects.find(project => project.id !== featuredGameArt?.id);
+  const developmentProject = visibleProjects(developmentCategory?.id)[0];
+  const selectedProjects = [
+    personalCollection ? renderHomeWorkCard(personalCollection, 0, personalCategory) : '',
+    renderHomeWorkCard(featuredGameArt, 1),
+    renderHomeWorkCard(otherGameArt, 2),
+    renderHomeWorkCard(developmentProject, 3)
+  ].filter(Boolean).join('');
+  return `<div class="page home-page"><section class="home-hero"><div class="hero-copy"><div class="hero-index">${esc(home.heroIndex)}</div><span class="eyebrow">${esc(home.heroKicker)}</span><h1>${titleMarkup(home.heroTitle, home.heroEmphasis)}</h1><p class="hero-intro">${esc(home.heroIntro)}</p><div class="hero-ctas"><a class="button-light" href="#${esc(personalCategory?.slug || 'about')}">${esc(home.heroPrimaryCta)} <span>↗</span></a><a class="link-arrow" href="#about">${esc(home.heroSecondaryCta)} <span>↗</span></a></div></div><figure class="hero-art"><img src="${esc(asset(home.heroImage))}" alt="${esc(home.heroImageAlt)}"></figure><span class="hero-side-note">${esc(home.heroSideNote)}</span><a class="hero-scroll" href="#selectedWorks">${esc(home.heroScrollLabel)}</a><span class="hero-orbit orbit-one" aria-hidden="true"></span><span class="hero-orbit orbit-two" aria-hidden="true"></span></section><section class="home-selected" id="selectedWorks"><div class="home-selected-head reveal"><div><span class="eyebrow">${esc(home.spotlightEyebrow)}</span><h2>${titleMarkup(home.spotlightTitle, home.spotlightEmphasis)}</h2></div><p>${esc(home.spotlightDescription)}</p></div><div class="home-work-grid">${selectedProjects || `<p class="home-work-empty">${esc(portfolio.site.labels.noProjects)}</p>`}</div></section>${renderFeaturedCarousel()}</div>`;
 }
 
 function renderArtworkCategory(category, categoryProjects) {
@@ -209,10 +223,11 @@ function renderArtworkCategory(category, categoryProjects) {
 }
 
 function renderProjectCategory(category, categoryProjects) {
-  return `<div class="page dev-page"><section class="dev-intro"><div><span class="eyebrow">${esc(category.pageEyebrow)}</span><h1>${titleMarkup(category.pageTitle, category.pageEmphasis)}</h1></div><p>${esc(category.pageDescription)}</p></section><div class="dev-project-stack">${categoryProjects.length ? categoryProjects.map((project, index) => {
+  return `<div class="page dev-page ${category.id === 'game-art' ? 'game-art-project-page' : ''}"><section class="dev-intro"><div><span class="eyebrow">${esc(category.pageEyebrow)}</span><h1>${titleMarkup(category.pageTitle, category.pageEmphasis)}</h1></div><p>${esc(category.pageDescription)}</p></section><div class="dev-project-stack">${categoryProjects.length ? categoryProjects.map((project, index) => {
     const cover = project.cover || project.gallery[0]?.image || '';
     const caption = project.shortTitle || project.title;
-    return `<article class="dev-project"><button class="dev-visual" type="button" data-view-project="${esc(project.id)}" data-view-index="0" data-view-src="${esc(cover)}" data-view-caption="${esc(caption)}" aria-label="${esc(portfolio.site.labels.fullSize)}: ${esc(caption)}"><img src="${esc(asset(cover))}" alt="${esc(caption)} ${esc(portfolio.site.labels.projectArtworkAlt)}" draggable="false"></button><div class="dev-copy" data-number="${String(index + 1).padStart(2, '0')}"><div><span class="dev-meta">${esc(project.year)} &nbsp; / &nbsp; ${esc(category.featuredLabel)}</span><h2>${esc(project.title)}</h2><p>${esc(project.description)}</p></div><a class="dev-project-link" href="#project/${esc(project.id)}"><span>${esc(project.subtitle || project.role)}</span><span aria-hidden="true">↗</span></a></div></article>`;
+    const projectMeta = [project.year, project.role].filter(Boolean).join(' / ') || category.featuredLabel;
+    return `<article class="dev-project"><button class="dev-visual" type="button" data-view-project="${esc(project.id)}" data-view-index="0" data-view-src="${esc(cover)}" data-view-caption="${esc(caption)}" aria-label="${esc(portfolio.site.labels.fullSize)}: ${esc(caption)}"><img src="${esc(asset(cover))}" alt="${esc(caption)} ${esc(portfolio.site.labels.projectArtworkAlt)}" draggable="false"></button><div class="dev-copy" data-number="${String(index + 1).padStart(2, '0')}"><div><span class="dev-meta">${esc(projectMeta)}</span><h2>${esc(project.title)}</h2>${project.subtitle ? `<p class="dev-project-subtitle">${esc(project.subtitle)}</p>` : ''}<p>${esc(project.description)}</p></div><a class="dev-project-link" href="#project/${esc(project.id)}"><span>${esc(portfolio.site.labels.openProject || 'View project details')}</span><span aria-hidden="true">↗</span></a></div></article>`;
   }).join('') : `<p>${esc(portfolio.site.labels.noProjects)}</p>`}</div></div>`;
 }
 
@@ -288,7 +303,11 @@ function render(page, id = '') {
 function route() {
   if (!portfolio) return;
   const raw = location.hash.replace(/^#/, '') || 'home';
-  if (raw === 'statement') { requestAnimationFrame(() => $('#statement')?.scrollIntoView({ behavior: 'smooth' })); return; }
+  if (raw === 'statement' || raw === 'selectedWorks') {
+    if (!$('#selectedWorks')) render('home');
+    requestAnimationFrame(() => $('#selectedWorks')?.scrollIntoView({ behavior: 'smooth' }));
+    return;
+  }
   if (raw === 'contact') { render('about'); requestAnimationFrame(() => $('#contact')?.scrollIntoView({ behavior: 'smooth' })); return; }
   const [page, id] = raw.split('/');
   render(page, id);

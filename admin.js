@@ -170,30 +170,20 @@ function renderSiteEditor() {
       ['site.navigation.footerTop', 'Tautan kembali ke atas'], ['site.navigation.viewerHelp', 'Petunjuk galeri layar penuh'],
       ['site.footerRole', 'Peran pada footer'], ['site.copyright', 'Teks hak cipta']
     ] },
-    { title: 'Beranda · Hero dan pernyataan', fields: [
+    { title: 'Beranda · Hero', fields: [
       ['site.home.heroIndex', 'Label kecil di atas hero'], ['site.home.heroKicker', 'Label profesi'], ['site.home.heroTitle', 'Judul hero'],
       ['site.home.heroEmphasis', 'Judul hero miring'], ['site.home.heroIntro', 'Kalimat pembuka', 'textarea'],
       ['site.home.heroImageAlt', 'Deskripsi gambar hero (alt)'], ['site.home.heroSideNote', 'Catatan sisi hero'],
-      ['site.home.heroPrimaryCta', 'Tombol utama hero'], ['site.home.heroSecondaryCta', 'Tombol kedua hero'], ['site.home.heroScrollLabel', 'Teks petunjuk scroll'],
-      ['site.home.statementEyebrow', 'Label pernyataan'], ['site.home.statementMeta', 'Metadata pernyataan'],
-      ['site.home.statement', 'Pernyataan utama', 'textarea'], ['site.home.statementFooter', 'Label bawah pernyataan']
+      ['site.home.heroPrimaryCta', 'Tombol utama hero'], ['site.home.heroSecondaryCta', 'Tombol kedua hero'], ['site.home.heroScrollLabel', 'Teks petunjuk scroll']
     ] },
-    { title: 'Beranda · Koleksi dan kategori', fields: [
-      ['site.home.featuredTopLeft', 'Label atas carousel'], ['site.home.featuredTopRight', 'Teks sisi kanan carousel'],
-      ['site.home.personalEyebrow', 'Label koleksi personal'], ['site.home.personalTitle', 'Judul koleksi personal'],
-      ['site.home.personalEmphasis', 'Judul miring koleksi personal'], ['site.home.personalDescription', 'Deskripsi koleksi personal', 'textarea'],
-      ['site.home.personalSideLabel', 'Label kartu koleksi'], ['site.home.personalSideTitle', 'Judul kartu koleksi'],
-      ['site.home.personalSideEmphasis', 'Judul miring kartu koleksi'], ['site.home.personalLink', 'Tautan koleksi'],
-      ['site.home.personalCoverLabel', 'Teks pada gambar koleksi'], ['site.home.personalFooterLabel', 'Teks bawah koleksi'],
-      ['site.home.personalFooterLink', 'Tautan bawah koleksi'], ['site.home.spotlightEyebrow', 'Label proyek pilihan'],
-      ['site.home.spotlightTitle', 'Judul proyek pilihan'], ['site.home.spotlightEmphasis', 'Judul miring proyek pilihan'],
-      ['site.home.spotlightDescription', 'Deskripsi proyek pilihan', 'textarea'], ['site.home.spotlightLink', 'Teks tautan proyek pilihan'], ['site.home.spotlightImageAlt', 'Alt gambar desktop'],
-      ['site.home.spotlightMobileImageAlt', 'Alt gambar mobile'], ['site.home.spotlightRibbon', 'Teks pita proyek pilihan'],
-      ['site.home.categorySummaryEyebrow', 'Label ringkasan kategori'], ['site.home.categorySummaryTitle', 'Judul ringkasan kategori'],
-      ['site.home.categorySummaryEmphasis', 'Judul miring ringkasan kategori'], ['site.home.categorySummaryDescription', 'Deskripsi ringkasan kategori', 'textarea']
+    { title: 'Beranda · Karya pilihan dan disiplin', fields: [
+      ['site.home.spotlightEyebrow', 'Label bagian karya pilihan'], ['site.home.spotlightTitle', 'Judul karya pilihan'],
+      ['site.home.spotlightEmphasis', 'Judul miring karya pilihan'], ['site.home.spotlightDescription', 'Pengantar karya pilihan', 'textarea'],
+      ['site.home.spotlightLink', 'Teks tautan project'], ['site.home.personalLink', 'Teks tautan koleksi personal'],
+      ['site.home.featuredTopLeft', 'Label atas carousel disiplin'], ['site.home.featuredTopRight', 'Teks sisi kanan carousel']
     ] },
-    { title: 'Beranda · Gambar dan proyek pilihan', fields: [
-      ['site.home.heroImage', 'Gambar hero', 'image'], ['site.home.spotlightProjectId', 'ID proyek pilihan', 'project-select']
+    { title: 'Beranda · Gambar dan project utama', fields: [
+      ['site.home.heroImage', 'Gambar hero', 'image'], ['site.home.spotlightProjectId', 'Project 2D Game Art yang tampil pertama', 'project-select']
     ] },
     { title: 'Tentang saya dan kontak', fields: [
       ['site.about.eyebrow', 'Label halaman About'], ['site.about.titleLine', 'Judul About'], ['site.about.titleEmphasis', 'Judul About miring'],
@@ -220,8 +210,12 @@ function renderContactsEditor() {
 
 function projectSelectField(path, label) {
   const value = getPath(portfolio, path) || '';
-  const options = portfolio.projects.map(project => `<option value="${escapeHtml(project.id)}" ${project.id === value ? 'selected' : ''}>${escapeHtml(project.title)}</option>`).join('');
-  return `<label class="field"><span class="field-label">${escapeHtml(label)}</span><select data-path="${escapeHtml(path)}"><option value="">Pilih proyek pertama di kategori game art</option>${options}</select><small>Ganti pilihan ini jika ingin menampilkan proyek lain di beranda.</small></label>`;
+  const featuredGameArt = path === 'site.home.spotlightProjectId';
+  const projects = portfolio.projects.filter(project => project.published !== false && (!featuredGameArt || project.category === 'game-art'));
+  const options = projects.map(project => `<option value="${escapeHtml(project.id)}" ${project.id === value ? 'selected' : ''}>${escapeHtml(project.title)}</option>`).join('');
+  const placeholder = featuredGameArt ? 'Pilih project 2D Game Art' : 'Pilih project';
+  const note = featuredGameArt ? 'Project ini mendapat urutan pertama di bagian karya pilihan Home.' : 'Pilih project yang ditampilkan di beranda.';
+  return `<label class="field"><span class="field-label">${escapeHtml(label)}</span><select data-path="${escapeHtml(path)}"><option value="">${placeholder}</option>${options}</select><small>${note}</small></label>`;
 }
 
 const categoryTextFields = [
@@ -501,7 +495,7 @@ function deleteProject() {
   portfolio.projects = portfolio.projects.filter(item => item !== project);
   project.gallery.forEach(image => queueUnusedAsset(image.image));
   queueUnusedAsset(project.cover);
-  if (portfolio.site.home.spotlightProjectId === oldId) portfolio.site.home.spotlightProjectId = portfolio.projects[0]?.id || '';
+  if (portfolio.site.home.spotlightProjectId === oldId) portfolio.site.home.spotlightProjectId = portfolio.projects.find(item => item.category === 'game-art' && item.published !== false)?.id || '';
   selectedProjectRef = portfolio.projects[0] || null;
   selectedProjectId = selectedProjectRef?.id || '';
   renderEditor();
@@ -603,7 +597,8 @@ function validatePortfolio() {
     }
     projectIds.add(project.id);
   }
-  if (portfolio.site.home.spotlightProjectId && !projectIds.has(portfolio.site.home.spotlightProjectId)) return 'Pilih proyek beranda yang masih tersedia.';
+  const featuredGameArtProject = portfolio.projects.find(project => project.id === portfolio.site.home.spotlightProjectId);
+  if (portfolio.site.home.spotlightProjectId && (!featuredGameArtProject || featuredGameArtProject.category !== 'game-art' || featuredGameArtProject.published === false)) return 'Pilih project 2D Game Art yang masih dipublikasikan untuk bagian karya pilihan Home.';
   return '';
 }
 

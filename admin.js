@@ -4,6 +4,7 @@ const BRANCH = 'main';
 const CONTENT_PATH = 'portfolio-content.json';
 const API = `https://api.github.com/repos/${OWNER}/${REPOSITORY}`;
 const $ = (selector, root = document) => root.querySelector(selector);
+const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
 const editor = $('#editor');
 const editorContent = $('#editorContent');
 const gate = $('#githubGate');

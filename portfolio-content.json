@@ -84,12 +84,6 @@
           "label": "Email",
           "value": "112fadhlanikhtiari@gmail.com",
           "href": "mailto:112fadhlanikhtiari@gmail.com",
-          "newWindow": false
-        },
-        {
-          "label": "DeviantArt",
-          "value": "DeviantArt",
-          "href": "https://www.deviantart.com/m0ngrell",
           "newWindow": true
         },
         {
@@ -97,12 +91,6 @@
           "value": "Instagram",
           "href": "https://www.instagram.com/fadhlanchaos/",
           "newWindow": true
-        },
-        {
-          "label": "Telepon",
-          "value": "+62 811 1028 083",
-          "href": "tel:+628111028083",
-          "newWindow": false
         }
       ]
     },

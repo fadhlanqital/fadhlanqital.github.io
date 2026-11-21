@@ -478,7 +478,6 @@ body{background:#090b10;color:var(--white)}
   border:0;background:transparent;cursor:zoom-in;overflow:hidden;
 }
 .featured-image-trigger img{width:auto;height:auto;max-width:100%;max-height:100%;object-fit:contain;object-position:center;filter:drop-shadow(0 24px 38px rgba(0,0,0,.45));transition:opacity .32s ease,transform .7s cubic-bezier(.2,.7,.2,1);-webkit-user-drag:none}
-#featuredImage{width:auto;height:auto;max-width:100%;max-height:100%;object-fit:contain}
 .featured-image-trigger:hover img{transform:none}
 .featured-image-trigger img.image-change{animation:featuredImageIn .55s cubic-bezier(.2,.7,.2,1) both}
 @keyframes featuredImageIn{from{opacity:.25;transform:translateX(18px) scale(.985)}to{opacity:1;transform:translateX(0) scale(1)}}

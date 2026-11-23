@@ -145,7 +145,7 @@
       "heroImageScale": 145,
       "backgrounds": {
         "homeHero": {
-          "image": "personal-01",
+          "image": "assets/obitomadara-mwsyissd-1.webp",
           "opacity": 20,
           "overlay": 28,
           "blur": 0,
@@ -283,11 +283,6 @@
           "type": "Traditional Drawing"
         },
         {
-          "image": "personal-01",
-          "caption": "Personal Artwork 01",
-          "type": "Digital Illustration"
-        },
-        {
           "image": "personal-03",
           "caption": "Personal Artwork 03",
           "type": "Digital Illustration"
@@ -396,6 +391,11 @@
           "image": "assets/fadhlan-ikhtiari-10121398-tugas-2-2d-animation-mwswo63d-15.gif",
           "caption": "Fadhlan Ikhtiari - 10121398 - TUGAS 2 2D ANIMATION",
           "type": "Character Animation"
+        },
+        {
+          "image": "assets/obitomadara-mwszavhl-1.webp",
+          "caption": "obitomadara",
+          "type": "Digital Illustration"
         }
       ],
       "detail": {
@@ -407,12 +407,11 @@
             "subtitle": "PERSONAL ARTWORK",
             "layout": "wide",
             "images": [
-              1,
               0,
-              2,
+              1,
+              4,
               5,
-              6,
-              7
+              6
             ]
           }
         ]

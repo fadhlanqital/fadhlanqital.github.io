@@ -20,7 +20,7 @@
       "heroTitle": "Worlds beyond",
       "heroEmphasis": "the familiar.",
       "heroIntro": "I'm Fadhlan Qital. I create illustrations, 2D game assets and interactive experiences, drawn to surreal ideas, atmospheric spaces and expressive visual storytelling.",
-      "heroImage": "gifgarbha",
+      "heroImage": "assets/illustration9-5-mwssdck2-1.gif",
       "heroImageAlt": "Original illustrated character artwork by Fadhlan Qital",
       "heroSideNote": "A PERSONAL COLLECTION OF ART & INTERACTIVE WORLDS",
       "heroPrimaryCta": "Explore personal artwork",
@@ -457,8 +457,8 @@
       "published": true,
       "gallery": [
         {
-          "image": "polri-01",
-          "caption": "Character animation asset",
+          "image": "assets/illustration9-5-mwssdck2-1.gif",
+          "caption": "Illustration9.5",
           "type": "Character Animation"
         },
         {
@@ -495,11 +495,6 @@
           "image": "polri-08",
           "caption": "Animation sprite sheet",
           "type": "Sprite Sheet / Animation"
-        },
-        {
-          "image": "gifgarbha",
-          "caption": "Character animation asset",
-          "type": "Character Animation"
         }
       ],
       "detail": {

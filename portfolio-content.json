@@ -138,9 +138,9 @@
       "uiTextSize": 12,
       "labelTextSize": 13,
       "captionTextSize": 11,
-      "sectionSpacingScale": 112,
-      "contentGapScale": 100,
-      "pageGutterScale": 100,
+      "sectionSpacingScale": 140,
+      "contentGapScale": 70,
+      "pageGutterScale": 85,
       "heroImageScale": 145,
       "backgrounds": {
         "homeHero": {

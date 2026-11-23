@@ -401,20 +401,7 @@
       "detail": {
         "narrativeTitle": "Personal collection.",
         "narrative": "This collection brings together personal projects and illustrations from the Independent Study Program under the Kampus Merdeka Initiative.",
-        "sections": [
-          {
-            "title": "01 / PERSONAL PROJECTS",
-            "subtitle": "PERSONAL ARTWORK",
-            "layout": "wide",
-            "images": [
-              0,
-              1,
-              4,
-              5,
-              6
-            ]
-          }
-        ]
+        "sections": []
       }
     },
     {

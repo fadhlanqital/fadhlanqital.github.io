@@ -144,9 +144,9 @@
       "heroImageScale": 145,
       "backgrounds": {
         "homeHero": {
-          "image": "personal-01",
+          "image": "assets/cutscene1-mwsykcwc-6.webp",
           "opacity": 20,
-          "overlay": 28,
+          "overlay": 15,
           "blur": 0,
           "saturation": 70,
           "positionX": 31,
@@ -277,19 +277,14 @@
       "published": true,
       "gallery": [
         {
-          "image": "personal-02",
-          "caption": "Personal Artwork 02",
-          "type": "Traditional Drawing"
-        },
-        {
-          "image": "personal-01",
-          "caption": "Personal Artwork 01",
-          "type": "Digital Illustration"
-        },
-        {
           "image": "personal-03",
           "caption": "Personal Artwork 03",
           "type": "Digital Illustration"
+        },
+        {
+          "image": "personal-02",
+          "caption": "Personal Artwork 02",
+          "type": "Traditional Drawing"
         },
         {
           "image": "assets/walker-mwsvp1qw-d.webp",
@@ -395,6 +390,11 @@
           "image": "assets/fadhlan-ikhtiari-10121398-tugas-2-2d-animation-mwswo63d-15.gif",
           "caption": "Fadhlan Ikhtiari - 10121398 - TUGAS 2 2D ANIMATION",
           "type": "Character Animation"
+        },
+        {
+          "image": "assets/obitomadara-mwsyissd-1.webp",
+          "caption": "obitomadara",
+          "type": ""
         }
       ],
       "detail": {
@@ -408,10 +408,9 @@
             "images": [
               1,
               0,
-              2,
+              4,
               5,
-              6,
-              7
+              6
             ]
           }
         ]
@@ -427,40 +426,10 @@
       "contribution": "",
       "subtitle": "Character concept · Sprite assets · Gameplay · Cutscenes",
       "description": "Selected visual work for Anima: The Fallen Heroes & Mystic Forest, including character concept art, sprite character assets, gameplay visuals and cutscene illustrations.",
-      "cover": "anima-divider",
+      "cover": "assets/engkongarwah-mwsw5d64-j.webp",
       "sortOrder": 1,
       "published": true,
       "gallery": [
-        {
-          "image": "anima-divider",
-          "caption": "Game visual artwork",
-          "type": ""
-        },
-        {
-          "image": "anima-cutscene-01",
-          "caption": "Cutscene illustration",
-          "type": "Cutscene Illustration"
-        },
-        {
-          "image": "anima-cutscene-02",
-          "caption": "Cutscene illustration",
-          "type": "Cutscene Illustration"
-        },
-        {
-          "image": "anima-cutscene-03",
-          "caption": "Cutscene illustration",
-          "type": "Cutscene Illustration"
-        },
-        {
-          "image": "anima-cutscene-04",
-          "caption": "Cutscene illustration",
-          "type": "Cutscene Illustration"
-        },
-        {
-          "image": "anima-cutscene-05",
-          "caption": "Cutscene illustration",
-          "type": "Cutscene Illustration"
-        },
         {
           "image": "assets/engkongarwah-mwsw5d64-j.webp",
           "caption": "engkongArwah",
@@ -535,6 +504,31 @@
           "image": "assets/player-running-mwsw5dwi-u.gif",
           "caption": "Player_Running",
           "type": "Character Animation"
+        },
+        {
+          "image": "assets/cutscene5-mwsykcgh-2.webp",
+          "caption": "cutscene5",
+          "type": "Cutscene Illustration"
+        },
+        {
+          "image": "assets/cutscene4-mwsykck4-3.webp",
+          "caption": "cutscene4",
+          "type": "Cutscene Illustration"
+        },
+        {
+          "image": "assets/cutscene3-mwsykcnx-4.webp",
+          "caption": "cutscene3",
+          "type": "Cutscene Illustration"
+        },
+        {
+          "image": "assets/cutscene2-mwsykcs1-5.webp",
+          "caption": "cutscene2",
+          "type": "Cutscene Illustration"
+        },
+        {
+          "image": "assets/cutscene1-mwsykcwc-6.webp",
+          "caption": "cutscene1",
+          "type": "Cutscene Illustration"
         }
       ],
       "detail": {
@@ -555,8 +549,8 @@
             "subtitle": "ANIMA / THE FALLEN HEROES & MYSTIC FOREST",
             "layout": "asset-strip",
             "images": [
-              6,
-              7
+              0,
+              1
             ]
           },
           {
@@ -565,13 +559,13 @@
             "layout": "asset-grid",
             "videoSource": "local",
             "images": [
-              14,
-              15,
-              16,
-              17,
-              18,
-              19,
-              20
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14
             ]
           },
           {
@@ -579,25 +573,19 @@
             "subtitle": "ANIMA / THE FALLEN HEROES & MYSTIC FOREST",
             "layout": "asset-grid",
             "images": [
-              8,
-              9,
-              10,
-              11,
-              12,
-              13
+              2,
+              3,
+              4,
+              5,
+              6,
+              7
             ]
           },
           {
             "title": "CINEMATIC STORY SEQUENCE",
             "subtitle": "Five cutscene illustrations presented in portfolio order.",
             "layout": "sequence",
-            "images": [
-              1,
-              2,
-              3,
-              4,
-              5
-            ]
+            "images": []
           }
         ]
       }

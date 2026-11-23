@@ -217,7 +217,7 @@
       "collectionLabel": "COLLECTION / PERSONAL ARTWORK",
       "filterLabel": "PERSONAL ARTWORK",
       "allTypesLabel": "SEMUA JENIS",
-      "artworkTypeLabel": "ARTWORK TYPE",
+      "artworkTypeLabel": "",
       "secondaryFilterLabel": "INDEPENDENT STUDY INCLUDED",
       "artworkTypes": [
         "Traditional Drawing",

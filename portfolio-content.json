@@ -402,18 +402,18 @@
         "narrative": "Selected visual work for Anima: The Fallen Heroes & Mystic Forest, presented through character concepts, sprite assets, gameplay visuals and cutscene illustrations.",
         "sections": [
           {
-            "title": "01 / GAMEPLAY VISUAL",
+            "title": "GAMEPLAY VISUAL",
             "subtitle": "ANIMA / THE FALLEN HEROES & MYSTIC FOREST",
             "layout": "gameplay",
             "videoSource": "local",
             "beforeNarrative": true,
-            "video": "",
+            "video": "assets/ytsave-to-youtube-media-fsvqmr2q80-trailer-anima-mwsngyyu-1.mp4",
             "images": [
               9
             ]
           },
           {
-            "title": "02 / CHARACTER CONCEPT",
+            "title": "CHARACTER CONCEPT",
             "subtitle": "ANIMA / THE FALLEN HEROES & MYSTIC FOREST",
             "layout": "wide",
             "images": [
@@ -421,7 +421,7 @@
             ]
           },
           {
-            "title": "03 / SPRITE CHARACTER ASSETS",
+            "title": "SPRITE CHARACTER ASSETS",
             "subtitle": "ANIMA / THE FALLEN HEROES & MYSTIC FOREST",
             "layout": "asset-grid",
             "images": [
@@ -435,7 +435,7 @@
             ]
           },
           {
-            "title": "04 / CINEMATIC STORY SEQUENCE",
+            "title": "CINEMATIC STORY SEQUENCE",
             "subtitle": "Five cutscene illustrations presented in portfolio order.",
             "layout": "sequence",
             "images": [

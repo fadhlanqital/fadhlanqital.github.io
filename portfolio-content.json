@@ -137,7 +137,62 @@
       "bodyTextSize": 15,
       "uiTextSize": 12,
       "labelTextSize": 13,
-      "captionTextSize": 11
+      "captionTextSize": 11,
+      "sectionSpacingScale": 100,
+      "contentGapScale": 100,
+      "pageGutterScale": 100,
+      "backgrounds": {
+        "homeHero": {
+          "image": "personal-01",
+          "opacity": 20,
+          "overlay": 28,
+          "blur": 0,
+          "saturation": 70,
+          "positionX": 31,
+          "positionY": 39,
+          "zoom": 100
+        },
+        "personalCategory": {
+          "image": "assets/study-01.webp",
+          "opacity": 17,
+          "overlay": 22,
+          "blur": 0,
+          "saturation": 52,
+          "positionX": 69,
+          "positionY": 40,
+          "zoom": 100
+        },
+        "gameArtCategory": {
+          "image": "assets/illustration9-mwsukri3-2.webp",
+          "opacity": 17,
+          "overlay": 41,
+          "blur": 0,
+          "saturation": 65,
+          "positionX": 70,
+          "positionY": 59,
+          "zoom": 100
+        },
+        "developmentCategory": {
+          "image": "assets/paranoia-03.webp",
+          "opacity": 17,
+          "overlay": 60,
+          "blur": 1,
+          "saturation": 60,
+          "positionX": 70,
+          "positionY": 50,
+          "zoom": 112
+        },
+        "aboutOpening": {
+          "image": "assets/anima-wide.webp",
+          "opacity": 14,
+          "overlay": 64,
+          "blur": 1,
+          "saturation": 55,
+          "positionX": 28,
+          "positionY": 50,
+          "zoom": 110
+        }
+      }
     }
   },
   "categories": [
@@ -452,18 +507,13 @@
       "contribution": "",
       "subtitle": "Company project · Prototype",
       "description": "Visual and animation asset contributions for the POLRI Quiz Game prototype, presented through character artwork and animation asset boards.",
-      "cover": "polri-02",
+      "cover": "assets/illustration9-5-mwssdck2-1.gif",
       "sortOrder": 2,
       "published": true,
       "gallery": [
         {
           "image": "assets/illustration9-5-mwssdck2-1.gif",
           "caption": "Illustration9.5",
-          "type": "Character Animation"
-        },
-        {
-          "image": "polri-02",
-          "caption": "Character animation asset",
           "type": "Character Animation"
         },
         {
@@ -495,6 +545,11 @@
           "image": "polri-08",
           "caption": "Animation sprite sheet",
           "type": "Sprite Sheet / Animation"
+        },
+        {
+          "image": "assets/illustration9-mwsukri3-2.webp",
+          "caption": "Illustration9",
+          "type": "Character Animation"
         }
       ],
       "detail": {
@@ -505,17 +560,15 @@
             "title": "01 / CHARACTER IN MOTION",
             "subtitle": "POLRI QUIZ GAME · PROTOTYPE",
             "layout": "paired",
-            "images": [
-              1
-            ]
+            "images": []
           },
           {
             "title": "02 / ANIMATION ASSET BOARD",
             "subtitle": "POLRI QUIZ GAME · PROTOTYPE",
             "layout": "paired",
             "images": [
-              2,
-              3
+              1,
+              2
             ]
           },
           {
@@ -523,8 +576,8 @@
             "subtitle": "POLRI QUIZ GAME · PROTOTYPE",
             "layout": "paired",
             "images": [
-              4,
-              5
+              3,
+              4
             ]
           },
           {
@@ -532,8 +585,8 @@
             "subtitle": "POLRI QUIZ GAME · PROTOTYPE",
             "layout": "paired",
             "images": [
-              6,
-              7
+              5,
+              6
             ]
           }
         ]

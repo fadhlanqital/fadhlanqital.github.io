@@ -397,8 +397,8 @@ function renderPersonalArtworkEditor() {
   const personalProjects = portfolio.projects.filter(project => project.category === category.id);
   const textFields = [
     ['pageEyebrow', 'Label kecil di atas judul'], ['pageTitle', 'Judul halaman'], ['pageEmphasis', 'Bagian judul miring'],
-    ['pageDescription', 'Deskripsi halaman', 'textarea'], ['collectionLabel', 'Label koleksi karya'], ['filterLabel', 'Label filter proyek'],
-    ['allTypesLabel', 'Label filter semua jenis'], ['artworkTypeLabel', 'Label kecil di atas judul jenis karya (kosongkan untuk menyembunyikan)']
+    ['pageDescription', 'Deskripsi halaman', 'textarea'], ['collectionLabel', 'Label koleksi karya (kosongkan untuk menyembunyikan)'], ['filterLabel', 'Label filter proyek'],
+    ['allTypesLabel', 'Label filter semua jenis'], ['artworkTypeLabel', 'Label kecil di atas judul jenis karya (kosongkan untuk menyembunyikan nomor dan label)']
   ];
   const projectCards = personalProjects.map(project => renderPersonalArtworkProject(project)).join('');
   return `<div class="section-heading personal-editor-heading"><div><span class="eyebrow">PENGELOLAAN HALAMAN</span><h2>Personal Artwork</h2><p>Halaman publik ini mengambil teks dari kategori Personal Artwork dan gambar dari galeri proyek di bawah. Seksi cerita mengatur halaman detail proyek; menghapus seksi cerita tidak menghapus karya di halaman ini.</p></div><button class="button button-quiet" type="button" data-action="preview-personal">Pratinjau Personal Artwork</button></div><section class="settings-group personal-page-copy-editor"><div class="group-heading"><div><h3>Teks halaman Personal Artwork</h3><p>Perubahan teks langsung terlihat pada Pratinjau website dan diterbitkan saat Anda menekan tombol di bagian bawah.</p></div></div><div class="field-grid">${textFields.map(([key, label, type = 'text']) => {

@@ -141,6 +141,7 @@
       "sectionSpacingScale": 100,
       "contentGapScale": 100,
       "pageGutterScale": 100,
+      "heroImageScale": 145,
       "backgrounds": {
         "homeHero": {
           "image": "personal-01",

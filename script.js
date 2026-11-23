@@ -237,14 +237,72 @@ function renderCategory(category) {
   return renderArtworkCategory(category, categoryProjects);
 }
 
+function youtubeVideoId(value = '') {
+  try {
+    const url = new URL(value.trim());
+    if (!['https:', 'http:'].includes(url.protocol)) return '';
+    const host = url.hostname.toLowerCase();
+    if (host === 'youtu.be' || host === 'www.youtu.be') {
+      const id = url.pathname.split('/').filter(Boolean)[0] || '';
+      return /^[A-Za-z0-9_-]{11}$/.test(id) ? id : '';
+    }
+    if (!['youtube.com', 'www.youtube.com', 'm.youtube.com', 'youtube-nocookie.com', 'www.youtube-nocookie.com'].includes(host)) return '';
+    const match = url.pathname.match(/^\/(?:embed|shorts|live)\/([A-Za-z0-9_-]{11})(?:\/|$)/);
+    const id = url.pathname === '/watch' ? url.searchParams.get('v') || '' : match?.[1] || '';
+    return /^[A-Za-z0-9_-]{11}$/.test(id) ? id : '';
+  } catch { return ''; }
+}
+
+function vimeoEmbedUrl(value = '') {
+  try {
+    const url = new URL(value.trim());
+    if (!['https:', 'http:'].includes(url.protocol) || !['vimeo.com', 'www.vimeo.com', 'player.vimeo.com'].includes(url.hostname.toLowerCase())) return '';
+    const parts = url.pathname.split('/').filter(Boolean);
+    let idIndex = -1;
+    parts.forEach((part, index) => { if (/^\d{5,}$/.test(part) && (url.hostname.toLowerCase() !== 'player.vimeo.com' || parts[index - 1] === 'video')) idIndex = index; });
+    if (idIndex < 0) return '';
+    const id = parts[idIndex];
+    const pathHash = parts[idIndex + 1] && /^[A-Za-z0-9_-]+$/.test(parts[idIndex + 1]) ? parts[idIndex + 1] : '';
+    const hash = url.searchParams.get('h') || pathHash;
+    return `https://player.vimeo.com/video/${id}${hash ? `?h=${encodeURIComponent(hash)}` : ''}`;
+  } catch { return ''; }
+}
+
+function directVideoUrl(value = '') {
+  try {
+    const url = new URL(value.trim());
+    return url.protocol === 'https:' && /\.(?:mp4|webm)$/i.test(url.pathname) ? url.href : '';
+  } catch { return ''; }
+}
+
 function renderStorySection(project, section, sectionIndex) {
   const images = (section.images || []).filter(index => project.gallery[index]);
   const layout = section.layout || 'wide';
-  const buttons = images.map(index => imageButton(project, index, layout === 'asset-strip' ? 'asset-image' : layout === 'paired' ? 'polri-board-image' : 'wide')).join('');
+  const imageClass = layout === 'asset-strip' ? 'asset-image' : layout === 'asset-grid' ? 'asset-grid-image' : layout === 'paired' ? 'polri-board-image' : 'wide';
+  const buttons = images.map(index => imageButton(project, index, imageClass)).join('');
+  if (layout === 'gameplay') {
+    const sourceType = section.videoSource || 'local';
+    const poster = images.length ? ` poster="${esc(asset(project.gallery[images[0]].image))}"` : '';
+    let player = '';
+    if (sourceType === 'youtube') {
+      const videoId = youtubeVideoId(section.videoUrl);
+      if (videoId) player = `<iframe class="gameplay-embed" src="https://www.youtube-nocookie.com/embed/${videoId}?rel=0&playsinline=1" title="${esc(section.title || project.shortTitle)}" loading="lazy" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`;
+    } else if (sourceType === 'vimeo') {
+      const embedUrl = vimeoEmbedUrl(section.videoUrl);
+      if (embedUrl) player = `<iframe class="gameplay-embed" src="${esc(embedUrl)}" title="${esc(section.title || project.shortTitle)}" loading="lazy" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
+    } else if (sourceType === 'direct') {
+      const url = directVideoUrl(section.videoUrl);
+      if (url) player = `<video class="gameplay-video" controls playsinline preload="metadata"${poster} src="${esc(url)}"></video>`;
+    } else if (section.video) {
+      player = `<video class="gameplay-video" controls playsinline preload="metadata"${poster}><source src="${esc(asset(section.video))}" type="${/\.webm(?:$|\?)/i.test(section.video) ? 'video/webm' : 'video/mp4'}">Browser Anda tidak mendukung pemutaran video.</video>`;
+    }
+    const video = player ? `<div class="gameplay-video-wrap">${player}</div>` : '';
+    return `<section class="story-plate gameplay-plate ${sectionIndex % 2 ? 'midnight' : 'dark'}"><div class="story-plate-head"><span>${esc(section.title)}</span><span>${esc(section.subtitle || project.shortTitle)}</span></div>${video}<div class="case-study-images gameplay-stills">${buttons}</div></section>`;
+  }
   if (layout === 'sequence') {
     return `<section class="cutscene-sequence"><div class="cutscene-heading"><span class="eyebrow">${esc(section.title)}</span><h2>${esc(section.subtitle || '')}</h2></div>${images.map((index, imageIndex) => `<div class="cutscene-frame"><span class="cutscene-index">${esc(portfolio.site.labels.visualSequence)} ${String(imageIndex + 1).padStart(2, '0')}</span>${imageButton(project, index, 'wide')}</div>`).join('')}</section>`;
   }
-  const groupClass = layout === 'paired' ? 'polri-board-pair' : layout === 'asset-strip' ? 'case-study-images asset-strip' : 'case-study-images';
+  const groupClass = layout === 'paired' ? 'polri-board-pair' : layout === 'asset-strip' ? 'case-study-images asset-strip' : layout === 'asset-grid' ? 'case-study-images asset-grid' : 'case-study-images';
   return `<section class="story-plate ${sectionIndex % 2 ? 'midnight' : 'dark'}"><div class="story-plate-head"><span>${esc(section.title)}</span><span>${esc(section.subtitle || project.shortTitle)}</span></div><div class="${groupClass}">${buttons}</div></section>`;
 }
 
@@ -263,8 +321,10 @@ function renderProject(id) {
     [project.contribution ? labels.contribution : labels.visuals, project.contribution || `${String(project.gallery.length).padStart(2, '0')} ${labels.selectedPieces}`]
   ].filter(([, value]) => value);
   const sections = detail.sections?.length ? detail.sections : [{ title: `01 / ${labels.featuredVisual}`, subtitle: project.shortTitle, layout: 'wide', images: project.gallery.map((_, index) => index) }];
+  const leadingSections = sections.filter(section => section.beforeNarrative);
+  const followingSections = sections.filter(section => !section.beforeNarrative);
   const yearLabel = project.year ? ` · ${esc(project.year)}` : '';
-  return `<div class="page project-page"><section class="project-opening"><img src="${esc(asset(project.cover || project.gallery[0]?.image))}" alt="${esc(project.title)} — ${esc(labels.featuredArtworkAlt)}"><span class="project-opening-index">${esc(labels.projectIndex)} ${String(allProjects().indexOf(project) + 1).padStart(2, '0')} / ${String(allProjects().length).padStart(2, '0')}</span><div class="project-opening-copy"><span class="eyebrow">${esc(category?.featuredLabel || category?.name || '')}${yearLabel}</span><h1>${esc(project.shortTitle)}</h1><p>${esc(project.subtitle)}</p></div></section><div class="project-facts">${facts.map(([label, value]) => `<div class="fact"><span>${esc(label)}</span><strong>${esc(value)}</strong></div>`).join('')}</div><section class="project-narrative"><h2>${esc(detail.narrativeTitle || project.shortTitle)}</h2><p>${esc(detail.narrative || project.description)}</p></section>${sections.map((section, index) => renderStorySection(project, section, index)).join('')}<div class="project-end"><a href="#${esc(category?.slug || 'home')}"><span>←</span> ${esc(portfolio.site.labels.backToCategory)} · ${esc(category?.name || '')}</a>${projectList.length > 1 ? `<a href="#project/${esc(previous.id)}">${esc(portfolio.site.labels.previousProject)}</a><a href="#project/${esc(next.id)}">${esc(portfolio.site.labels.nextProject)} <span>↗</span></a>` : ''}</div></div>`;
+  return `<div class="page project-page"><section class="project-opening"><img src="${esc(asset(project.cover || project.gallery[0]?.image))}" alt="${esc(project.title)} — ${esc(labels.featuredArtworkAlt)}"><span class="project-opening-index">${esc(labels.projectIndex)} ${String(allProjects().indexOf(project) + 1).padStart(2, '0')} / ${String(allProjects().length).padStart(2, '0')}</span><div class="project-opening-copy"><span class="eyebrow">${esc(category?.featuredLabel || category?.name || '')}${yearLabel}</span><h1>${esc(project.shortTitle)}</h1><p>${esc(project.subtitle)}</p></div></section><div class="project-facts">${facts.map(([label, value]) => `<div class="fact"><span>${esc(label)}</span><strong>${esc(value)}</strong></div>`).join('')}</div>${leadingSections.map((section, index) => renderStorySection(project, section, index)).join('')}<section class="project-narrative"><h2>${esc(detail.narrativeTitle || project.shortTitle)}</h2><p>${esc(detail.narrative || project.description)}</p></section>${followingSections.map((section, index) => renderStorySection(project, section, index + leadingSections.length)).join('')}<div class="project-end"><a href="#${esc(category?.slug || 'home')}"><span>←</span> ${esc(portfolio.site.labels.backToCategory)} · ${esc(category?.name || '')}</a>${projectList.length > 1 ? `<a href="#project/${esc(previous.id)}">${esc(portfolio.site.labels.previousProject)}</a><a href="#project/${esc(next.id)}">${esc(portfolio.site.labels.nextProject)} <span>↗</span></a>` : ''}</div></div>`;
 }
 
 function renderAbout() {

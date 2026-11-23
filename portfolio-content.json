@@ -27,7 +27,7 @@
       "heroSecondaryCta": "Meet the artist",
       "heroScrollLabel": "SCROLL TO EXPLORE",
       "spotlightProjectId": "anima",
-      "spotlightEyebrow": "01 / CURATED PROJECTS",
+      "spotlightEyebrow": "CURATED PROJECTS",
       "spotlightTitle": "Selected",
       "spotlightEmphasis": "artworks.",
       "spotlightDescription": "A cross-section of personal illustration, 2D game art and interactive projects, with a closer look at the work behind each image.",
@@ -314,10 +314,6 @@
           "caption": "Game visual artwork"
         },
         {
-          "image": "anima-wide",
-          "caption": "Environment artwork"
-        },
-        {
           "image": "anima-character",
           "caption": "Character concept"
         },
@@ -376,36 +372,39 @@
       ],
       "detail": {
         "narrativeTitle": "Visual contributions.",
-        "narrative": "Selected visual work for Anima: The Fallen Heroes & Mystic Forest, presented through character concepts, sprite assets, gameplay visuals, cutscenes and environment artwork.",
+        "narrative": "Selected visual work for Anima: The Fallen Heroes & Mystic Forest, presented through character concepts, sprite assets, gameplay visuals and cutscene illustrations.",
         "sections": [
           {
-            "title": "01 / CHARACTER CONCEPT",
+            "title": "01 / GAMEPLAY VISUAL",
             "subtitle": "ANIMA / THE FALLEN HEROES & MYSTIC FOREST",
-            "layout": "wide",
+            "layout": "gameplay",
+            "videoSource": "local",
+            "beforeNarrative": true,
+            "video": "",
             "images": [
-              2
+              9
             ]
           },
           {
-            "title": "02 / SPRITE CHARACTER ASSETS",
+            "title": "02 / CHARACTER CONCEPT",
             "subtitle": "ANIMA / THE FALLEN HEROES & MYSTIC FOREST",
-            "layout": "asset-strip",
+            "layout": "wide",
             "images": [
+              1
+            ]
+          },
+          {
+            "title": "03 / SPRITE CHARACTER ASSETS",
+            "subtitle": "ANIMA / THE FALLEN HEROES & MYSTIC FOREST",
+            "layout": "asset-grid",
+            "images": [
+              2,
               3,
               4,
               5,
               6,
               7,
-              8,
-              9
-            ]
-          },
-          {
-            "title": "03 / GAMEPLAY VISUAL",
-            "subtitle": "ANIMA / THE FALLEN HEROES & MYSTIC FOREST",
-            "layout": "wide",
-            "images": [
-              10
+              8
             ]
           },
           {
@@ -413,20 +412,11 @@
             "subtitle": "Five cutscene illustrations presented in portfolio order.",
             "layout": "sequence",
             "images": [
+              10,
               11,
               12,
               13,
-              14,
-              15
-            ]
-          },
-          {
-            "title": "05 / ENVIRONMENT & ADDITIONAL VISUALS",
-            "subtitle": "ANIMA / THE FALLEN HEROES & MYSTIC FOREST",
-            "layout": "asset-strip",
-            "images": [
-              1,
-              0
+              14
             ]
           }
         ]

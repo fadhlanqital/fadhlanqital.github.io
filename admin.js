@@ -155,7 +155,7 @@ function field(path, label, type = 'text', hint = '') {
 function imageField(path, label, hint = '') {
   const value = String(getPath(portfolio, path) || '');
   const preview = value ? (value.startsWith('http') || value.startsWith('/') ? value : value.startsWith('assets/') ? value : `assets/${value}.webp`) : '';
-  return `<div class="field"><span class="field-label">${escapeHtml(label)}</span><div class="image-control"><div><input type="text" data-path="${escapeHtml(path)}" data-original-asset="${escapeHtml(value)}" value="${escapeHtml(value)}" placeholder="Nama file atau URL"><input type="file" accept="image/jpeg,image/png,image/webp" data-upload-path="${escapeHtml(path)}" aria-label="Unggah ${escapeHtml(label)}"></div><img class="image-preview" src="${escapeHtml(preview)}" alt="Pratinjau ${escapeHtml(label)}" ${preview ? '' : 'hidden'}></div>${hint ? `<small>${escapeHtml(hint)}</small>` : ''}</div>`;
+  return `<div class="field"><span class="field-label">${escapeHtml(label)}</span><div class="image-control"><div><input type="text" data-path="${escapeHtml(path)}" data-original-asset="${escapeHtml(value)}" value="${escapeHtml(value)}" placeholder="Nama file atau URL"><input type="file" accept="image/jpeg,image/png,image/webp,image/gif" data-upload-path="${escapeHtml(path)}" aria-label="Unggah ${escapeHtml(label)}"></div><img class="image-preview" src="${escapeHtml(preview)}" alt="Pratinjau ${escapeHtml(label)}" ${preview ? '' : 'hidden'}></div>${hint ? `<small>${escapeHtml(hint)}</small>` : ''}</div>`;
 }
 
 function renderSiteEditor() {
@@ -246,16 +246,85 @@ function renderProjectsEditor() {
   return `<div class="project-workspace"><aside class="project-list-panel"><div class="project-list-heading"><span>DAFTAR PROYEK</span><button class="button button-primary button-small" type="button" data-action="add-project">+ Baru</button></div><div class="project-list">${list}</div></aside>${renderProjectForm(project)}</div>`;
 }
 
+function adminYouTubeId(value = '') {
+  try {
+    const url = new URL(value.trim());
+    if (!['https:', 'http:'].includes(url.protocol)) return '';
+    const host = url.hostname.toLowerCase();
+    if (host === 'youtu.be' || host === 'www.youtu.be') {
+      const id = url.pathname.split('/').filter(Boolean)[0] || '';
+      return /^[A-Za-z0-9_-]{11}$/.test(id) ? id : '';
+    }
+    if (!['youtube.com', 'www.youtube.com', 'm.youtube.com', 'youtube-nocookie.com', 'www.youtube-nocookie.com'].includes(host)) return '';
+    const match = url.pathname.match(/^\/(?:embed|shorts|live)\/([A-Za-z0-9_-]{11})(?:\/|$)/);
+    const id = url.pathname === '/watch' ? url.searchParams.get('v') || '' : match?.[1] || '';
+    return /^[A-Za-z0-9_-]{11}$/.test(id) ? id : '';
+  } catch { return ''; }
+}
+
+function adminVimeoEmbedUrl(value = '') {
+  try {
+    const url = new URL(value.trim());
+    const host = url.hostname.toLowerCase();
+    if (!['https:', 'http:'].includes(url.protocol) || !['vimeo.com', 'www.vimeo.com', 'player.vimeo.com'].includes(host)) return '';
+    const parts = url.pathname.split('/').filter(Boolean);
+    let idIndex = -1;
+    parts.forEach((part, index) => { if (/^\d{5,}$/.test(part) && (host !== 'player.vimeo.com' || parts[index - 1] === 'video')) idIndex = index; });
+    if (idIndex < 0) return '';
+    const id = parts[idIndex];
+    const pathHash = parts[idIndex + 1] && /^[A-Za-z0-9_-]+$/.test(parts[idIndex + 1]) ? parts[idIndex + 1] : '';
+    const hash = url.searchParams.get('h') || pathHash;
+    return `https://player.vimeo.com/video/${id}${hash ? `?h=${encodeURIComponent(hash)}` : ''}`;
+  } catch { return ''; }
+}
+
+function adminDirectVideoUrl(value = '') {
+  try {
+    const url = new URL(value.trim());
+    return url.protocol === 'https:' && /\.(?:mp4|webm)$/i.test(url.pathname) ? url.href : '';
+  } catch { return ''; }
+}
+
+function renderAdminVideoPreview(section) {
+  const source = section.videoSource || 'local';
+  if (source === 'youtube') {
+    const id = adminYouTubeId(section.videoUrl);
+    return id ? `<iframe class="story-video-preview" src="https://www.youtube-nocookie.com/embed/${id}?rel=0&playsinline=1" title="Pratinjau video YouTube" loading="lazy" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>` : '<small>Masukkan tautan YouTube yang valid untuk melihat pratinjau.</small>';
+  }
+  if (source === 'vimeo') {
+    const embedUrl = adminVimeoEmbedUrl(section.videoUrl);
+    return embedUrl ? `<iframe class="story-video-preview" src="${escapeHtml(embedUrl)}" title="Pratinjau video Vimeo" loading="lazy" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>` : '<small>Masukkan tautan Vimeo yang bisa disematkan.</small>';
+  }
+  if (source === 'direct') {
+    const url = adminDirectVideoUrl(section.videoUrl);
+    return url ? `<video class="story-video-preview" controls playsinline preload="metadata" src="${escapeHtml(url)}"></video>` : '<small>Masukkan tautan langsung HTTPS yang berakhir .mp4 atau .webm.</small>';
+  }
+  return section.video ? `<video class="story-video-preview" controls playsinline preload="metadata" src="${escapeHtml(publicAsset(section.video))}"></video>` : '<small>Preview video lokal akan muncul setelah berkas dipilih.</small>';
+}
+
 function renderProjectForm(project) {
   if (!project) return '<div class="empty-card">Pilih proyek untuk mengeditnya.</div>';
   const categoryOptions = portfolio.categories.map(category => `<option value="${escapeHtml(category.id)}" ${category.id === project.category ? 'selected' : ''}>${escapeHtml(category.name)}</option>`).join('');
   const detail = project.detail ||= { narrativeTitle: '', narrative: '', sections: [] };
   const gallery = project.gallery ||= [];
   const galleryMarkup = gallery.map((image, index) => `<div class="gallery-item"><img src="${escapeHtml(publicAsset(image.image))}" alt="Pratinjau" loading="lazy"><input type="text" class="gallery-path" value="${escapeHtml(image.image)}" data-original-image="${escapeHtml(image.image)}" data-gallery-index="${index}" data-gallery-field="image" aria-label="Path gambar ${index + 1}"><input type="text" value="${escapeHtml(image.caption)}" data-gallery-index="${index}" data-gallery-field="caption" aria-label="Keterangan gambar ${index + 1}"><div class="gallery-controls"><button class="icon-button" type="button" data-action="move-gallery" data-index="${index}" data-direction="-1" aria-label="Naikkan urutan" ${index === 0 ? 'disabled' : ''}>↑</button><button class="icon-button" type="button" data-action="move-gallery" data-index="${index}" data-direction="1" aria-label="Turunkan urutan" ${index === gallery.length - 1 ? 'disabled' : ''}>↓</button><button class="icon-button" type="button" data-action="remove-gallery" data-index="${index}" aria-label="Hapus gambar dari galeri">×</button></div></div>`).join('');
-  const sectionsMarkup = (detail.sections || []).map((section, sectionIndex) => `<article class="story-item"><div class="story-item-top"><strong>SEKSI CERITA ${String(sectionIndex + 1).padStart(2, '0')}</strong><button class="button button-danger button-small" type="button" data-action="remove-story" data-index="${sectionIndex}">Hapus seksi</button></div><div class="story-fields"><label class="field"><span class="field-label">Judul seksi</span><input value="${escapeHtml(section.title)}" data-story-index="${sectionIndex}" data-story-field="title"></label><label class="field"><span class="field-label">Subjudul seksi</span><input value="${escapeHtml(section.subtitle)}" data-story-index="${sectionIndex}" data-story-field="subtitle"></label><label class="field"><span class="field-label">Tata letak gambar</span><select data-story-index="${sectionIndex}" data-story-field="layout"><option value="wide" ${section.layout === 'wide' ? 'selected' : ''}>Gambar lebar</option><option value="asset-strip" ${section.layout === 'asset-strip' ? 'selected' : ''}>Deretan aset</option><option value="paired" ${section.layout === 'paired' ? 'selected' : ''}>Gambar berpasangan</option><option value="sequence" ${section.layout === 'sequence' ? 'selected' : ''}>Urutan cerita</option></select></label></div><div class="story-images">${gallery.map((image, imageIndex) => `<label class="image-choice"><input type="checkbox" data-story-images="${sectionIndex}" value="${imageIndex}" ${section.images?.includes(imageIndex) ? 'checked' : ''}><span>${String(imageIndex + 1).padStart(2, '0')} · ${escapeHtml(image.caption || image.image)}</span></label>`).join('') || '<small>Tambahkan gambar ke galeri untuk memilihnya.</small>'}</div></article>`).join('');
-  return `<section class="project-editor"><div class="project-titlebar"><div><span class="eyebrow">EDIT PROYEK</span><h2>${escapeHtml(project.title || 'Proyek baru')}</h2></div><div class="project-actions"><button class="button button-danger button-small" type="button" data-action="delete-project">Hapus proyek</button></div></div><div class="field-grid"><label class="field"><span class="field-label">ID proyek / URL detail</span><input type="text" value="${escapeHtml(project.id)}" data-project-field="id" ${project._new ? '' : 'readonly'} pattern="[a-z0-9-]+" required><small>Gunakan huruf kecil, angka, dan tanda hubung.</small></label><label class="field"><span class="field-label">Kategori</span><select data-project-field="category">${categoryOptions}</select></label><label class="field"><span class="field-label">Judul proyek</span><input value="${escapeHtml(project.title)}" data-project-field="title" required></label><label class="field"><span class="field-label">Judul singkat</span><input value="${escapeHtml(project.shortTitle)}" data-project-field="shortTitle"></label><label class="field"><span class="field-label">Tahun</span><input value="${escapeHtml(project.year)}" data-project-field="year"></label><label class="field"><span class="field-label">Peran</span><input value="${escapeHtml(project.role)}" data-project-field="role"></label><label class="field"><span class="field-label">Kontribusi</span><input value="${escapeHtml(project.contribution)}" data-project-field="contribution"></label><label class="field"><span class="field-label">Subjudul</span><input value="${escapeHtml(project.subtitle)}" data-project-field="subtitle"></label><label class="field field-wide"><span class="field-label">Deskripsi</span><textarea data-project-field="description">${escapeHtml(project.description)}</textarea></label><label class="field"><span class="field-label">Gambar cover · path atau URL</span><input value="${escapeHtml(project.cover)}" data-original-cover="${escapeHtml(project.cover)}" data-project-field="cover"><input type="file" accept="image/jpeg,image/png,image/webp" data-upload-project-cover="true"></label><label class="field"><span class="field-label">Urutan tampil</span><input type="number" min="0" step="1" value="${Number(project.sortOrder || 0)}" data-project-field="sortOrder"></label><label class="check-field"><input type="checkbox" data-project-field="published" ${project.published !== false ? 'checked' : ''}> Tampilkan di website publik</label></div><section class="subsection"><div class="subsection-heading"><div><h3>Gambar sampul</h3><p>Upload akan menambahkan berkas WebP ke folder assets.</p></div></div>${imageFieldForProjectCover(project)}</section><section class="subsection"><div class="subsection-heading"><div><h3>Galeri gambar (${gallery.length})</h3><p>Caption, urutan, dan gambar galeri dapat diatur di sini. Menghapus gambar yang tidak dipakai lagi akan menghapus berkasnya dari repositori saat diterbitkan.</p></div><label class="button button-quiet button-small">+ Unggah gambar<input type="file" accept="image/jpeg,image/png,image/webp" data-upload-gallery multiple hidden></label></div><div class="gallery-list">${galleryMarkup || '<div class="empty-card">Belum ada gambar di galeri.</div>'}</div></section><section class="subsection"><div class="subsection-heading"><div><h3>Halaman detail proyek</h3><p>Atur narasi dan kelompok gambar yang tampil pada studi kasus ini.</p></div></div><div class="field-grid"><label class="field"><span class="field-label">Judul narasi</span><input value="${escapeHtml(detail.narrativeTitle)}" data-project-path="detail.narrativeTitle"></label><label class="field field-wide"><span class="field-label">Narasi</span><textarea data-project-path="detail.narrative">${escapeHtml(detail.narrative)}</textarea></label></div><div class="subsection"><div class="subsection-heading"><h3>Seksi cerita dan susunan gambarnya</h3><button class="button button-quiet button-small" type="button" data-action="add-story">+ Tambah seksi</button></div><div class="story-list">${sectionsMarkup || '<div class="empty-card">Belum ada seksi cerita. Tambahkan seksi untuk menampilkan gambar galeri di halaman detail.</div>'}</div></div></section>`;
+  const sectionsMarkup = (detail.sections || []).map((section, sectionIndex) => {
+    const videoSource = section.videoSource || 'local';
+    const videoPreview = renderAdminVideoPreview(section);
+    const videoSourceSelect = `<label class="field"><span class="field-label">Sumber video</span><select data-story-index="${sectionIndex}" data-story-field="videoSource"><option value="local" ${videoSource === 'local' ? 'selected' : ''}>Upload dari perangkat</option><option value="youtube" ${videoSource === 'youtube' ? 'selected' : ''}>Tautan YouTube</option><option value="vimeo" ${videoSource === 'vimeo' ? 'selected' : ''}>Tautan Vimeo</option><option value="direct" ${videoSource === 'direct' ? 'selected' : ''}>Tautan MP4/WebM langsung</option></select></label>`;
+    const videoSourceInput = videoSource === 'local'
+      ? `<label class="field"><span class="field-label">Berkas video · MP4 atau WebM</span><input type="text" value="${escapeHtml(section.video || '')}" placeholder="assets/nama-video.mp4" data-original-video="${escapeHtml(section.video || '')}" data-story-index="${sectionIndex}" data-story-field="video"><input type="file" accept="video/mp4,video/webm,.mp4,.webm" data-upload-story-video="${sectionIndex}"><small>Upload otomatis mengatur tata letak ke Gameplay. Video disimpan dalam format asli; maksimum 40 MB.</small></label>`
+      : `<label class="field"><span class="field-label">${videoSource === 'youtube' ? 'Tautan video YouTube' : videoSource === 'vimeo' ? 'Tautan video Vimeo' : 'Tautan langsung MP4/WebM'}</span><input type="url" value="${escapeHtml(section.videoUrl || '')}" placeholder="${videoSource === 'youtube' ? 'https://youtu.be/xxxxxxxxxxx' : videoSource === 'vimeo' ? 'https://vimeo.com/123456789' : 'https://domain.com/video.mp4'}" data-story-index="${sectionIndex}" data-story-field="videoUrl"><small>${videoSource === 'youtube' ? 'Tempel tautan tonton atau berbagi YouTube. Video harus mengizinkan pemutaran embed.' : videoSource === 'vimeo' ? 'Tempel tautan Vimeo. Pastikan video diizinkan untuk disematkan.' : 'Gunakan URL HTTPS publik yang berakhir .mp4 atau .webm.'}</small></label>`;
+    const videoControls = `<div class="story-video-field">${videoSourceSelect}${videoSourceInput}${videoPreview}</div>`;
+    return `<article class="story-item">
+      <div class="story-item-top"><strong>SEKSI CERITA ${String(sectionIndex + 1).padStart(2, '0')}</strong><div class="project-actions"><button class="icon-button" type="button" data-action="move-story" data-index="${sectionIndex}" data-direction="-1" aria-label="Naikkan urutan seksi" ${sectionIndex === 0 ? 'disabled' : ''}>↑</button><button class="icon-button" type="button" data-action="move-story" data-index="${sectionIndex}" data-direction="1" aria-label="Turunkan urutan seksi" ${sectionIndex === detail.sections.length - 1 ? 'disabled' : ''}>↓</button><button class="button button-danger button-small" type="button" data-action="remove-story" data-index="${sectionIndex}">Hapus seksi</button></div></div>
+      <div class="story-fields"><label class="field"><span class="field-label">Judul seksi</span><input value="${escapeHtml(section.title)}" data-story-index="${sectionIndex}" data-story-field="title"></label><label class="field"><span class="field-label">Subjudul seksi</span><input value="${escapeHtml(section.subtitle)}" data-story-index="${sectionIndex}" data-story-field="subtitle"></label><label class="field"><span class="field-label">Tata letak</span><select data-story-index="${sectionIndex}" data-story-field="layout">${layouts.map(([value, label]) => `<option value="${value}" ${section.layout === value ? 'selected' : ''}>${label}</option>`).join('')}</select></label><label class="check-field"><input type="checkbox" data-story-index="${sectionIndex}" data-story-field="beforeNarrative" ${section.beforeNarrative ? 'checked' : ''}> Tampilkan sebelum narasi Visual contributions</label>${videoControls}</div>
+      <small class="story-images-help">Centang aset galeri yang ingin ditampilkan di seksi ini. Unggah GIF melalui Galeri gambar terlebih dahulu.</small>
+      <div class="story-images">${gallery.map((image, imageIndex) => `<label class="image-choice"><input type="checkbox" data-story-images="${sectionIndex}" value="${imageIndex}" ${section.images?.includes(imageIndex) ? 'checked' : ''}><span>${String(imageIndex + 1).padStart(2, '0')} · ${escapeHtml(image.caption || image.image)}</span></label>`).join('') || '<small>Tambahkan gambar ke galeri untuk memilihnya.</small>'}</div>
+    </article>`;
+  }).join('');
+  return `<section class="project-editor"><div class="project-titlebar"><div><span class="eyebrow">EDIT PROYEK</span><h2>${escapeHtml(project.title || 'Proyek baru')}</h2></div><div class="project-actions"><button class="button button-danger button-small" type="button" data-action="delete-project">Hapus proyek</button></div></div><div class="field-grid"><label class="field"><span class="field-label">ID proyek / URL detail</span><input type="text" value="${escapeHtml(project.id)}" data-project-field="id" ${project._new ? '' : 'readonly'} pattern="[a-z0-9-]+" required><small>Gunakan huruf kecil, angka, dan tanda hubung.</small></label><label class="field"><span class="field-label">Kategori</span><select data-project-field="category">${categoryOptions}</select></label><label class="field"><span class="field-label">Judul proyek</span><input value="${escapeHtml(project.title)}" data-project-field="title" required></label><label class="field"><span class="field-label">Judul singkat</span><input value="${escapeHtml(project.shortTitle)}" data-project-field="shortTitle"></label><label class="field"><span class="field-label">Tahun</span><input value="${escapeHtml(project.year)}" data-project-field="year"></label><label class="field"><span class="field-label">Peran</span><input value="${escapeHtml(project.role)}" data-project-field="role"></label><label class="field"><span class="field-label">Kontribusi</span><input value="${escapeHtml(project.contribution)}" data-project-field="contribution"></label><label class="field"><span class="field-label">Subjudul</span><input value="${escapeHtml(project.subtitle)}" data-project-field="subtitle"></label><label class="field field-wide"><span class="field-label">Deskripsi</span><textarea data-project-field="description">${escapeHtml(project.description)}</textarea></label><label class="field"><span class="field-label">Gambar cover · path atau URL</span><input value="${escapeHtml(project.cover)}" data-original-cover="${escapeHtml(project.cover)}" data-project-field="cover"><input type="file" accept="image/jpeg,image/png,image/webp,image/gif" data-upload-project-cover="true"></label><label class="field"><span class="field-label">Urutan tampil</span><input type="number" min="0" step="1" value="${Number(project.sortOrder || 0)}" data-project-field="sortOrder"></label><label class="check-field"><input type="checkbox" data-project-field="published" ${project.published !== false ? 'checked' : ''}> Tampilkan di website publik</label></div><section class="subsection"><div class="subsection-heading"><div><h3>Gambar sampul</h3><p>Upload gambar biasa akan dioptimalkan ke WebP; GIF tetap bergerak.</p></div></div>${imageFieldForProjectCover(project)}</section><section class="subsection"><div class="subsection-heading"><div><h3>Galeri gambar (${gallery.length})</h3><p>JPG, PNG, WebP, dan GIF dapat diunggah. GIF disimpan tanpa diubah agar animasinya tetap aktif. Video ditambahkan pada seksi gameplay.</p></div><label class="button button-quiet button-small">+ Unggah gambar<input type="file" accept="image/jpeg,image/png,image/webp,image/gif" data-upload-gallery multiple hidden></label></div><div class="gallery-list">${galleryMarkup || '<div class="empty-card">Belum ada gambar di galeri.</div>'}</div></section><section class="subsection"><div class="subsection-heading"><div><h3>Halaman detail proyek</h3><p>Atur narasi, video gameplay, serta kelompok gambar pada studi kasus ini.</p></div></div><div class="field-grid"><label class="field"><span class="field-label">Judul narasi</span><input value="${escapeHtml(detail.narrativeTitle)}" data-project-path="detail.narrativeTitle"></label><label class="field field-wide"><span class="field-label">Narasi</span><textarea data-project-path="detail.narrative">${escapeHtml(detail.narrative)}</textarea></label></div><div class="subsection"><div class="subsection-heading"><h3>Seksi cerita dan susunan medianya</h3><button class="button button-quiet button-small" type="button" data-action="add-story">+ Tambah seksi</button></div><div class="story-list">${sectionsMarkup || '<div class="empty-card">Belum ada seksi cerita. Tambahkan seksi untuk menampilkan gambar atau video pada halaman detail.</div>'}</div></div></section>`;
 }
-
 function imageFieldForProjectCover(project) {
   const value = project.cover || '';
   return `<div class="image-control"><div><small>Gambar cover yang terpilih: <span data-project-cover-label>${escapeHtml(value || 'belum ada')}</span></small></div><img class="image-preview" data-project-cover-preview src="${escapeHtml(publicAsset(value))}" alt="Pratinjau cover" ${value ? '' : 'hidden'}></div>`;
@@ -340,7 +409,7 @@ function isAssetReferenced(path) {
   const matches = value => repositoryAssetPath(value) === path;
   const siteImages = [portfolio.site.home.heroImage, portfolio.site.about.image, portfolio.site.meta.openGraphImage];
   if (siteImages.some(matches)) return true;
-  return portfolio.projects.some(project => matches(project.cover) || project.gallery.some(image => matches(image.image)));
+  return portfolio.projects.some(project => matches(project.cover) || project.gallery.some(image => matches(image.image)) || (project.detail?.sections || []).some(section => matches(section.video)));
 }
 
 function queueUnusedAsset(path) {
@@ -425,7 +494,17 @@ function updateFromInput(target, eventType = 'change') {
   }
   if (target.dataset.storyIndex !== undefined) {
     const project = getCurrentProject(); const section = project?.detail?.sections?.[Number(target.dataset.storyIndex)];
-    if (section) section[target.dataset.storyField] = target.value;
+    if (!section) return;
+    const key = target.dataset.storyField;
+    const oldValue = section[key];
+    const value = target.type === 'checkbox' ? target.checked : target.value;
+    section[key] = value;
+    if (key === 'videoSource') section.layout = 'gameplay';
+    if (key === 'video' && eventType === 'change') {
+      const originalValue = target.dataset.originalVideo || oldValue;
+      if (originalValue !== value) queueUnusedAsset(originalValue);
+      target.dataset.originalVideo = value;
+    }
   }
 }
 
@@ -494,6 +573,7 @@ function deleteProject() {
   const oldId = project.id;
   portfolio.projects = portfolio.projects.filter(item => item !== project);
   project.gallery.forEach(image => queueUnusedAsset(image.image));
+  (project.detail?.sections || []).forEach(section => queueUnusedAsset(section.video));
   queueUnusedAsset(project.cover);
   if (portfolio.site.home.spotlightProjectId === oldId) portfolio.site.home.spotlightProjectId = portfolio.projects.find(item => item.category === 'game-art' && item.published !== false)?.id || '';
   selectedProjectRef = portfolio.projects[0] || null;
@@ -504,7 +584,16 @@ function deleteProject() {
 function addStorySection() {
   const project = getCurrentProject(); if (!project) return;
   project.detail.sections ||= [];
-  project.detail.sections.push({ title: 'SEKSI CERITA BARU', subtitle: project.shortTitle, layout: 'wide', images: [] });
+  project.detail.sections.push({ title: 'SEKSI CERITA BARU', subtitle: project.shortTitle, layout: 'wide', videoSource: 'local', images: [] });
+  renderEditor();
+}
+
+function moveStorySection(index, direction) {
+  const project = getCurrentProject();
+  const sections = project?.detail?.sections || [];
+  const destination = index + direction;
+  if (destination < 0 || destination >= sections.length) return;
+  [sections[index], sections[destination]] = [sections[destination], sections[index]];
   renderEditor();
 }
 
@@ -529,28 +618,55 @@ function imageSlug(name) {
     .toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 48) || 'gambar';
 }
 
-async function stageImage(file) {
-  const blob = await optimizeImage(file);
-  const path = `assets/${imageSlug(file.name)}-${Date.now().toString(36)}.webp`;
+function classifyUpload(file) {
+  const extension = file.name.split('.').pop().toLowerCase();
+  if (extension === 'mp4' || file.type === 'video/mp4') return { kind: 'video', extension: 'mp4' };
+  if (extension === 'webm' || file.type === 'video/webm') return { kind: 'video', extension: 'webm' };
+  if (extension === 'gif' || file.type === 'image/gif') return { kind: 'gif', extension: 'gif' };
+  if (['jpg', 'jpeg', 'png', 'webp'].includes(extension) || ['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) return { kind: 'image', extension: 'webp' };
+  throw new Error(`Format “.${extension}” belum didukung. Gunakan JPG, PNG, WebP, GIF, MP4, atau WebM.`);
+}
+
+async function stageUpload(file, uploadType) {
+  if (file.size > 40 * 1024 * 1024) throw new Error(`“${file.name}” lebih dari batas 40 MB per berkas. Kompres video atau GIF lalu coba lagi.`);
+  const blob = uploadType.kind === 'image' ? await optimizeImage(file) : file;
+  const path = `assets/${imageSlug(file.name)}-${Date.now().toString(36)}-${(pendingUploads.length + 1).toString(36)}.${uploadType.extension}`;
   const previewUrl = URL.createObjectURL(blob);
   pendingUploads.push({ path, content: encodeBase64(await blob.arrayBuffer()), previewUrl });
   localPreviewAssets.set(path, previewUrl);
   return path;
 }
 
-async function handleImageUpload(input) {
+async function handleFileUpload(input) {
   const files = [...input.files]; if (!files.length) return;
+  const isVideoSlot = input.dataset.uploadStoryVideo !== undefined;
   const button = $('#publishButton'); button.disabled = true;
   const saveStatus = $('#saveStatus');
   try {
-    for (const file of files) {
-      const path = await stageImage(file);
-      if (input.dataset.uploadPath) {
+    const classified = files.map(file => ({ file, type: classifyUpload(file) }));
+    const oversized = classified.find(({ file }) => file.size > 40 * 1024 * 1024);
+    if (oversized) throw new Error(`“${oversized.file.name}” lebih dari batas 40 MB per berkas. Kompres video atau GIF lalu coba lagi.`);
+    if (classified.some(({ type }) => isVideoSlot ? type.kind !== 'video' : type.kind === 'video')) {
+      throw new Error(isVideoSlot ? 'Slot gameplay menerima video MP4 atau WebM.' : 'Pilih gambar untuk cover/galeri. Video diunggah melalui field video pada seksi cerita.');
+    }
+    for (const { file, type } of classified) {
+      const path = await stageUpload(file, type);
+      if (isVideoSlot) {
+        const project = getCurrentProject();
+        const section = project?.detail?.sections?.[Number(input.dataset.uploadStoryVideo)];
+        if (!section) throw new Error('Seksi video tidak ditemukan.');
+        const oldValue = section.video;
+        section.video = path;
+        section.videoSource = 'local';
+        section.layout = 'gameplay';
+        queueUnusedAsset(oldValue);
+      } else if (input.dataset.uploadPath) {
         const oldValue = getPath(portfolio, input.dataset.uploadPath);
         setPath(portfolio, input.dataset.uploadPath, path);
         queueUnusedAsset(oldValue);
       } else {
         const project = getCurrentProject();
+        if (!project) throw new Error('Pilih proyek terlebih dahulu.');
         if (input.dataset.uploadProjectCover !== undefined) {
           const oldValue = project.cover; project.cover = path; queueUnusedAsset(oldValue);
         } else if (input.dataset.uploadGallery !== undefined) {
@@ -558,7 +674,8 @@ async function handleImageUpload(input) {
         }
       }
     }
-    status(saveStatus, `${files.length} gambar siap diterbitkan bersama perubahan konten.`, 'success');
+    const noun = isVideoSlot ? 'video' : 'gambar/GIF';
+    status(saveStatus, `${files.length} berkas ${noun} siap diterbitkan bersama perubahan konten.`, 'success');
     renderEditor();
   } catch (error) {
     status(saveStatus, error.message, 'error');
@@ -618,7 +735,8 @@ function handleEditorClick(event) {
   if (action === 'add-story') addStorySection();
   if (action === 'add-contact') { portfolio.site.about.contacts.push({ label: 'Tautan baru', value: 'Teks tautan', href: 'https://', newWindow: true }); renderEditor(); }
   if (action === 'remove-contact') { portfolio.site.about.contacts.splice(Number(button.dataset.index), 1); renderEditor(); }
-  if (action === 'remove-story') { const project = getCurrentProject(); if (project) { project.detail.sections.splice(Number(button.dataset.index), 1); renderEditor(); } }
+  if (action === 'move-story') moveStorySection(Number(button.dataset.index), Number(button.dataset.direction));
+  if (action === 'remove-story') { const project = getCurrentProject(); if (project) { const [removed] = project.detail.sections.splice(Number(button.dataset.index), 1); queueUnusedAsset(removed?.video); renderEditor(); } }
 }
 
 async function publishChanges() {
@@ -675,8 +793,13 @@ $('#connectForm').addEventListener('submit', async event => {
 editorContent.addEventListener('input', event => { updateFromInput(event.target, event.type); scheduleSitePreview(); });
 editorContent.addEventListener('change', event => {
   const input = event.target;
-  if (input.type === 'file') { handleImageUpload(input); return; }
+  if (input.type === 'file') { handleFileUpload(input); return; }
   if (input.dataset.storyImages !== undefined) { handleStoryImages(input); scheduleSitePreview(); return; }
+  if (['videoSource', 'videoUrl', 'video'].includes(input.dataset.storyField)) {
+    updateFromInput(input, event.type);
+    renderEditor();
+    return;
+  }
   updateFromInput(input, event.type);
   scheduleSitePreview();
 });

@@ -559,6 +559,14 @@ body{background:#090b10;color:var(--white)}
 .case-study-images.sequence-images{display:flex;flex-direction:column;gap:clamp(24px,4vw,58px)}
 .case-study-images.asset-strip{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(210px,30vw);gap:14px;overflow-x:auto;overscroll-behavior-inline:contain;scroll-snap-type:x mandatory;padding-bottom:12px;scrollbar-color:rgba(190,180,225,.4) transparent;scrollbar-width:thin}
 .case-study-images.asset-strip .story-image{height:clamp(220px,30vw,410px);scroll-snap-align:start}
+.case-study-images.asset-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr));gap:clamp(12px,2vw,22px);}
+.case-study-images.asset-grid .story-image{height:clamp(240px,29vw,390px);min-width:0;background:#090d15}
+.case-study-images.asset-grid .story-image img{width:100%;height:100%;max-height:none;object-fit:contain;padding:10px}
+.gameplay-video-wrap{width:100%;max-width:1440px;margin:0 auto 16px;background:#05070c;border:1px solid rgba(210,215,232,.16);}
+.gameplay-video{display:block;width:100%;max-height:78vh;aspect-ratio:16/9;object-fit:contain;background:#05070c}
+.gameplay-embed{display:block;width:100%;aspect-ratio:16/9;border:0;background:#05070c}
+.gameplay-stills{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),440px));gap:14px;justify-content:start}
+.gameplay-stills .story-image{height:clamp(210px,28vw,370px)}
 .cutscene-sequence{padding:clamp(54px,8vw,110px) clamp(22px,7vw,110px);background:radial-gradient(ellipse at 75% 15%,rgba(89,70,136,.14),transparent 45%),#090c13;color:#f1eff5}
 .cutscene-heading{max-width:1440px;margin:0 auto clamp(32px,5vw,70px)}
 .cutscene-heading h2,.polri-frame-intro h2{font-size:clamp(44px,7vw,90px);line-height:.9;letter-spacing:-.085em;margin:18px 0}
@@ -580,6 +588,12 @@ body{background:#090b10;color:var(--white)}
   .personal-detail-rail .story-image{height:78vw;min-height:260px}
   .case-study-images.asset-strip{grid-auto-columns:78vw;gap:10px}
   .case-study-images.asset-strip .story-image{height:74vw;min-height:240px}
+  .case-study-images.asset-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+  .case-study-images.asset-grid .story-image{height:clamp(180px,54vw,300px)}
+  .case-study-images.asset-grid .story-image img{padding:5px}
+  .gameplay-video-wrap{margin-bottom:10px}
+  .gameplay-stills{grid-template-columns:1fr}
+  .gameplay-stills .story-image{height:68vw;min-height:220px}
   .polri-board-pair{grid-template-columns:1fr;gap:12px}
   .polri-board-image{height:78vw;min-height:250px}
   .cutscene-sequence{padding-inline:18px}

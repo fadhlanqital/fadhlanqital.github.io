@@ -307,11 +307,22 @@ function renderArtworkCategory(category, categoryProjects) {
     if (!typeCounts.has(key)) typeCounts.set(key, { label: type, count: 0 });
     typeCounts.get(key).count += 1;
   });
+  const savedTypeOrder = new Map((Array.isArray(category.artworkTypeOrder) ? category.artworkTypeOrder : [])
+    .map((label, index) => [String(label).trim().toLocaleLowerCase(), index]));
+  const compareArtworkTypes = (a, b) => {
+    const rankA = savedTypeOrder.get(a.label.toLocaleLowerCase());
+    const rankB = savedTypeOrder.get(b.label.toLocaleLowerCase());
+    if (rankA !== undefined && rankB !== undefined && rankA !== rankB) return rankA - rankB;
+    if (rankA !== undefined && rankB === undefined) return -1;
+    if (rankA === undefined && rankB !== undefined) return 1;
+    return a.label.localeCompare(b.label);
+  };
+  const orderedTypeEntries = [...typeCounts.entries()].sort(([, a], [, b]) => compareArtworkTypes(a, b));
   const projectFilterMarkup = projectsForPage.length > 1
     ? `<div class="filter-list" aria-label="Filter proyek"><button type="button" class="filter-btn ${currentCategoryFilter === 'all' ? 'active' : ''}" data-filter-kind="project" data-filter="all">${esc(category.filterLabel || 'ALL')} <span>${String(total).padStart(2, '0')}</span></button>${projectsForPage.map(project => `<button type="button" class="filter-btn ${currentCategoryFilter === project.id ? 'active' : ''}" data-filter-kind="project" data-filter="${esc(project.id)}">${esc(project.shortTitle)} <span>${String(project.gallery.length).padStart(2, '0')}</span></button>`).join('')}</div>`
     : '';
   const typeFilterMarkup = typeCounts.size
-    ? `<div class="filter-list type-filter-list" aria-label="Filter jenis karya"><button type="button" class="filter-btn ${currentArtworkTypeFilter === 'all' ? 'active' : ''}" data-filter-kind="type" data-filter="all">SEMUA JENIS <span>${String(projectItems.length).padStart(2, '0')}</span></button>${[...typeCounts.entries()].map(([key, type]) => `<button type="button" class="filter-btn ${currentArtworkTypeFilter === key ? 'active' : ''}" data-filter-kind="type" data-filter="${esc(key)}">${esc(type.label)} <span>${String(type.count).padStart(2, '0')}</span></button>`).join('')}</div>`
+    ? `<div class="filter-list type-filter-list" aria-label="Filter jenis karya"><button type="button" class="filter-btn ${currentArtworkTypeFilter === 'all' ? 'active' : ''}" data-filter-kind="type" data-filter="all">SEMUA JENIS <span>${String(projectItems.length).padStart(2, '0')}</span></button>${orderedTypeEntries.map(([key, type]) => `<button type="button" class="filter-btn ${currentArtworkTypeFilter === key ? 'active' : ''}" data-filter-kind="type" data-filter="${esc(key)}">${esc(type.label)} <span>${String(type.count).padStart(2, '0')}</span></button>`).join('')}</div>`
     : '';
   const fallbackFilterMarkup = !projectFilterMarkup && !typeFilterMarkup
     ? `<div class="filter-list"><span class="filter-btn active static-filter">${esc(category.filterLabel || category.name)} <span>${String(total).padStart(2, '0')}</span></span>${category.secondaryFilterLabel ? `<span class="filter-note">${esc(category.secondaryFilterLabel)}</span>` : ''}</div>`
@@ -328,7 +339,7 @@ function renderArtworkCategory(category, categoryProjects) {
     artworkGroups.get(key).items.push(item);
   });
   const gridGroupsMarkup = [...artworkGroups.values()]
-    .sort((a, b) => a.label.localeCompare(b.label))
+    .sort(compareArtworkTypes)
     .map((group, groupIndex) => `<section class="artwork-type-section" aria-labelledby="artwork-type-heading-${groupIndex}"><header class="artwork-type-heading"><div><span class="eyebrow">${String(groupIndex + 1).padStart(2, '0')} / ARTWORK TYPE</span><h2 id="artwork-type-heading-${groupIndex}">${esc(group.label)}</h2></div><span class="artwork-type-count">${String(group.items.length).padStart(2, '0')} ${esc(portfolio.site.labels.visuals)}</span></header><div class="artwork-type-grid">${group.items.map((item, index) => artworkCard(item, index, group.items.length)).join('')}</div></section>`)
     .join('') || '<p class="artwork-empty">Tidak ada karya pada jenis ini.</p>';
   const displayedItems = currentArtworkView === 'grid' ? gridGroupsMarkup : railItemsMarkup;

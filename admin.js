@@ -181,7 +181,7 @@ function applyAppearance(site, target = document.documentElement) {
     target.style.setProperty('--admin-background-zoom', String(clampValue(config.zoom, 100, 160, defaults.zoom) / 100));
   }
   const spacingVariables = {
-    '--portfolio-preview-section-pad': px(24, sectionScale), '--portfolio-preview-content-gap': px(12, contentScale), '--portfolio-preview-side-pad': px(24, gutterScale), '--portfolio-preview-min-height': px(Math.max(245, 190 * sectionScale), 1),
+    '--portfolio-preview-section-pad': px(24, sectionScale), '--portfolio-preview-section-gap': px(22, sectionScale), '--portfolio-preview-content-gap': px(12, contentScale), '--portfolio-preview-side-pad': px(24, gutterScale), '--portfolio-preview-min-height': px(Math.max(245, 190 * sectionScale), 1),
     '--portfolio-page-gutter': `clamp(${px(22, gutterScale)}, ${vw(7, gutterScale)}, ${px(112, gutterScale)})`,
     '--portfolio-page-gutter-wide': `clamp(${px(22, gutterScale)}, ${vw(8, gutterScale)}, ${px(120, gutterScale)})`,
     '--portfolio-page-gutter-narrative': `clamp(${px(22, gutterScale)}, ${vw(10, gutterScale)}, ${px(155, gutterScale)})`,
@@ -256,7 +256,7 @@ function renderAppearanceEditor() {
     ${appearanceRange('site.appearance.sectionSpacingScale', 'Jarak antar-section', 60, 160, 'Mengatur jarak antar-section, termasuk kelompok jenis pada Grid View Personal Artwork.', '%')}
     ${appearanceRange('site.appearance.contentGapScale', 'Jarak antar-konten', 60, 160, 'Atur jarak filter, kartu grid, metadata, dan kelompok gambar di halaman proyek.', '%')}
     ${appearanceRange('site.appearance.pageGutterScale', 'Padding sisi halaman', 75, 140, 'Atur lebar ruang di sisi kiri dan kanan halaman kategori dan detail proyek.', '%')}
-  </div></div><div class="background-settings"><div class="group-heading"><div><h3>Background gambar</h3><p>Pilih karya sebagai background, lalu atur tampilannya. Preview kecil mengikuti perubahan saat itu juga; gunakan Pratinjau website untuk melihat penempatan di halaman sebenarnya.</p></div></div>${Object.keys(BACKGROUND_DEFAULTS).map(backgroundSettingEditor).join('')}</div><div class="appearance-preview" id="appearancePreview"><div class="appearance-preview-layout"><div class="appearance-preview-art"><span class="appearance-preview-kicker">CONTOH JUDUL BAGIAN</span><p class="appearance-preview-body">Contoh teks isi portofolio untuk melihat ukuran dan warnanya.</p><a class="appearance-preview-link" href="#">CONTOH TAUTAN / TOMBOL ↗</a><span class="appearance-preview-label">LABEL KATEGORI · METADATA</span><span class="appearance-preview-caption">PERSONAL ARTWORK / CONTOH CAPTION</span></div><div class="appearance-preview-image-example"><div class="appearance-preview-image-stage"><img class="appearance-preview-image" src="assets/personal-02.webp" alt="Contoh karya portrait di dalam panel landscape"></div><span class="appearance-preview-image-label">PREVIEW KARYA DALAM PANEL LANDSCAPE</span></div></div></div></section>`;
+  </div><div class="spacing-preview" id="spacingPreview"><div class="spacing-preview-heading"><span>PREVIEW RUANG & JARAK</span><small>Jarak panel, jarak tile, dan padding sisi berubah bersama slider.</small></div><div class="spacing-preview-viewport"><div class="spacing-preview-page"><section class="spacing-preview-section"><div class="spacing-preview-section-head"><span>01 / PERSONAL ARTWORK</span><b>12 VISUALS</b></div><div class="spacing-preview-content"><div class="spacing-preview-tile"><i></i><span></span></div><div class="spacing-preview-tile"><i></i><span></span></div><div class="spacing-preview-tile"><i></i><span></span></div></div></section><section class="spacing-preview-section"><div class="spacing-preview-section-head"><span>02 / PROJECT DETAILS</span><b>03 SECTIONS</b></div><div class="spacing-preview-content"><div class="spacing-preview-tile is-wide"><i></i><span></span></div><div class="spacing-preview-tile is-wide"><i></i><span></span></div></div></section></div></div><div class="spacing-preview-legend"><span><i class="legend-section"></i> Jarak antar-section</span><span><i class="legend-content"></i> Jarak antar-konten</span><span><i class="legend-gutter"></i> Padding sisi halaman</span></div></div></div><div class="background-settings"><div class="group-heading"><div><h3>Background gambar</h3><p>Pilih karya sebagai background, lalu atur tampilannya. Preview kecil mengikuti perubahan saat itu juga; gunakan Pratinjau website untuk melihat penempatan di halaman sebenarnya.</p></div></div>${Object.keys(BACKGROUND_DEFAULTS).map(backgroundSettingEditor).join('')}</div><div class="appearance-preview" id="appearancePreview"><div class="appearance-preview-layout"><div class="appearance-preview-art"><span class="appearance-preview-kicker">CONTOH JUDUL BAGIAN</span><p class="appearance-preview-body">Contoh teks isi portofolio untuk melihat ukuran dan warnanya.</p><a class="appearance-preview-link" href="#">CONTOH TAUTAN / TOMBOL ↗</a><span class="appearance-preview-label">LABEL KATEGORI · METADATA</span><span class="appearance-preview-caption">PERSONAL ARTWORK / CONTOH CAPTION</span></div><div class="appearance-preview-image-example"><div class="appearance-preview-image-stage"><img class="appearance-preview-image" src="assets/personal-02.webp" alt="Contoh karya portrait di dalam panel landscape"></div><span class="appearance-preview-image-label">PREVIEW KARYA DALAM PANEL LANDSCAPE</span></div></div></div></section>`;
 }
 
 function backgroundSettingEditor(key) {
@@ -360,7 +360,33 @@ const categoryTextFields = [
 
 function renderCategoriesEditor() {
   const cards = portfolio.categories.map((category, index) => `<article class="category-card"><div class="category-titlebar"><div><strong>${escapeHtml(category.name || 'Kategori baru')}</strong><small>ID internal: ${escapeHtml(category.id)}</small></div><div class="project-actions"><button class="icon-button" type="button" data-action="move-category" data-index="${index}" data-direction="-1" aria-label="Naikkan urutan kategori" ${index === 0 ? 'disabled' : ''}>↑</button><button class="icon-button" type="button" data-action="move-category" data-index="${index}" data-direction="1" aria-label="Turunkan urutan kategori" ${index === portfolio.categories.length - 1 ? 'disabled' : ''}>↓</button><button class="button button-danger button-small" type="button" data-action="delete-category" data-index="${index}">Hapus kategori</button></div></div><div class="category-fields"><div class="category-grid">${categoryTextFields.map(([key, label, type = 'text']) => fieldForCategory(index, key, label, type)).join('')}<label class="field"><span class="field-label">Tata letak halaman</span><select data-category-index="${index}" data-category-field="layout"><option value="artwork-rail" ${category.layout === 'artwork-rail' ? 'selected' : ''}>Galeri gambar horizontal</option><option value="project-list" ${category.layout === 'project-list' ? 'selected' : ''}>Daftar proyek</option></select><small>Kategori baru dapat memakai salah satu tata letak ini.</small></label></div></div></article>`).join('');
-  return `<div class="section-heading"><div><h2>Kategori website</h2><p>Nama, teks carousel, deskripsi, tautan, dan label navigasi setiap kategori dapat diubah di sini.</p></div><button class="button button-primary" type="button" data-action="add-category">+ Tambah kategori</button></div>${cards || '<div class="empty-card"><strong>Belum ada kategori</strong>Tambahkan kategori untuk mengelompokkan proyek.</div>'}`;
+  return `<div class="section-heading"><div><h2>Kategori website</h2><p>Nama, teks carousel, deskripsi, tautan, dan label navigasi setiap kategori dapat diubah di sini.</p></div><button class="button button-primary" type="button" data-action="add-category">+ Tambah kategori</button></div>${cards || '<div class="empty-card"><strong>Belum ada kategori</strong>Tambahkan kategori untuk mengelompokkan proyek.</div>'}${renderPersonalArtworkTypeOrder()}`;
+}
+
+function personalArtworkTypes() {
+  const category = portfolio.categories.find(item => item.id === 'personal');
+  if (!category) return [];
+  const counts = new Map();
+  portfolio.projects.filter(project => project.category === category.id).forEach(project => {
+    (project.gallery || []).forEach(image => {
+      const label = String(image.type || '').trim() || 'Belum dikategorikan';
+      const key = label.toLocaleLowerCase();
+      counts.set(key, { label, count: (counts.get(key)?.count || 0) + 1 });
+    });
+  });
+  const savedOrder = Array.isArray(category.artworkTypeOrder) ? category.artworkTypeOrder : [];
+  const ordered = savedOrder.map(label => counts.get(String(label).toLocaleLowerCase())).filter(Boolean);
+  const known = new Set(ordered.map(item => item.label.toLocaleLowerCase()));
+  const additions = [...counts.values()].filter(item => !known.has(item.label.toLocaleLowerCase())).sort((a, b) => a.label.localeCompare(b.label));
+  return [...ordered, ...additions];
+}
+
+function renderPersonalArtworkTypeOrder() {
+  const category = portfolio.categories.find(item => item.id === 'personal');
+  if (!category) return '';
+  const types = personalArtworkTypes();
+  const rows = types.map((type, index) => `<div class="artwork-type-order-row"><span class="artwork-type-order-number">${String(index + 1).padStart(2, '0')}</span><div class="artwork-type-order-copy"><strong>${escapeHtml(type.label)}</strong><small>${type.count} karya</small></div><div class="artwork-type-order-controls"><button class="icon-button" type="button" data-action="move-artwork-type" data-category-id="${escapeHtml(category.id)}" data-index="${index}" data-direction="-1" aria-label="Naikkan ${escapeHtml(type.label)}" ${index === 0 ? 'disabled' : ''}>↑</button><button class="icon-button" type="button" data-action="move-artwork-type" data-category-id="${escapeHtml(category.id)}" data-index="${index}" data-direction="1" aria-label="Turunkan ${escapeHtml(type.label)}" ${index === types.length - 1 ? 'disabled' : ''}>↓</button></div></div>`).join('');
+  return `<section class="settings-group artwork-type-order-editor"><div class="group-heading"><div><h2>Urutan jenis karya · Personal Artwork</h2><p>Gunakan panah untuk mengatur urutan section pada Grid View dan urutan filter jenis karya. Jenis baru akan ditambahkan setelah jenis yang sudah diurutkan.</p></div></div><div class="artwork-type-order-list">${rows || '<div class="empty-card">Belum ada jenis karya. Isi kolom Jenis karya pada gambar di Proyek & galeri terlebih dahulu.</div>'}</div></section>`;
 }
 
 function fieldForCategory(index, key, label, type) {
@@ -373,8 +399,9 @@ function renderProjectsEditor() {
   if (!portfolio.projects.length) return `<div class="empty-card"><strong>Belum ada proyek</strong>Tambahkan proyek dan mulai susun galeri portofolio.</div><button class="button button-primary" data-action="add-project" type="button">+ Tambah proyek</button>`;
   const project = portfolio.projects.includes(selectedProjectRef) ? selectedProjectRef : portfolio.projects.find(item => item.id === selectedProjectId) || portfolio.projects[0];
   selectedProjectRef = project; selectedProjectId = project.id;
-  const list = [...portfolio.projects].sort((a, b) => Number(a.sortOrder || 0) - Number(b.sortOrder || 0)).map(item => `<button class="project-select ${item === project ? 'is-active' : ''}" type="button" data-action="select-project" data-project-id="${escapeHtml(item.id)}"><strong>${escapeHtml(item.title || 'Proyek baru')}</strong><small>${escapeHtml(portfolio.categories.find(category => category.id === item.category)?.name || 'Tanpa kategori')} · ${(item.gallery || []).length} gambar${item.published === false ? ' · Draft' : ''}</small></button>`).join('');
-  return `<div class="project-workspace"><aside class="project-list-panel"><div class="project-list-heading"><span>DAFTAR PROYEK</span><button class="button button-primary button-small" type="button" data-action="add-project">+ Baru</button></div><div class="project-list">${list}</div></aside>${renderProjectForm(project)}</div>`;
+  const orderedProjects = [...portfolio.projects].sort((a, b) => Number(a.sortOrder || 0) - Number(b.sortOrder || 0));
+  const list = orderedProjects.map((item, index) => `<div class="project-order-row"><button class="project-select ${item === project ? 'is-active' : ''}" type="button" data-action="select-project" data-project-id="${escapeHtml(item.id)}"><strong>${escapeHtml(item.title || 'Proyek baru')}</strong><small>${escapeHtml(portfolio.categories.find(category => category.id === item.category)?.name || 'Tanpa kategori')} · ${(item.gallery || []).length} gambar${item.published === false ? ' · Draft' : ''}</small></button><div class="project-order-controls"><span>${String(index + 1).padStart(2, '0')}</span><button class="icon-button" type="button" data-action="move-project-order" data-project-id="${escapeHtml(item.id)}" data-direction="-1" aria-label="Naikkan urutan ${escapeHtml(item.title)}" ${index === 0 ? 'disabled' : ''}>↑</button><button class="icon-button" type="button" data-action="move-project-order" data-project-id="${escapeHtml(item.id)}" data-direction="1" aria-label="Turunkan urutan ${escapeHtml(item.title)}" ${index === orderedProjects.length - 1 ? 'disabled' : ''}>↓</button></div></div>`).join('');
+  return `<div class="project-workspace"><aside class="project-list-panel"><div class="project-list-heading"><span>URUTAN SEMUA PROYEK</span><button class="button button-primary button-small" type="button" data-action="add-project">+ Baru</button></div><small class="project-order-hint">Panah mengatur urutan proyek di halaman kategorinya.</small><div class="project-list">${list}</div></aside>${renderProjectForm(project)}</div>`;
 }
 
 function adminYouTubeId(value = '') {
@@ -787,6 +814,8 @@ function updateFromInput(target, eventType = 'change') {
 
 function updateAppearancePreview() {
   if (!portfolio?.site) return;
+  const spacingPreview = $('#spacingPreview', editorContent);
+  if (spacingPreview) applyAppearance(portfolio.site, spacingPreview);
   const preview = $('#appearancePreview', editorContent);
   if (preview) applyAppearance(portfolio.site, preview);
   $$('[data-background-preview]', editorContent).forEach(target => applyAppearance(portfolio.site, target));
@@ -826,12 +855,34 @@ function deleteCategory(index) {
 
 function addProject() {
   if (!portfolio.categories.length) { alert('Tambahkan kategori terlebih dahulu.'); return; }
+  const nextSortOrder = Math.max(0, ...portfolio.projects.map(item => Number(item.sortOrder) || 0)) + 1;
   const project = {
     id: `proyek-baru-${Date.now().toString(36)}`, title: 'Proyek baru', shortTitle: 'Proyek baru', category: portfolio.categories[0].id,
-    year: '', role: '', contribution: '', subtitle: '', description: '', cover: '', sortOrder: portfolio.projects.length,
+    year: '', role: '', contribution: '', subtitle: '', description: '', cover: '', sortOrder: nextSortOrder,
     published: true, gallery: [], detail: { narrativeTitle: 'Judul cerita proyek', narrative: 'Tulis cerita singkat proyek.', sections: [] }, _new: true
   };
   portfolio.projects.push(project); selectedProjectId = project.id; selectedProjectRef = project; activeTab = 'projects'; renderEditor();
+}
+
+function moveProjectOrder(projectId, direction) {
+  const ordered = [...portfolio.projects].sort((a, b) => Number(a.sortOrder || 0) - Number(b.sortOrder || 0));
+  const index = ordered.findIndex(project => project.id === projectId);
+  const destination = index + direction;
+  if (index < 0 || destination < 0 || destination >= ordered.length) return;
+  [ordered[index], ordered[destination]] = [ordered[destination], ordered[index]];
+  ordered.forEach((project, order) => { project.sortOrder = order + 1; });
+  renderEditor();
+}
+
+function movePersonalArtworkType(index, direction) {
+  const category = portfolio.categories.find(item => item.id === 'personal');
+  if (!category) return;
+  const types = personalArtworkTypes();
+  const destination = index + direction;
+  if (destination < 0 || destination >= types.length) return;
+  [types[index], types[destination]] = [types[destination], types[index]];
+  category.artworkTypeOrder = types.map(type => type.label);
+  renderEditor();
 }
 
 function removeGalleryImage(project, index) {
@@ -1023,6 +1074,8 @@ function handleEditorClick(event) {
   if (action === 'add-category') addCategory();
   if (action === 'delete-category') deleteCategory(Number(button.dataset.index));
   if (action === 'move-category') { const index = Number(button.dataset.index); const destination = index + Number(button.dataset.direction); if (destination >= 0 && destination < portfolio.categories.length) { [portfolio.categories[index], portfolio.categories[destination]] = [portfolio.categories[destination], portfolio.categories[index]]; renderEditor(); } }
+  if (action === 'move-artwork-type') movePersonalArtworkType(Number(button.dataset.index), Number(button.dataset.direction));
+  if (action === 'move-project-order') moveProjectOrder(button.dataset.projectId, Number(button.dataset.direction));
   if (action === 'add-project') addProject();
   if (action === 'select-project') { selectedProjectId = button.dataset.projectId; selectedProjectRef = portfolio.projects.find(project => project.id === selectedProjectId) || null; renderEditor(); }
   if (action === 'delete-project') deleteProject();

@@ -20,7 +20,7 @@
       "heroTitle": "Worlds beyond",
       "heroEmphasis": "the familiar.",
       "heroIntro": "I'm Fadhlan Qital. I create illustrations, 2D game assets and interactive experiences, drawn to surreal ideas, atmospheric spaces and expressive visual storytelling.",
-      "heroImage": "anima-character",
+      "heroImage": "assets/engkongarwah-mwsw5d64-j.webp",
       "heroImageAlt": "Original illustrated character artwork by Fadhlan Qital",
       "heroSideNote": "A PERSONAL COLLECTION OF ART & INTERACTIVE WORLDS",
       "heroPrimaryCta": "Explore personal artwork",
@@ -139,8 +139,9 @@
       "labelTextSize": 13,
       "captionTextSize": 11,
       "sectionSpacingScale": 112,
-      "contentGapScale": 100,
-      "pageGutterScale": 100,
+      "contentGapScale": 82,
+      "pageGutterScale": 90,
+      "personalArtworkSectionGap": 30,
       "heroImageScale": 145,
       "backgrounds": {
         "homeHero": {
@@ -215,7 +216,14 @@
       "pageDescription": "Personal illustrations, sketchbook explorations and selected environment studies from the Independent Study Program. A collection of visual experiments and worlds shaped by personal curiosity.",
       "collectionLabel": "COLLECTION / PERSONAL ARTWORK",
       "filterLabel": "PERSONAL ARTWORK",
-      "secondaryFilterLabel": "INDEPENDENT STUDY INCLUDED"
+      "secondaryFilterLabel": "INDEPENDENT STUDY INCLUDED",
+      "artworkTypes": [
+        "Traditional Drawing",
+        "Digital Illustration",
+        "Comic / Manga",
+        "Study / Experiment",
+        "Character Animation"
+      ]
     },
     {
       "id": "game-art",

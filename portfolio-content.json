@@ -214,14 +214,14 @@
       "pageTitle": "Personal",
       "pageEmphasis": "Artwork.",
       "pageDescription": "Personal illustrations, sketchbook explorations and selected environment studies from the Independent Study Program. A collection of visual experiments and worlds shaped by personal curiosity.",
-      "collectionLabel": "COLLECTION / PERSONAL ARTWORK",
+      "collectionLabel": "",
       "filterLabel": "PERSONAL ARTWORK",
       "allTypesLabel": "SEMUA JENIS",
       "artworkTypeLabel": "",
       "secondaryFilterLabel": "INDEPENDENT STUDY INCLUDED",
       "artworkTypes": [
-        "Traditional Drawing",
         "Digital Illustration",
+        "Traditional Drawing",
         "Comic / Manga",
         "Study / Experiment",
         "Character Animation"
@@ -546,7 +546,7 @@
           {
             "title": "CHARACTER ANIMATION",
             "subtitle": "ANIMA / THE FALLEN HEROES & MYSTIC FOREST",
-            "layout": "asset-grid",
+            "layout": "paired",
             "videoSource": "local",
             "images": [
               9,
@@ -561,7 +561,7 @@
           {
             "title": "SPRITE CHARACTER ASSETS",
             "subtitle": "ANIMA / THE FALLEN HEROES & MYSTIC FOREST",
-            "layout": "asset-grid",
+            "layout": "paired",
             "images": [
               3,
               4,

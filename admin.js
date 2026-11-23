@@ -38,7 +38,7 @@ const APPEARANCE_DEFAULTS = {
   headingTextColor: '#f1f0f4', bodyTextColor: '#a7adbb', uiTextColor: '#e6e3ee', labelTextColor: '#b4acd8',
   captionTextColor: '#f5f3fb', captionBackgroundColor: '#080a10',
   headingTextScale: 100, featuredImageScale: 100, bodyTextSize: 13, uiTextSize: 12, labelTextSize: 10, captionTextSize: 11,
-  sectionSpacingScale: 100, contentGapScale: 100, pageGutterScale: 100, heroImageScale: 100, backgrounds: BACKGROUND_DEFAULTS
+  sectionSpacingScale: 100, contentGapScale: 100, pageGutterScale: 100, artworkGroupGap: 80, projectSectionGap: 24, heroImageScale: 100, backgrounds: BACKGROUND_DEFAULTS
 };
 const DEFAULT_SITE_LABELS = {
   brandHome: 'home', contentLoadError: 'Portfolio content could not be loaded. Please reload the page in a moment.',
@@ -163,6 +163,10 @@ function applyAppearance(site, target = document.documentElement) {
   const sectionScale = number('sectionSpacingScale', 100, 60, 160) / 100;
   const contentScale = number('contentGapScale', 100, 60, 160) / 100;
   const gutterScale = number('pageGutterScale', 100, 75, 140) / 100;
+  const pixelValue = (key, fallback, min, max) => {
+    const value = Number(appearance[key]);
+    return Math.max(min, Math.min(max, Number.isFinite(value) ? value : fallback));
+  };
   const px = (base, scale) => `${Number((base * scale).toFixed(1))}px`;
   const vw = (base, scale) => `${Number((base * scale).toFixed(2))}vw`;
   const backgroundVariables = {};
@@ -236,6 +240,12 @@ function applyAppearance(site, target = document.documentElement) {
     '--portfolio-gap-mobile-controls': px(20, contentScale), '--portfolio-gap-mobile-rail': px(12, contentScale), '--portfolio-gap-mobile-grid': px(10, contentScale), '--portfolio-gap-mobile-story-pair': px(25, contentScale)
   };
   Object.entries(spacingVariables).forEach(([property, value]) => target.style.setProperty(property, value));
+  const artworkGroupGap = pixelValue('artworkGroupGap', 80, 24, 180);
+  const projectSectionGap = pixelValue('projectSectionGap', 24, 0, 120);
+  target.style.setProperty('--portfolio-artwork-group-gap', px(artworkGroupGap, 1));
+  target.style.setProperty('--portfolio-artwork-group-gap-mobile', px(artworkGroupGap * .72, 1));
+  target.style.setProperty('--portfolio-project-section-gap', px(projectSectionGap, 1));
+  target.style.setProperty('--portfolio-project-section-gap-mobile', px(projectSectionGap * .8, 1));
   target.style.setProperty('--portfolio-heading-color', safeHexColor(appearance.headingTextColor, APPEARANCE_DEFAULTS.headingTextColor));
   target.style.setProperty('--portfolio-body-color', safeHexColor(appearance.bodyTextColor, APPEARANCE_DEFAULTS.bodyTextColor));
   target.style.setProperty('--portfolio-ui-color', safeHexColor(appearance.uiTextColor, APPEARANCE_DEFAULTS.uiTextColor));
@@ -271,10 +281,12 @@ function renderAppearanceEditor() {
     ${appearanceRange('site.appearance.uiTextSize', 'Ukuran navbar, tautan, filter, dan tombol', 10, 18, 'Berlaku pada menu utama, tab kategori, filter karya, tautan, dan tombol.')}
     ${appearanceRange('site.appearance.labelTextSize', 'Ukuran label dan metadata', 9, 15, 'Berlaku untuk label kecil, metadata, dan catatan kategori.')}
     ${appearanceRange('site.appearance.captionTextSize', 'Ukuran caption gambar', 10, 16, 'Berlaku untuk judul kecil pada gambar portofolio.')}
-  </div><div class="hero-size-preview" id="heroImageSizePreview"><div class="hero-size-preview-copy"><span>HOME · HERO</span><strong data-hero-preview-title>${escapeHtml(portfolio.site.home.heroTitle)}</strong><em data-hero-preview-emphasis>${escapeHtml(portfolio.site.home.heroEmphasis)}</em><small>Preview skala gambar utama</small></div><div class="hero-size-preview-art"><img data-hero-preview-image src="${escapeHtml(publicAsset(portfolio.site.home.heroImage))}" alt="Preview gambar utama Hero"></div></div><div class="appearance-spacing"><div class="group-heading"><div><h3>Ruang dan jarak</h3><p>Atur jarak antar-section, jarak antar-konten, dan ruang di sisi halaman. Panel contoh di bawah ikut berubah; buka Pratinjau website untuk melihat seluruh halaman.</p></div></div><div class="field-grid">
-    ${appearanceRange('site.appearance.sectionSpacingScale', 'Jarak antar-section', 60, 160, 'Mengatur jarak antar-section, termasuk kelompok jenis pada Grid View Personal Artwork.', '%')}
+  </div><div class="hero-size-preview" id="heroImageSizePreview"><div class="hero-size-preview-copy"><span>HOME · HERO</span><strong data-hero-preview-title>${escapeHtml(portfolio.site.home.heroTitle)}</strong><em data-hero-preview-emphasis>${escapeHtml(portfolio.site.home.heroEmphasis)}</em><small>Preview skala gambar utama</small></div><div class="hero-size-preview-art"><img data-hero-preview-image src="${escapeHtml(publicAsset(portfolio.site.home.heroImage))}" alt="Preview gambar utama Hero"></div></div><div class="appearance-spacing"><div class="group-heading"><div><h3>Ruang dan jarak</h3><p>Atur jarak umum, kelompok jenis karya, section detail proyek, dan ruang sisi halaman. Preview di bawah mengikuti perubahan secara langsung.</p></div></div><div class="field-grid">
+    ${appearanceRange('site.appearance.sectionSpacingScale', 'Skala ruang section', 60, 160, 'Mengubah ruang vertikal umum pada halaman. Gunakan dua pengaturan khusus di bawah untuk celah antar-section yang lebih presisi.', '%')}
     ${appearanceRange('site.appearance.contentGapScale', 'Jarak antar-konten', 60, 160, 'Atur jarak filter, kartu grid, metadata, dan kelompok gambar di halaman proyek.', '%')}
     ${appearanceRange('site.appearance.pageGutterScale', 'Padding sisi halaman', 75, 140, 'Atur lebar ruang di sisi kiri dan kanan halaman kategori dan detail proyek.', '%')}
+    ${appearanceRange('site.appearance.artworkGroupGap', 'Jarak antar-section jenis karya', 24, 180, 'Atur jarak setelah satu kelompok jenis selesai sebelum section jenis berikutnya pada Personal Artwork dan 2D Game Art.')}
+    ${appearanceRange('site.appearance.projectSectionGap', 'Jarak antar-section detail proyek', 0, 120, 'Atur jarak kosong antara section cerita yang berurutan pada halaman detail proyek.')}
   </div><div class="spacing-preview" id="spacingPreview"><div class="spacing-preview-heading"><span>PREVIEW RUANG & JARAK</span><small>Jarak panel, jarak tile, dan padding sisi berubah bersama slider.</small></div><div class="spacing-preview-viewport"><div class="spacing-preview-page"><section class="spacing-preview-section"><div class="spacing-preview-section-head"><span>01 / PERSONAL ARTWORK</span><b>12 VISUALS</b></div><div class="spacing-preview-content"><div class="spacing-preview-tile"><i></i><span></span></div><div class="spacing-preview-tile"><i></i><span></span></div><div class="spacing-preview-tile"><i></i><span></span></div></div></section><section class="spacing-preview-section"><div class="spacing-preview-section-head"><span>02 / PROJECT DETAILS</span><b>03 SECTIONS</b></div><div class="spacing-preview-content"><div class="spacing-preview-tile is-wide"><i></i><span></span></div><div class="spacing-preview-tile is-wide"><i></i><span></span></div></div></section></div></div><div class="spacing-preview-legend"><span><i class="legend-section"></i> Jarak antar-section</span><span><i class="legend-content"></i> Jarak antar-konten</span><span><i class="legend-gutter"></i> Padding sisi halaman</span></div></div></div><div class="background-settings"><div class="group-heading"><div><h3>Background gambar</h3><p>Pilih karya sebagai background, lalu atur tampilannya. Preview kecil mengikuti perubahan saat itu juga; gunakan Pratinjau website untuk melihat penempatan di halaman sebenarnya.</p></div></div>${Object.keys(BACKGROUND_DEFAULTS).map(backgroundSettingEditor).join('')}</div><div class="appearance-preview" id="appearancePreview"><div class="appearance-preview-layout"><div class="appearance-preview-art"><span class="appearance-preview-kicker">CONTOH JUDUL BAGIAN</span><p class="appearance-preview-body">Contoh teks isi portofolio untuk melihat ukuran dan warnanya.</p><a class="appearance-preview-link" href="#">CONTOH TAUTAN / TOMBOL ↗</a><span class="appearance-preview-label">LABEL KATEGORI · METADATA</span><span class="appearance-preview-caption">PERSONAL ARTWORK / CONTOH CAPTION</span></div><div class="appearance-preview-image-example"><div class="appearance-preview-image-stage"><img class="appearance-preview-image" src="assets/personal-02.webp" alt="Contoh karya portrait di dalam panel landscape"></div><span class="appearance-preview-image-label">PREVIEW KARYA DALAM PANEL LANDSCAPE</span></div></div></div></section>`;
 }
 
@@ -573,9 +585,15 @@ function renderEditor() {
   if (portfolio) normalizePersonalArtworkTypes(portfolio);
   $$('.editor-tab').forEach(button => button.classList.toggle('is-active', button.dataset.tab === activeTab));
   editorContent.innerHTML = activeTab === 'site' ? renderSiteEditor() : activeTab === 'categories' ? renderCategoriesEditor() : renderProjectsEditor();
+  const spacingPreview = $('#spacingPreview', editorContent);
+  if (spacingPreview) spacingPreview.insertAdjacentHTML('beforeend', renderProjectSpacingPreview());
   enhanceMediaFields();
   updateAppearancePreview();
   scheduleSitePreview();
+}
+
+function renderProjectSpacingPreview() {
+  return `<div class="spacing-project-gap-previews"><div class="spacing-project-gap-demo artwork-gap-demo"><span class="spacing-preview-heading-label">KATEGORI · GRID VIEW</span><section class="spacing-project-gap-card"><b>01 / ARTWORK TYPE</b><div class="spacing-project-gap-placeholder"></div></section><section class="spacing-project-gap-card"><b>02 / ARTWORK TYPE</b><strong>Study / Experiment</strong><div class="spacing-project-gap-placeholder"></div></section></div><div class="spacing-project-gap-demo detail-gap-demo"><span class="spacing-preview-heading-label">DETAIL PROJECT · STORY SECTIONS</span><section class="spacing-project-gap-card"><b>01 / GAMEPLAY</b><div class="spacing-project-gap-placeholder is-wide"></div></section><section class="spacing-project-gap-card"><b>02 / VISUAL CONTRIBUTIONS</b><div class="spacing-project-gap-placeholder is-wide"></div></section></div></div>`;
 }
 
 async function connect(token) {

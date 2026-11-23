@@ -169,3 +169,13 @@ body.preview-open{overflow:hidden}
 .project-order-controls .icon-button{width:25px;height:23px;line-height:1}
 @media(max-width:760px){.project-list{grid-template-columns:1fr}.project-order-row{grid-template-columns:minmax(0,1fr) 29px}.project-order-controls .icon-button{width:24px;height:22px}}
 @media(max-width:420px){.artwork-type-order-editor{padding:14px}.artwork-type-order-row{grid-template-columns:30px minmax(0,1fr) auto;gap:7px;padding:8px}.artwork-type-order-controls{gap:3px}.artwork-type-order-controls .icon-button{width:27px;height:28px}}
+.artwork-type-add{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;margin:0 0 12px}
+.artwork-type-order-main{min-width:0}
+.artwork-type-name-line{display:flex;align-items:center;gap:7px}
+.artwork-type-name-line input{min-width:0;padding:8px 10px;font-size:11px}
+.artwork-type-name-line .button{flex:none}
+.artwork-type-order-main>small{display:block;margin-top:5px;color:var(--muted);font-size:9px}
+.artwork-type-delete{color:var(--danger)}
+.artwork-type-manager-note{display:block;margin-top:12px;color:var(--muted);font-size:10px;line-height:1.5}
+@media(max-width:600px){.gallery-item select[data-gallery-field="type"]{grid-column:2}}
+@media(max-width:420px){.artwork-type-add{grid-template-columns:1fr}.artwork-type-name-line{align-items:stretch;flex-direction:column}.artwork-type-name-line .button{width:100%}.artwork-type-order-row{grid-template-columns:30px minmax(0,1fr) auto}}

@@ -307,7 +307,8 @@ function renderArtworkCategory(category, categoryProjects) {
     if (!typeCounts.has(key)) typeCounts.set(key, { label: type, count: 0 });
     typeCounts.get(key).count += 1;
   });
-  const savedTypeOrder = new Map((Array.isArray(category.artworkTypeOrder) ? category.artworkTypeOrder : [])
+  const artworkTypeOrder = Array.isArray(category.artworkTypes) ? category.artworkTypes : category.artworkTypeOrder;
+  const savedTypeOrder = new Map((Array.isArray(artworkTypeOrder) ? artworkTypeOrder : [])
     .map((label, index) => [String(label).trim().toLocaleLowerCase(), index]));
   const compareArtworkTypes = (a, b) => {
     const rankA = savedTypeOrder.get(a.label.toLocaleLowerCase());

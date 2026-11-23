@@ -128,6 +128,25 @@ function normalizeSiteLabels(site) {
   return site.labels;
 }
 
+function normalizePersonalArtworkTypes(content) {
+  const category = content.categories?.find(item => item.id === 'personal');
+  if (!category) return;
+  const names = [
+    ...(Array.isArray(category.artworkTypes) ? category.artworkTypes : []),
+    ...(Array.isArray(category.artworkTypeOrder) ? category.artworkTypeOrder : []),
+    ...content.projects.filter(project => project.category === category.id)
+      .flatMap(project => (project.gallery || []).map(image => image.type))
+  ].map(value => String(value || '').trim()).filter(value => value && value.toLocaleLowerCase() !== 'belum dikategorikan');
+  const seen = new Set();
+  category.artworkTypes = names.filter(name => {
+    const key = name.toLocaleLowerCase();
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+  delete category.artworkTypeOrder;
+}
+
 function safeHexColor(value, fallback) {
   return /^#[0-9a-f]{6}$/i.test(String(value || '')) ? value : fallback;
 }
@@ -374,10 +393,15 @@ function personalArtworkTypes() {
       counts.set(key, { label, count: (counts.get(key)?.count || 0) + 1 });
     });
   });
-  const savedOrder = Array.isArray(category.artworkTypeOrder) ? category.artworkTypeOrder : [];
-  const ordered = savedOrder.map(label => counts.get(String(label).toLocaleLowerCase())).filter(Boolean);
-  const known = new Set(ordered.map(item => item.label.toLocaleLowerCase()));
-  const additions = [...counts.values()].filter(item => !known.has(item.label.toLocaleLowerCase())).sort((a, b) => a.label.localeCompare(b.label));
+  const savedTypes = Array.isArray(category.artworkTypes) ? category.artworkTypes : [];
+  const known = new Set();
+  const ordered = savedTypes.map(label => {
+    const key = String(label).trim().toLocaleLowerCase();
+    if (!key || known.has(key)) return null;
+    known.add(key);
+    return { label: String(label).trim(), count: counts.get(key)?.count || 0 };
+  }).filter(Boolean);
+  const additions = [...counts.values()].filter(item => !known.has(item.label.toLocaleLowerCase()) && item.label !== 'Belum dikategorikan').sort((a, b) => a.label.localeCompare(b.label));
   return [...ordered, ...additions];
 }
 
@@ -385,8 +409,8 @@ function renderPersonalArtworkTypeOrder() {
   const category = portfolio.categories.find(item => item.id === 'personal');
   if (!category) return '';
   const types = personalArtworkTypes();
-  const rows = types.map((type, index) => `<div class="artwork-type-order-row"><span class="artwork-type-order-number">${String(index + 1).padStart(2, '0')}</span><div class="artwork-type-order-copy"><strong>${escapeHtml(type.label)}</strong><small>${type.count} karya</small></div><div class="artwork-type-order-controls"><button class="icon-button" type="button" data-action="move-artwork-type" data-category-id="${escapeHtml(category.id)}" data-index="${index}" data-direction="-1" aria-label="Naikkan ${escapeHtml(type.label)}" ${index === 0 ? 'disabled' : ''}>↑</button><button class="icon-button" type="button" data-action="move-artwork-type" data-category-id="${escapeHtml(category.id)}" data-index="${index}" data-direction="1" aria-label="Turunkan ${escapeHtml(type.label)}" ${index === types.length - 1 ? 'disabled' : ''}>↓</button></div></div>`).join('');
-  return `<section class="settings-group artwork-type-order-editor"><div class="group-heading"><div><h2>Urutan jenis karya · Personal Artwork</h2><p>Gunakan panah untuk mengatur urutan section pada Grid View dan urutan filter jenis karya. Jenis baru akan ditambahkan setelah jenis yang sudah diurutkan.</p></div></div><div class="artwork-type-order-list">${rows || '<div class="empty-card">Belum ada jenis karya. Isi kolom Jenis karya pada gambar di Proyek & galeri terlebih dahulu.</div>'}</div></section>`;
+  const rows = types.map((type, index) => `<div class="artwork-type-order-row"><span class="artwork-type-order-number">${String(index + 1).padStart(2, '0')}</span><div class="artwork-type-order-main"><div class="artwork-type-name-line"><input type="text" value="${escapeHtml(type.label)}" data-artwork-type-name="${index}" aria-label="Nama jenis karya ${index + 1}"><button class="button button-quiet button-small" type="button" data-action="rename-artwork-type" data-index="${index}">Simpan nama</button></div><small>${type.count} karya</small></div><div class="artwork-type-order-controls"><button class="icon-button" type="button" data-action="move-artwork-type" data-index="${index}" data-direction="-1" aria-label="Naikkan ${escapeHtml(type.label)}" ${index === 0 ? 'disabled' : ''}>↑</button><button class="icon-button" type="button" data-action="move-artwork-type" data-index="${index}" data-direction="1" aria-label="Turunkan ${escapeHtml(type.label)}" ${index === types.length - 1 ? 'disabled' : ''}>↓</button><button class="icon-button artwork-type-delete" type="button" data-action="delete-artwork-type" data-index="${index}" aria-label="Hapus ${escapeHtml(type.label)}">×</button></div></div>`).join('');
+  return `<section class="settings-group artwork-type-order-editor"><div class="group-heading"><div><h2>Jenis karya · Personal Artwork</h2><p>Tambahkan, ganti nama, hapus, dan susun jenis karya. Urutan ini dipakai untuk section Grid View dan filter di website publik.</p></div></div><div class="artwork-type-add"><input type="text" data-new-artwork-type placeholder="Contoh: Digital Art" aria-label="Nama jenis karya baru"><button class="button button-primary button-small" type="button" data-action="add-artwork-type">+ Tambah jenis</button></div><div class="artwork-type-order-list">${rows || '<div class="empty-card">Belum ada jenis karya. Tambahkan jenis di atas, lalu pilih pada galeri karya Personal Artwork.</div>'}</div><small class="artwork-type-manager-note">Jenis yang belum memiliki karya tetap tersimpan di sini, tetapi baru tampil di website setelah ada gambar yang menggunakannya.</small></section>`;
 }
 
 function fieldForCategory(index, key, label, type) {
@@ -460,12 +484,23 @@ function renderAdminVideoPreview(section) {
   return section.video ? `<video class="story-video-preview" controls playsinline preload="metadata" src="${escapeHtml(publicAsset(section.video))}"></video>` : '<small>Preview video lokal akan muncul setelah berkas dipilih.</small>';
 }
 
+function galleryArtworkTypeField(project, image, index) {
+  if (project.category === 'personal') {
+    const types = personalArtworkTypes();
+    const selected = String(image.type || '').trim();
+    const hasSelected = types.some(type => type.label.toLocaleLowerCase() === selected.toLocaleLowerCase());
+    const options = types.map(type => `<option value="${escapeHtml(type.label)}" ${type.label.toLocaleLowerCase() === selected.toLocaleLowerCase() ? 'selected' : ''}>${escapeHtml(type.label)}</option>`).join('');
+    return `<select data-gallery-index="${index}" data-gallery-field="type" aria-label="Jenis karya gambar ${index + 1}"><option value="" ${!selected ? 'selected' : ''}>Belum dikategorikan</option>${!hasSelected && selected ? `<option value="${escapeHtml(selected)}" selected>${escapeHtml(selected)}</option>` : ''}${options}</select>`;
+  }
+  return `<input type="text" value="${escapeHtml(image.type || '')}" data-gallery-index="${index}" data-gallery-field="type" aria-label="Jenis karya gambar ${index + 1}" placeholder="Jenis karya" list="artworkTypeSuggestions-${index}"><datalist id="artworkTypeSuggestions-${index}">${ARTWORK_TYPE_SUGGESTIONS.map(type => `<option value="${escapeHtml(type)}"></option>`).join('')}</datalist>`;
+}
+
 function renderProjectForm(project) {
   if (!project) return '<div class="empty-card">Pilih proyek untuk mengeditnya.</div>';
   const categoryOptions = portfolio.categories.map(category => `<option value="${escapeHtml(category.id)}" ${category.id === project.category ? 'selected' : ''}>${escapeHtml(category.name)}</option>`).join('');
   const detail = project.detail ||= { narrativeTitle: '', narrative: '', sections: [] };
   const gallery = project.gallery ||= [];
-  const galleryMarkup = gallery.map((image, index) => `<div class="gallery-item"><img src="${escapeHtml(publicAsset(image.image))}" alt="Pratinjau" loading="lazy"><input type="text" class="gallery-path" value="${escapeHtml(image.image)}" data-original-image="${escapeHtml(image.image)}" data-gallery-index="${index}" data-gallery-field="image" aria-label="Path gambar ${index + 1}"><input type="text" value="${escapeHtml(image.caption)}" data-gallery-index="${index}" data-gallery-field="caption" aria-label="Caption gambar ${index + 1}" placeholder="Caption / judul karya"><input type="text" value="${escapeHtml(image.type || '')}" data-gallery-index="${index}" data-gallery-field="type" aria-label="Jenis karya gambar ${index + 1}" placeholder="Jenis karya" list="artworkTypeSuggestions-${index}"><datalist id="artworkTypeSuggestions-${index}">${ARTWORK_TYPE_SUGGESTIONS.map(type => `<option value="${escapeHtml(type)}"></option>`).join('')}</datalist><div class="gallery-controls"><button class="icon-button" type="button" data-action="move-gallery" data-index="${index}" data-direction="-1" aria-label="Naikkan urutan" ${index === 0 ? 'disabled' : ''}>↑</button><button class="icon-button" type="button" data-action="move-gallery" data-index="${index}" data-direction="1" aria-label="Turunkan urutan" ${index === gallery.length - 1 ? 'disabled' : ''}>↓</button><button class="icon-button" type="button" data-action="remove-gallery" data-index="${index}" aria-label="Hapus gambar dari galeri">×</button></div></div>`).join('');
+  const galleryMarkup = gallery.map((image, index) => `<div class="gallery-item"><img src="${escapeHtml(publicAsset(image.image))}" alt="Pratinjau" loading="lazy"><input type="text" class="gallery-path" value="${escapeHtml(image.image)}" data-original-image="${escapeHtml(image.image)}" data-gallery-index="${index}" data-gallery-field="image" aria-label="Path gambar ${index + 1}"><input type="text" value="${escapeHtml(image.caption)}" data-gallery-index="${index}" data-gallery-field="caption" aria-label="Caption gambar ${index + 1}" placeholder="Caption / judul karya">${galleryArtworkTypeField(project, image, index)}<div class="gallery-controls"><button class="icon-button" type="button" data-action="move-gallery" data-index="${index}" data-direction="-1" aria-label="Naikkan urutan" ${index === 0 ? 'disabled' : ''}>↑</button><button class="icon-button" type="button" data-action="move-gallery" data-index="${index}" data-direction="1" aria-label="Turunkan urutan" ${index === gallery.length - 1 ? 'disabled' : ''}>↓</button><button class="icon-button" type="button" data-action="remove-gallery" data-index="${index}" aria-label="Hapus gambar dari galeri">×</button></div></div>`).join('');
   const sectionsMarkup = (detail.sections || []).map((section, sectionIndex) => {
     const layouts = [
       ['wide', 'Gambar lebar'], ['asset-strip', 'Deretan aset (geser)'], ['asset-grid', 'Grid · tampilkan semua'],
@@ -535,6 +570,7 @@ function closeSitePreview() {
 }
 
 function renderEditor() {
+  if (portfolio) normalizePersonalArtworkTypes(portfolio);
   $$('.editor-tab').forEach(button => button.classList.toggle('is-active', button.dataset.tab === activeTab));
   editorContent.innerHTML = activeTab === 'site' ? renderSiteEditor() : activeTab === 'categories' ? renderCategoriesEditor() : renderProjectsEditor();
   enhanceMediaFields();
@@ -552,6 +588,7 @@ async function connect(token) {
   normalizeAppearance(parsed.site);
   normalizeSiteLabels(parsed.site);
   portfolio = parsed;
+  normalizePersonalArtworkTypes(portfolio);
   pendingUploads = [];
   pendingDeletes = new Set();
   selectedProjectId = portfolio.projects[0]?.id || '';
@@ -768,6 +805,7 @@ function updateFromInput(target, eventType = 'change') {
       const oldId = project.id; project.id = value.toLowerCase(); selectedProjectId = project.id || oldId;
       if (portfolio.site.home.spotlightProjectId === oldId) portfolio.site.home.spotlightProjectId = project.id;
     } else project[key] = value;
+    if (key === 'category' && value === 'personal') normalizePersonalArtworkTypes(portfolio);
     if (key === 'cover') {
       const preview = $('[data-project-cover-preview]', editorContent);
       const label = $('[data-project-cover-label]', editorContent);
@@ -874,6 +912,68 @@ function moveProjectOrder(projectId, direction) {
   renderEditor();
 }
 
+function artworkTypeNameError(value, currentIndex = -1) {
+  const name = String(value || '').trim();
+  if (!name) return 'Nama jenis karya tidak boleh kosong.';
+  if (name.toLocaleLowerCase() === 'belum dikategorikan') return 'Nama “Belum dikategorikan” sudah dipakai untuk karya tanpa jenis.';
+  if (personalArtworkTypes().some((type, index) => index !== currentIndex && type.label.toLocaleLowerCase() === name.toLocaleLowerCase())) return 'Jenis karya dengan nama tersebut sudah ada.';
+  return '';
+}
+
+function addPersonalArtworkType() {
+  const category = portfolio.categories.find(item => item.id === 'personal');
+  const input = $('[data-new-artwork-type]', editorContent);
+  if (!category || !input) return;
+  const name = input.value.trim();
+  const error = artworkTypeNameError(name);
+  if (error) { status($('#saveStatus'), error, 'error'); input.focus(); return; }
+  category.artworkTypes ||= [];
+  category.artworkTypes.push(name);
+  renderEditor();
+  status($('#saveStatus'), `Jenis karya “${name}” ditambahkan.`, 'success');
+}
+
+function renamePersonalArtworkType(index) {
+  const category = portfolio.categories.find(item => item.id === 'personal');
+  const types = personalArtworkTypes();
+  const oldName = types[index]?.label;
+  const input = $(`[data-artwork-type-name="${index}"]`, editorContent);
+  if (!category || !oldName || !input) return;
+  const name = input.value.trim();
+  const error = artworkTypeNameError(name, index);
+  if (error) { status($('#saveStatus'), error, 'error'); input.focus(); return; }
+  const oldKey = oldName.toLocaleLowerCase();
+  category.artworkTypes = types.map((type, typeIndex) => typeIndex === index ? name : type.label);
+  portfolio.projects.filter(project => project.category === category.id).forEach(project => {
+    (project.gallery || []).forEach(image => {
+      if (String(image.type || '').trim().toLocaleLowerCase() === oldKey) image.type = name;
+    });
+  });
+  renderEditor();
+  status($('#saveStatus'), `Jenis karya diubah menjadi “${name}”.`, 'success');
+}
+
+function deletePersonalArtworkType(index) {
+  const category = portfolio.categories.find(item => item.id === 'personal');
+  const types = personalArtworkTypes();
+  const type = types[index];
+  if (!category || !type) return;
+  const message = type.count
+    ? `Hapus jenis “${type.label}”? ${type.count} karya akan tetap ada, tetapi menjadi Belum dikategorikan.`
+    : `Hapus jenis “${type.label}”?`;
+  if (!confirm(message)) return;
+  const key = type.label.toLocaleLowerCase();
+  category.artworkTypes = types.filter((_, typeIndex) => typeIndex !== index).map(item => item.label);
+  portfolio.projects.filter(project => project.category === category.id).forEach(project => {
+    (project.gallery || []).forEach(image => {
+      if (String(image.type || '').trim().toLocaleLowerCase() === key) image.type = '';
+    });
+  });
+  delete category.artworkTypeOrder;
+  renderEditor();
+  status($('#saveStatus'), `Jenis karya “${type.label}” dihapus.`, 'success');
+}
+
 function movePersonalArtworkType(index, direction) {
   const category = portfolio.categories.find(item => item.id === 'personal');
   if (!category) return;
@@ -881,7 +981,7 @@ function movePersonalArtworkType(index, direction) {
   const destination = index + direction;
   if (destination < 0 || destination >= types.length) return;
   [types[index], types[destination]] = [types[destination], types[index]];
-  category.artworkTypeOrder = types.map(type => type.label);
+  category.artworkTypes = types.map(type => type.label);
   renderEditor();
 }
 
@@ -1074,6 +1174,9 @@ function handleEditorClick(event) {
   if (action === 'add-category') addCategory();
   if (action === 'delete-category') deleteCategory(Number(button.dataset.index));
   if (action === 'move-category') { const index = Number(button.dataset.index); const destination = index + Number(button.dataset.direction); if (destination >= 0 && destination < portfolio.categories.length) { [portfolio.categories[index], portfolio.categories[destination]] = [portfolio.categories[destination], portfolio.categories[index]]; renderEditor(); } }
+  if (action === 'add-artwork-type') addPersonalArtworkType();
+  if (action === 'rename-artwork-type') renamePersonalArtworkType(Number(button.dataset.index));
+  if (action === 'delete-artwork-type') deletePersonalArtworkType(Number(button.dataset.index));
   if (action === 'move-artwork-type') movePersonalArtworkType(Number(button.dataset.index), Number(button.dataset.direction));
   if (action === 'move-project-order') moveProjectOrder(button.dataset.projectId, Number(button.dataset.direction));
   if (action === 'add-project') addProject();
@@ -1152,6 +1255,11 @@ editorContent.addEventListener('change', event => {
   const input = event.target;
   if (input.type === 'file') { handleFileUpload(input); return; }
   if (input.dataset.storyImages !== undefined) { handleStoryImages(input); scheduleSitePreview(); return; }
+  if (input.dataset.projectField === 'category') {
+    updateFromInput(input, event.type);
+    renderEditor();
+    return;
+  }
   if (['videoSource', 'videoUrl', 'video'].includes(input.dataset.storyField)) {
     updateFromInput(input, event.type);
     renderEditor();

@@ -133,7 +133,7 @@
       "captionTextColor": "#f5f3fb",
       "captionBackgroundColor": "#080a10",
       "headingTextScale": 110,
-      "featuredImageScale": 75,
+      "featuredImageScale": 89,
       "bodyTextSize": 15,
       "uiTextSize": 12,
       "labelTextSize": 13,
@@ -256,22 +256,22 @@
         {
           "image": "study-01",
           "caption": "Independent Study — Forest Study 01",
-          "type": "Environment Study"
+          "type": "Study / Experiment"
         },
         {
           "image": "study-03",
           "caption": "Independent Study — Forest Study 03",
-          "type": "Environment Study"
+          "type": "Study / Experiment"
         },
         {
           "image": "study-04",
           "caption": "Independent Study — Forest Study 04",
-          "type": "Environment Study"
+          "type": "Study / Experiment"
         },
         {
           "image": "study-05",
           "caption": "Independent Study — Forest Study 05",
-          "type": "Environment Study"
+          "type": "Study / Experiment"
         }
       ],
       "detail": {
@@ -324,7 +324,7 @@
         {
           "image": "anima-divider",
           "caption": "Game visual artwork",
-          "type": "Game Key Art"
+          "type": ""
         },
         {
           "image": "anima-character",
@@ -334,42 +334,37 @@
         {
           "image": "anima-sprite-01",
           "caption": "Sprite character asset",
-          "type": "Character Game Asset"
+          "type": "Sprite / Sprite Sheet"
         },
         {
           "image": "anima-sprite-02",
           "caption": "Sprite character asset",
-          "type": "Character Game Asset"
+          "type": "Sprite / Sprite Sheet"
         },
         {
           "image": "anima-sprite-03",
           "caption": "Sprite animation sheet",
-          "type": "Sprite Sheet / Animation"
+          "type": "Sprite / Sprite Sheet"
         },
         {
           "image": "anima-sprite-04",
           "caption": "Sprite animation sheet",
-          "type": "Sprite Sheet / Animation"
+          "type": "Sprite / Sprite Sheet"
         },
         {
           "image": "anima-sprite-05",
           "caption": "Character sprite",
-          "type": "Character Sprite Animation"
+          "type": "Character Animation"
         },
         {
           "image": "anima-sprite-06",
           "caption": "Character sprite",
-          "type": "Character Sprite Animation"
+          "type": "Character Animation"
         },
         {
           "image": "anima-sprite-07",
           "caption": "Character sprite",
-          "type": "Character Sprite Animation"
-        },
-        {
-          "image": "anima-gameplay",
-          "caption": "Gameplay",
-          "type": "Gameplay Capture"
+          "type": "Character Animation"
         },
         {
           "image": "anima-cutscene-01",
@@ -408,9 +403,7 @@
             "videoSource": "local",
             "beforeNarrative": true,
             "video": "assets/ytsave-to-youtube-media-fsvqmr2q80-trailer-anima-mwsngyyu-1.mp4",
-            "images": [
-              9
-            ]
+            "images": []
           },
           {
             "title": "CHARACTER CONCEPT",
@@ -439,11 +432,11 @@
             "subtitle": "Five cutscene illustrations presented in portfolio order.",
             "layout": "sequence",
             "images": [
+              9,
               10,
               11,
               12,
-              13,
-              14
+              13
             ]
           }
         ]

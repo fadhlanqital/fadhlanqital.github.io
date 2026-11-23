@@ -20,7 +20,8 @@ let previewTimer = 0;
 const APPEARANCE_DEFAULTS = {
   headingTextColor: '#f1f0f4', bodyTextColor: '#a7adbb', uiTextColor: '#e6e3ee', labelTextColor: '#b4acd8',
   captionTextColor: '#f5f3fb', captionBackgroundColor: '#080a10',
-  headingTextScale: 100, featuredImageScale: 100, bodyTextSize: 13, uiTextSize: 12, labelTextSize: 10, captionTextSize: 11
+  headingTextScale: 100, featuredImageScale: 100, bodyTextSize: 13, uiTextSize: 12, labelTextSize: 10, captionTextSize: 11,
+  sectionSpacingScale: 100, contentGapScale: 100, pageGutterScale: 100
 };
 const DEFAULT_SITE_LABELS = {
   brandHome: 'home', contentLoadError: 'Portfolio content could not be loaded. Please reload the page in a moment.',
@@ -112,6 +113,48 @@ function safeHexColor(value, fallback) {
 function applyAppearance(site, target = document.documentElement) {
   const appearance = normalizeAppearance(site);
   const number = (key, fallback, min, max) => Math.max(min, Math.min(max, Number(appearance[key]) || fallback));
+  const sectionScale = number('sectionSpacingScale', 100, 60, 160) / 100;
+  const contentScale = number('contentGapScale', 100, 60, 160) / 100;
+  const gutterScale = number('pageGutterScale', 100, 75, 140) / 100;
+  const px = (base, scale) => `${Number((base * scale).toFixed(1))}px`;
+  const vw = (base, scale) => `${Number((base * scale).toFixed(2))}vw`;
+  const spacingVariables = {
+    '--portfolio-preview-section-pad': px(24, sectionScale), '--portfolio-preview-content-gap': px(12, contentScale), '--portfolio-preview-side-pad': px(24, gutterScale), '--portfolio-preview-min-height': px(Math.max(245, 190 * sectionScale), 1),
+    '--portfolio-page-gutter': `clamp(${px(22, gutterScale)}, ${vw(7, gutterScale)}, ${px(112, gutterScale)})`,
+    '--portfolio-page-gutter-wide': `clamp(${px(22, gutterScale)}, ${vw(8, gutterScale)}, ${px(120, gutterScale)})`,
+    '--portfolio-page-gutter-narrative': `clamp(${px(22, gutterScale)}, ${vw(10, gutterScale)}, ${px(155, gutterScale)})`,
+    '--portfolio-page-gutter-mobile': px(22, gutterScale),
+    '--portfolio-story-gutter-mobile': px(16, gutterScale),
+    '--portfolio-pair-gutter-mobile': px(18, gutterScale),
+    '--portfolio-art-intro-top': px(80, sectionScale), '--portfolio-art-intro-bottom': px(44, sectionScale),
+    '--portfolio-art-intro-top-mobile': px(58, sectionScale), '--portfolio-art-intro-bottom-mobile': px(32, sectionScale),
+    '--portfolio-art-controls-space': px(18, sectionScale), '--portfolio-art-controls-space-mobile': px(15, sectionScale),
+    '--portfolio-art-feature-top': px(44, sectionScale), '--portfolio-art-feature-bottom': px(26, sectionScale),
+    '--portfolio-art-feature-top-mobile': px(28, sectionScale), '--portfolio-art-feature-bottom-mobile': px(18, sectionScale),
+    '--portfolio-dev-intro-top': px(80, sectionScale), '--portfolio-dev-intro-bottom': px(48, sectionScale),
+    '--portfolio-dev-intro-top-mobile': px(58, sectionScale), '--portfolio-dev-intro-bottom-mobile': px(32, sectionScale),
+    '--portfolio-dev-page-bottom': px(90, sectionScale),
+    '--portfolio-dev-project-gap': px(Math.max(1, 1 + (sectionScale - 1) * 30), 1),
+    '--portfolio-project-opening-space-min': px(45, sectionScale), '--portfolio-project-opening-space-fluid': vw(8, sectionScale), '--portfolio-project-opening-space-max': px(115, sectionScale), '--portfolio-project-opening-space-mobile-top': px(30, sectionScale), '--portfolio-project-opening-space-mobile-bottom': px(42, sectionScale),
+    '--portfolio-project-narrative-space-min': px(75, sectionScale), '--portfolio-project-narrative-space-fluid': vw(10, sectionScale), '--portfolio-project-narrative-space-max': px(140, sectionScale), '--portfolio-project-narrative-space-mobile': px(65, sectionScale),
+    '--portfolio-story-space-min': px(35, sectionScale), '--portfolio-story-space-fluid': vw(6, sectionScale), '--portfolio-story-space-max': px(86, sectionScale), '--portfolio-story-space-mobile': px(33, sectionScale),
+    '--portfolio-story-pair-space-min': px(35, sectionScale), '--portfolio-story-pair-space-fluid': vw(6, sectionScale), '--portfolio-story-pair-space-max': px(85, sectionScale), '--portfolio-story-pair-space-mobile': px(30, sectionScale),
+    '--portfolio-cutscene-space-min': px(54, sectionScale), '--portfolio-cutscene-space-fluid': vw(8, sectionScale), '--portfolio-cutscene-space-max': px(110, sectionScale),
+    '--portfolio-cutscene-heading-gap-min': px(32, sectionScale), '--portfolio-cutscene-heading-gap-fluid': vw(5, sectionScale), '--portfolio-cutscene-heading-gap-max': px(70, sectionScale),
+    '--portfolio-cutscene-frame-gap-min': px(34, sectionScale), '--portfolio-cutscene-frame-gap-fluid': vw(5, sectionScale), '--portfolio-cutscene-frame-gap-max': px(68, sectionScale),
+    '--portfolio-artwork-group-gap-min': px(34, sectionScale), '--portfolio-artwork-group-gap-fluid': vw(5, sectionScale), '--portfolio-artwork-group-gap-max': px(64, sectionScale), '--portfolio-artwork-group-gap-mobile': px(36, sectionScale),
+    '--portfolio-case-section-space-min': px(42, sectionScale), '--portfolio-case-section-space-fluid': vw(6, sectionScale), '--portfolio-case-section-space-max': px(82, sectionScale),
+    '--portfolio-project-facts-gap-min': px(25, contentScale), '--portfolio-project-facts-gap-fluid': vw(6, contentScale), '--portfolio-project-facts-gap-max': px(85, contentScale),
+    '--portfolio-project-narrative-gap': px(50, contentScale), '--portfolio-project-narrative-gap-mobile': px(22, contentScale),
+    '--portfolio-story-pair-gap-min': px(16, contentScale), '--portfolio-story-pair-gap-fluid': vw(3, contentScale), '--portfolio-story-pair-gap-max': px(42, contentScale),
+    '--portfolio-asset-grid-gap-min': px(12, contentScale), '--portfolio-asset-grid-gap-fluid': vw(2, contentScale), '--portfolio-asset-grid-gap-max': px(22, contentScale),
+    '--portfolio-gap-filter': px(9, contentScale), '--portfolio-gap-grid': px(18, contentScale), '--portfolio-gap-grid-tablet': px(14, contentScale), '--portfolio-gap-rail': px(20, contentScale),
+    '--portfolio-gap-intro': px(35, contentScale), '--portfolio-gap-controls': px(20, contentScale), '--portfolio-gap-story-head': px(20, contentScale), '--portfolio-story-head-margin': px(22, contentScale), '--portfolio-type-heading-gap': px(17, contentScale), '--portfolio-feature-top-gap': px(15, contentScale), '--portfolio-gap-micro': px(18, contentScale),
+    '--portfolio-gap-asset-strip': px(14, contentScale), '--portfolio-gap-gameplay': px(14, contentScale), '--portfolio-gap-pair': px(18, contentScale), '--portfolio-gap-mobile-asset-strip': px(10, contentScale), '--portfolio-gap-mobile-asset-grid': px(9, contentScale), '--portfolio-gap-mobile-pair': px(12, contentScale), '--portfolio-gap-mobile-type-heading': px(12, contentScale),
+    '--portfolio-gap-mobile-filter': px(7, contentScale), '--portfolio-gap-mobile-intro': px(21, contentScale), '--portfolio-gap-mobile-dev-intro': px(22, contentScale),
+    '--portfolio-gap-mobile-controls': px(20, contentScale), '--portfolio-gap-mobile-rail': px(12, contentScale), '--portfolio-gap-mobile-grid': px(10, contentScale), '--portfolio-gap-mobile-story-pair': px(25, contentScale)
+  };
+  Object.entries(spacingVariables).forEach(([property, value]) => target.style.setProperty(property, value));
   target.style.setProperty('--portfolio-heading-color', safeHexColor(appearance.headingTextColor, APPEARANCE_DEFAULTS.headingTextColor));
   target.style.setProperty('--portfolio-body-color', safeHexColor(appearance.bodyTextColor, APPEARANCE_DEFAULTS.bodyTextColor));
   target.style.setProperty('--portfolio-ui-color', safeHexColor(appearance.uiTextColor, APPEARANCE_DEFAULTS.uiTextColor));
@@ -145,7 +188,11 @@ function renderAppearanceEditor() {
     ${appearanceRange('site.appearance.uiTextSize', 'Ukuran navbar, tautan, filter, dan tombol', 10, 18, 'Berlaku pada menu utama, tab kategori, filter karya, tautan, dan tombol.')}
     ${appearanceRange('site.appearance.labelTextSize', 'Ukuran label dan metadata', 9, 15, 'Berlaku untuk label kecil, metadata, dan catatan kategori.')}
     ${appearanceRange('site.appearance.captionTextSize', 'Ukuran caption gambar', 10, 16, 'Berlaku untuk judul kecil pada gambar portofolio.')}
-  </div><div class="appearance-preview" id="appearancePreview"><div class="appearance-preview-layout"><div class="appearance-preview-art"><span class="appearance-preview-kicker">CONTOH JUDUL BAGIAN</span><p class="appearance-preview-body">Contoh teks isi portofolio untuk melihat ukuran dan warnanya.</p><a class="appearance-preview-link" href="#">CONTOH TAUTAN / TOMBOL ↗</a><span class="appearance-preview-label">LABEL KATEGORI · METADATA</span><span class="appearance-preview-caption">PERSONAL ARTWORK / CONTOH CAPTION</span></div><div class="appearance-preview-image-example"><div class="appearance-preview-image-stage"><img class="appearance-preview-image" src="assets/personal-02.webp" alt="Contoh karya portrait di dalam panel landscape"></div><span class="appearance-preview-image-label">PREVIEW KARYA DALAM PANEL LANDSCAPE</span></div></div></div></section>`;
+  </div><div class="appearance-spacing"><div class="group-heading"><div><h3>Ruang dan jarak</h3><p>Atur jarak antar-section, jarak antar-konten, dan ruang di sisi halaman. Panel contoh di bawah ikut berubah; buka Pratinjau website untuk melihat seluruh halaman.</p></div></div><div class="field-grid">
+    ${appearanceRange('site.appearance.sectionSpacingScale', 'Jarak antar-section', 60, 160, 'Mengatur jarak antar-section, termasuk kelompok jenis pada Grid View Personal Artwork.', '%')}
+    ${appearanceRange('site.appearance.contentGapScale', 'Jarak antar-konten', 60, 160, 'Atur jarak filter, kartu grid, metadata, dan kelompok gambar di halaman proyek.', '%')}
+    ${appearanceRange('site.appearance.pageGutterScale', 'Padding sisi halaman', 75, 140, 'Atur lebar ruang di sisi kiri dan kanan halaman kategori dan detail proyek.', '%')}
+  </div></div><div class="appearance-preview" id="appearancePreview"><div class="appearance-preview-layout"><div class="appearance-preview-art"><span class="appearance-preview-kicker">CONTOH JUDUL BAGIAN</span><p class="appearance-preview-body">Contoh teks isi portofolio untuk melihat ukuran dan warnanya.</p><a class="appearance-preview-link" href="#">CONTOH TAUTAN / TOMBOL ↗</a><span class="appearance-preview-label">LABEL KATEGORI · METADATA</span><span class="appearance-preview-caption">PERSONAL ARTWORK / CONTOH CAPTION</span></div><div class="appearance-preview-image-example"><div class="appearance-preview-image-stage"><img class="appearance-preview-image" src="assets/personal-02.webp" alt="Contoh karya portrait di dalam panel landscape"></div><span class="appearance-preview-image-label">PREVIEW KARYA DALAM PANEL LANDSCAPE</span></div></div></div></section>`;
 }
 
 function field(path, label, type = 'text', hint = '') {

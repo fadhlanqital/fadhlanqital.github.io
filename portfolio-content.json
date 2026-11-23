@@ -214,10 +214,10 @@
       "pageTitle": "Personal",
       "pageEmphasis": "Artwork.",
       "pageDescription": "Personal illustrations, sketchbook explorations and selected environment studies from the Independent Study Program. A collection of visual experiments and worlds shaped by personal curiosity.",
-      "collectionLabel": "COLLECTION / PERSONAL ARTWORK",
+      "collectionLabel": "",
       "filterLabel": "PERSONAL ARTWORK",
       "allTypesLabel": "SEMUA JENIS",
-      "artworkTypeLabel": "ARTWORK TYPE",
+      "artworkTypeLabel": "",
       "secondaryFilterLabel": "INDEPENDENT STUDY INCLUDED",
       "artworkTypes": [
         "Traditional Drawing",

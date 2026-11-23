@@ -138,7 +138,7 @@
       "uiTextSize": 12,
       "labelTextSize": 13,
       "captionTextSize": 11,
-      "sectionSpacingScale": 100,
+      "sectionSpacingScale": 112,
       "contentGapScale": 100,
       "pageGutterScale": 100,
       "heroImageScale": 145,
@@ -265,7 +265,7 @@
       "contribution": "",
       "subtitle": "Personal illustration · Independent Study · Visual exploration",
       "description": "A combined collection of personal projects and environment illustrations from the Independent Study Program under the Kampus Merdeka Initiative.",
-      "cover": "study-01",
+      "cover": "personal-02",
       "sortOrder": 1,
       "published": true,
       "gallery": [
@@ -285,14 +285,14 @@
           "type": "Digital Illustration"
         },
         {
-          "image": "personal-04",
-          "caption": "Personal Artwork 04",
-          "type": "Traditional Drawing"
+          "image": "assets/walker-mwsvp1qw-d.webp",
+          "caption": "walker",
+          "type": "Digital Illustration"
         },
         {
-          "image": "personal-05",
-          "caption": "Personal Artwork 05",
-          "type": "Traditional Drawing"
+          "image": "assets/death-mwsvp168-a.webp",
+          "caption": "death",
+          "type": "Digital Illustration"
         },
         {
           "image": "personal-06",
@@ -310,24 +310,84 @@
           "type": "Traditional Drawing"
         },
         {
-          "image": "study-01",
-          "caption": "Independent Study — Forest Study 01",
+          "image": "assets/12-7-a-stobo-la-versi-a-1-mwsvozq6-1.webp",
+          "caption": "12-7-A Stobo_LA (Versi A)(1)",
+          "type": "Comic / Manga"
+        },
+        {
+          "image": "assets/12-7-a-stobo-la-versi-a-2-mwsvozwo-2.webp",
+          "caption": "12-7-A Stobo_LA (Versi A)(2)",
+          "type": "Comic / Manga"
+        },
+        {
+          "image": "assets/12-7-a-stobo-la-versi-a-3-mwsvp01h-3.webp",
+          "caption": "12-7-A Stobo_LA (Versi A)(3)",
+          "type": "Comic / Manga"
+        },
+        {
+          "image": "assets/12-7-a-stobo-la-versi-a-mwsvp07r-4.webp",
+          "caption": "12-7-A Stobo_LA (Versi A)",
+          "type": "Comic / Manga"
+        },
+        {
+          "image": "assets/13-2b-stobo-la-versi-a-1-mwsvp0cu-5.webp",
+          "caption": "13-2b Stobo_LA (Versi A)(1)",
+          "type": "Comic / Manga"
+        },
+        {
+          "image": "assets/13-2b-stobo-la-versi-a-2-mwsvp0h5-6.webp",
+          "caption": "13-2b Stobo_LA (Versi A)(2)",
+          "type": "Comic / Manga"
+        },
+        {
+          "image": "assets/13-2b-stobo-la-versi-a-3-mwsvp0lx-7.webp",
+          "caption": "13-2b Stobo_LA (Versi A)(3)",
+          "type": "Comic / Manga"
+        },
+        {
+          "image": "assets/13-2b-stobo-la-versi-a-4-mwsvp0q0-8.webp",
+          "caption": "13-2b Stobo_LA (Versi A)(4)",
+          "type": "Comic / Manga"
+        },
+        {
+          "image": "assets/13-2b-stobo-la-versi-a-mwsvp0vd-9.webp",
+          "caption": "13-2b Stobo_LA (Versi A)",
+          "type": "Comic / Manga"
+        },
+        {
+          "image": "assets/ilusforest-mwsvp1pl-c.webp",
+          "caption": "ilusForest",
           "type": "Study / Experiment"
         },
         {
-          "image": "study-03",
-          "caption": "Independent Study — Forest Study 03",
+          "image": "assets/ilusforest-copy-2-mwsvr072-f.webp",
+          "caption": "ilusForest - Copy (2)",
           "type": "Study / Experiment"
         },
         {
-          "image": "study-04",
-          "caption": "Independent Study — Forest Study 04",
+          "image": "assets/envi-mwsvp1fr-b.webp",
+          "caption": "envi",
           "type": "Study / Experiment"
         },
         {
-          "image": "study-05",
-          "caption": "Independent Study — Forest Study 05",
+          "image": "assets/envi-colored-mwsvqzxo-e.webp",
+          "caption": "envi - colored",
           "type": "Study / Experiment"
+        },
+        {
+          "image": "assets/untitled-2powerup-mwswo638-13.gif",
+          "caption": "Untitled-2powerup",
+          "type": "Character Animation"
+        },
+        {
+          "image": "assets/slime-mwswo63b-14.gif",
+          "caption": "slime",
+          "type": "Character Animation"
+        },
+        {
+          "image": "assets/fadhlan-ikhtiari-10121398-tugas-2-2d-animation-mwswo63d-15.gif",
+          "caption": "Fadhlan Ikhtiari - 10121398 - TUGAS 2 2D ANIMATION",
+          "type": "Character Animation"
         }
       ],
       "detail": {
@@ -342,22 +402,9 @@
               1,
               0,
               2,
-              3,
-              4,
               5,
               6,
               7
-            ]
-          },
-          {
-            "title": "02 / INDEPENDENT STUDY",
-            "subtitle": "KAMPUS MERDEKA INITIATIVE",
-            "layout": "wide",
-            "images": [
-              8,
-              9,
-              10,
-              11
             ]
           }
         ]
@@ -383,46 +430,6 @@
           "type": ""
         },
         {
-          "image": "anima-character",
-          "caption": "Character concept",
-          "type": "Character Concept"
-        },
-        {
-          "image": "anima-sprite-01",
-          "caption": "Sprite character asset",
-          "type": "Sprite / Sprite Sheet"
-        },
-        {
-          "image": "anima-sprite-02",
-          "caption": "Sprite character asset",
-          "type": "Sprite / Sprite Sheet"
-        },
-        {
-          "image": "anima-sprite-03",
-          "caption": "Sprite animation sheet",
-          "type": "Sprite / Sprite Sheet"
-        },
-        {
-          "image": "anima-sprite-04",
-          "caption": "Sprite animation sheet",
-          "type": "Sprite / Sprite Sheet"
-        },
-        {
-          "image": "anima-sprite-05",
-          "caption": "Character sprite",
-          "type": "Character Animation"
-        },
-        {
-          "image": "anima-sprite-06",
-          "caption": "Character sprite",
-          "type": "Character Animation"
-        },
-        {
-          "image": "anima-sprite-07",
-          "caption": "Character sprite",
-          "type": "Character Animation"
-        },
-        {
           "image": "anima-cutscene-01",
           "caption": "Cutscene illustration",
           "type": "Cutscene Illustration"
@@ -446,6 +453,81 @@
           "image": "anima-cutscene-05",
           "caption": "Cutscene illustration",
           "type": "Cutscene Illustration"
+        },
+        {
+          "image": "assets/engkongarwah-mwsw5d64-j.webp",
+          "caption": "engkongArwah",
+          "type": "Character Concept"
+        },
+        {
+          "image": "assets/engkong2-mwsw5d8a-k.webp",
+          "caption": "engkong2",
+          "type": "Character Concept"
+        },
+        {
+          "image": "assets/ultsprite2-mwsw5cmj-h.webp",
+          "caption": "ultsprite2",
+          "type": "Sprite / Sprite Sheet"
+        },
+        {
+          "image": "assets/spriteskl2-mwsw5d0v-i.webp",
+          "caption": "spriteskl2",
+          "type": "Sprite / Sprite Sheet"
+        },
+        {
+          "image": "assets/spritebscatk-mwsw5dkm-l.webp",
+          "caption": "spritebscatk",
+          "type": "Sprite / Sprite Sheet"
+        },
+        {
+          "image": "assets/idle-sprite-mwsw5dsa-r.webp",
+          "caption": "idle-sprite",
+          "type": "Sprite / Sprite Sheet"
+        },
+        {
+          "image": "assets/spritejump-mwsw5do9-q.webp",
+          "caption": "spriteJump",
+          "type": "Sprite / Sprite Sheet"
+        },
+        {
+          "image": "assets/run-sprite-mwsw5dwf-t.webp",
+          "caption": "run-sprite",
+          "type": "Sprite / Sprite Sheet"
+        },
+        {
+          "image": "assets/player-atk-copy-3-mwsw5c5i-g.gif",
+          "caption": "Player_atk - Copy (3)",
+          "type": "Character Animation"
+        },
+        {
+          "image": "assets/player-atk-copy-mwsw5dks-m.gif",
+          "caption": "Player_atk - Copy",
+          "type": "Character Animation"
+        },
+        {
+          "image": "assets/player-atk4-mwsw5dkv-n.gif",
+          "caption": "Player_atk4",
+          "type": "Character Animation"
+        },
+        {
+          "image": "assets/player-atk2-mwsw5dkz-o.gif",
+          "caption": "Player_atk2",
+          "type": "Character Animation"
+        },
+        {
+          "image": "assets/jump-mwsw5dl1-p.gif",
+          "caption": "jump",
+          "type": "Character Animation"
+        },
+        {
+          "image": "assets/idle-mwsw5dsd-s.gif",
+          "caption": "idle",
+          "type": "Character Animation"
+        },
+        {
+          "image": "assets/player-running-mwsw5dwi-u.gif",
+          "caption": "Player_Running",
+          "type": "Character Animation"
         }
       ],
       "detail": {
@@ -465,34 +547,24 @@
             "title": "CHARACTER CONCEPT",
             "subtitle": "ANIMA / THE FALLEN HEROES & MYSTIC FOREST",
             "layout": "wide",
-            "images": [
-              1
-            ]
+            "images": []
           },
           {
             "title": "SPRITE CHARACTER ASSETS",
             "subtitle": "ANIMA / THE FALLEN HEROES & MYSTIC FOREST",
             "layout": "asset-grid",
-            "images": [
-              2,
-              3,
-              4,
-              5,
-              6,
-              7,
-              8
-            ]
+            "images": []
           },
           {
             "title": "CINEMATIC STORY SEQUENCE",
             "subtitle": "Five cutscene illustrations presented in portfolio order.",
             "layout": "sequence",
             "images": [
-              9,
-              10,
-              11,
-              12,
-              13
+              1,
+              2,
+              3,
+              4,
+              5
             ]
           }
         ]
@@ -513,43 +585,63 @@
       "published": true,
       "gallery": [
         {
+          "image": "assets/illustration9-mwsukri3-2.webp",
+          "caption": "Illustration9",
+          "type": "Character Concept"
+        },
+        {
+          "image": "assets/finish2-mwswlk38-12.webp",
+          "caption": "finish2",
+          "type": "Sprite / Sprite Sheet"
+        },
+        {
+          "image": "assets/finishspritecomp-mwswezv2-x.webp",
+          "caption": "finishSpriteComp",
+          "type": "Sprite / Sprite Sheet"
+        },
+        {
+          "image": "assets/wrongspritecomp-mwswdzr8-v.webp",
+          "caption": "wrongSpriteComp",
+          "type": "Sprite / Sprite Sheet"
+        },
+        {
+          "image": "assets/correctspritecomp-mwswe9by-w.webp",
+          "caption": "CorrectSpriteComp",
+          "type": "Sprite / Sprite Sheet"
+        },
+        {
+          "image": "assets/spritesheetopening-1-mwswpslo-16.webp",
+          "caption": "SpritesheetOpening (1)",
+          "type": "Sprite / Sprite Sheet"
+        },
+        {
+          "image": "assets/spritesheetgameplay-1-mwswvjm9-17.webp",
+          "caption": "SpritesheetGameplay (1)",
+          "type": ""
+        },
+        {
           "image": "assets/illustration9-5-mwssdck2-1.gif",
           "caption": "Illustration9.5",
           "type": "Character Animation"
         },
         {
-          "image": "polri-03",
-          "caption": "Animation sprite sheet",
-          "type": "Sprite Sheet / Animation"
-        },
-        {
-          "image": "polri-04",
-          "caption": "Animation sprite sheet",
-          "type": "Sprite Sheet / Animation"
-        },
-        {
-          "image": "polri-05",
-          "caption": "Character animation asset",
+          "image": "assets/illustration922-mwswfqhw-y.gif",
+          "caption": "Illustration922",
           "type": "Character Animation"
         },
         {
-          "image": "polri-06",
-          "caption": "Character animation asset",
+          "image": "assets/garbhaanim2-mwswfqim-z.gif",
+          "caption": "GarbhaAnim2",
           "type": "Character Animation"
         },
         {
-          "image": "polri-07",
-          "caption": "Animation sprite sheet",
-          "type": "Sprite Sheet / Animation"
+          "image": "assets/illustration7-copy-mwswgx1f-10.gif",
+          "caption": "Illustration7 - Copy",
+          "type": "Character Animation"
         },
         {
-          "image": "polri-08",
-          "caption": "Animation sprite sheet",
-          "type": "Sprite Sheet / Animation"
-        },
-        {
-          "image": "assets/illustration9-mwsukri3-2.webp",
-          "caption": "Illustration9",
+          "image": "assets/illustration7-mwswgx1u-11.gif",
+          "caption": "Illustration7",
           "type": "Character Animation"
         }
       ],
@@ -567,28 +659,19 @@
             "title": "02 / ANIMATION ASSET BOARD",
             "subtitle": "POLRI QUIZ GAME · PROTOTYPE",
             "layout": "paired",
-            "images": [
-              1,
-              2
-            ]
+            "images": []
           },
           {
             "title": "03 / CHARACTER ANIMATION",
             "subtitle": "POLRI QUIZ GAME · PROTOTYPE",
             "layout": "paired",
-            "images": [
-              3,
-              4
-            ]
+            "images": []
           },
           {
             "title": "04 / SPRITE SHEET",
             "subtitle": "POLRI QUIZ GAME · PROTOTYPE",
             "layout": "paired",
-            "images": [
-              5,
-              6
-            ]
+            "images": []
           }
         ]
       }

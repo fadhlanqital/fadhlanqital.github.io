@@ -221,9 +221,9 @@
       "secondaryFilterLabel": "INDEPENDENT STUDY INCLUDED",
       "artworkTypes": [
         "Digital Illustration",
-        "Traditional Drawing",
-        "Comic / Manga",
         "Study / Experiment",
+        "Comic / Manga",
+        "Traditional Drawing",
         "Character Animation"
       ]
     },
@@ -330,11 +330,6 @@
           "type": "Comic / Manga"
         },
         {
-          "image": "assets/12-7-a-stobo-la-versi-a-mwsvp07r-4.webp",
-          "caption": "12-7-A Stobo_LA (Versi A)",
-          "type": "Comic / Manga"
-        },
-        {
           "image": "assets/13-2b-stobo-la-versi-a-1-mwsvp0cu-5.webp",
           "caption": "13-2b Stobo_LA (Versi A)(1)",
           "type": "Comic / Manga"
@@ -352,11 +347,6 @@
         {
           "image": "assets/13-2b-stobo-la-versi-a-4-mwsvp0q0-8.webp",
           "caption": "13-2b Stobo_LA (Versi A)(4)",
-          "type": "Comic / Manga"
-        },
-        {
-          "image": "assets/13-2b-stobo-la-versi-a-mwsvp0vd-9.webp",
-          "caption": "13-2b Stobo_LA (Versi A)",
           "type": "Comic / Manga"
         },
         {

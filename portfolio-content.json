@@ -141,18 +141,18 @@
       "sectionSpacingScale": 140,
       "contentGapScale": 70,
       "pageGutterScale": 85,
-      "artworkGroupGap": 80,
-      "projectSectionGap": 24,
+      "artworkGroupGap": 35,
+      "projectSectionGap": 40,
       "heroImageScale": 145,
       "backgrounds": {
         "homeHero": {
-          "image": "assets/cutscene1-mwsykcwc-6.webp",
-          "opacity": 20,
-          "overlay": 15,
+          "image": "assets/obitomadara-mwsyissd-1.webp",
+          "opacity": 16,
+          "overlay": 7,
           "blur": 0,
-          "saturation": 70,
-          "positionX": 31,
-          "positionY": 39,
+          "saturation": 53,
+          "positionX": 27,
+          "positionY": 47,
           "zoom": 100
         },
         "personalCategory": {
@@ -428,7 +428,7 @@
       "contribution": "",
       "subtitle": "Character concept · Sprite assets · Gameplay · Cutscenes",
       "description": "Selected visual work for Anima: The Fallen Heroes & Mystic Forest, including character concept art, sprite character assets, gameplay visuals and cutscene illustrations.",
-      "cover": "assets/engkongarwah-mwsw5d64-j.webp",
+      "cover": "assets/cutscene1-mwsykcwc-6.webp",
       "sortOrder": 1,
       "published": true,
       "gallery": [

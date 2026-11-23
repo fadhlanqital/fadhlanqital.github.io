@@ -14,7 +14,14 @@ const DEFAULT_APPEARANCE = {
   headingTextColor: '#f1f0f4', bodyTextColor: '#a7adbb', uiTextColor: '#e6e3ee', labelTextColor: '#b4acd8',
   captionTextColor: '#f5f3fb', captionBackgroundColor: '#080a10',
   headingTextScale: 100, featuredImageScale: 100, bodyTextSize: 13, uiTextSize: 12, labelTextSize: 10, captionTextSize: 11,
-  sectionSpacingScale: 100, contentGapScale: 100, pageGutterScale: 100
+  sectionSpacingScale: 100, contentGapScale: 100, pageGutterScale: 100,
+  backgrounds: {
+    homeHero: { image: 'assets/personal-02.webp', opacity: 24, overlay: 42, blur: 0, saturation: 70, positionX: 70, positionY: 50, zoom: 110 },
+    personalCategory: { image: 'assets/study-01.webp', opacity: 18, overlay: 57, blur: 0, saturation: 65, positionX: 70, positionY: 50, zoom: 112 },
+    gameArtCategory: { image: 'assets/polri-01.webp', opacity: 18, overlay: 58, blur: 0, saturation: 65, positionX: 70, positionY: 50, zoom: 112 },
+    developmentCategory: { image: 'assets/paranoia-03.webp', opacity: 17, overlay: 60, blur: 1, saturation: 60, positionX: 70, positionY: 50, zoom: 112 },
+    aboutOpening: { image: 'assets/anima-wide.webp', opacity: 14, overlay: 64, blur: 1, saturation: 55, positionX: 28, positionY: 50, zoom: 110 }
+  }
 };
 const DEFAULT_SITE_LABELS = {
   brandHome: 'home', contentLoadError: 'Portfolio content could not be loaded. Please reload the page in a moment.',
@@ -37,6 +44,9 @@ const adminPreviewMode = new URLSearchParams(location.search).get('adminPreview'
 
 function applyAppearance(site) {
   const appearance = { ...DEFAULT_APPEARANCE, ...(site.appearance || {}) };
+  appearance.backgrounds = Object.fromEntries(Object.entries(DEFAULT_APPEARANCE.backgrounds).map(([key, defaults]) => [
+    key, { ...defaults, ...(site.appearance?.backgrounds?.[key] || {}) }
+  ]));
   const color = (value, fallback) => /^#[0-9a-f]{6}$/i.test(String(value || '')) ? value : fallback;
   const size = (value, fallback, min, max) => `${Math.max(min, Math.min(max, Number(value) || fallback))}px`;
   const scale = (key, fallback, min, max) => Math.max(min, Math.min(max, Number(appearance[key]) || fallback)) / 100;
@@ -58,6 +68,25 @@ function applyAppearance(site) {
   root.setProperty('--portfolio-ui-size', size(appearance.uiTextSize, 12, 10, 18));
   root.setProperty('--portfolio-label-size', size(appearance.labelTextSize, 10, 9, 15));
   root.setProperty('--portfolio-caption-size', size(appearance.captionTextSize, 11, 10, 16));
+  Object.entries(appearance.backgrounds).forEach(([key, defaults]) => {
+    const config = { ...defaults, ...(appearance.backgrounds[key] || {}) };
+    const slug = key.replace(/[A-Z]/g, match => `-${match.toLowerCase()}`);
+    const number = (value, fallback, min, max) => {
+      const numeric = Number(value);
+      return Math.max(min, Math.min(max, Number.isFinite(numeric) ? numeric : fallback));
+    };
+    const source = asset(config.image || '');
+    const safeSource = /^(https?:\/\/|blob:|data:image\/(?:png|jpeg|webp|gif);|\/|\.\/|assets\/)/i.test(source)
+      ? `url("${source.replace(/[\\"\n\r]/g, char => `\\${char}`)}")`
+      : 'none';
+    root.setProperty(`--portfolio-bg-${slug}-image`, safeSource);
+    root.setProperty(`--portfolio-bg-${slug}-opacity`, String(number(config.opacity, defaults.opacity, 0, 55) / 100));
+    root.setProperty(`--portfolio-bg-${slug}-overlay`, String(number(config.overlay, defaults.overlay, 0, 90) / 100));
+    root.setProperty(`--portfolio-bg-${slug}-blur`, `${number(config.blur, defaults.blur, 0, 12)}px`);
+    root.setProperty(`--portfolio-bg-${slug}-saturation`, `${number(config.saturation, defaults.saturation, 0, 150)}%`);
+    root.setProperty(`--portfolio-bg-${slug}-position`, `${number(config.positionX, defaults.positionX, 0, 100)}% ${number(config.positionY, defaults.positionY, 0, 100)}%`);
+    root.setProperty(`--portfolio-bg-${slug}-zoom`, String(number(config.zoom, defaults.zoom, 100, 160) / 100));
+  });
   const spacingVariables = {
     '--portfolio-page-gutter': `clamp(${px(22, gutterScale)}, ${vw(7, gutterScale)}, ${px(112, gutterScale)})`,
     '--portfolio-page-gutter-wide': `clamp(${px(22, gutterScale)}, ${vw(8, gutterScale)}, ${px(120, gutterScale)})`,
@@ -132,6 +161,17 @@ function imageButton(project, index, extra = '') {
   const image = project.gallery?.[index];
   if (!image) return '';
   return `<button class="story-image ${esc(extra)}" type="button" data-view-project="${esc(project.id)}" data-view-index="${index}" aria-label="${esc(portfolio.site.labels.fullSize)}: ${esc(image.caption)}${image.type ? ` · ${esc(image.type)}` : ''}"><img src="${esc(asset(image.image))}" alt="${esc(project.shortTitle)} — ${esc(image.caption)}" loading="lazy">${image.type ? `<span class="story-image-type">${esc(image.type)}</span>` : ''}</button>`;
+}
+
+function backgroundRegion(key) {
+  const config = { ...DEFAULT_APPEARANCE.backgrounds[key], ...(portfolio.site.appearance?.backgrounds?.[key] || {}) };
+  if (!config?.image) return { className: '', layers: '' };
+  const slug = key.replace(/[A-Z]/g, match => `-${match.toLowerCase()}`);
+  const variables = `--region-bg-image:var(--portfolio-bg-${slug}-image);--region-bg-opacity:var(--portfolio-bg-${slug}-opacity);--region-bg-overlay:var(--portfolio-bg-${slug}-overlay);--region-bg-blur:var(--portfolio-bg-${slug}-blur);--region-bg-saturation:var(--portfolio-bg-${slug}-saturation);--region-bg-position:var(--portfolio-bg-${slug}-position);--region-bg-zoom:var(--portfolio-bg-${slug}-zoom)`;
+  return {
+    className: 'portfolio-bg-region',
+    layers: `<span class="portfolio-bg-image" style="${variables}" aria-hidden="true"></span><span class="portfolio-bg-overlay" aria-hidden="true"></span>`
+  };
 }
 
 function updateChrome() {
@@ -247,10 +287,12 @@ function renderHome() {
     renderHomeWorkCard(otherGameArt, 2),
     renderHomeWorkCard(developmentProject, 3)
   ].filter(Boolean).join('');
-  return `<div class="page home-page"><section class="home-hero"><div class="hero-copy"><div class="hero-index">${esc(home.heroIndex)}</div><span class="eyebrow">${esc(home.heroKicker)}</span><h1>${titleMarkup(home.heroTitle, home.heroEmphasis)}</h1><p class="hero-intro">${esc(home.heroIntro)}</p><div class="hero-ctas"><a class="button-light" href="#${esc(personalCategory?.slug || 'about')}">${esc(home.heroPrimaryCta)} <span>↗</span></a><a class="link-arrow" href="#about">${esc(home.heroSecondaryCta)} <span>↗</span></a></div></div><figure class="hero-art"><img src="${esc(asset(home.heroImage))}" alt="${esc(home.heroImageAlt)}"></figure><span class="hero-side-note">${esc(home.heroSideNote)}</span><a class="hero-scroll" href="#featuredPreview">${esc(home.heroScrollLabel)}</a><span class="hero-orbit orbit-one" aria-hidden="true"></span><span class="hero-orbit orbit-two" aria-hidden="true"></span></section>${renderFeaturedCarousel()}<section class="home-selected" id="selectedWorks"><div class="home-selected-head reveal"><div><span class="eyebrow">${esc(home.spotlightEyebrow)}</span><h2>${titleMarkup(home.spotlightTitle, home.spotlightEmphasis)}</h2></div><p>${esc(home.spotlightDescription)}</p></div><div class="home-work-grid">${selectedProjects || `<p class="home-work-empty">${esc(portfolio.site.labels.noProjects)}</p>`}</div></section></div>`;
+  const background = backgroundRegion('homeHero');
+  return `<div class="page home-page"><section class="home-hero ${background.className}">${background.layers}<div class="hero-copy"><div class="hero-index">${esc(home.heroIndex)}</div><span class="eyebrow">${esc(home.heroKicker)}</span><h1>${titleMarkup(home.heroTitle, home.heroEmphasis)}</h1><p class="hero-intro">${esc(home.heroIntro)}</p><div class="hero-ctas"><a class="button-light" href="#${esc(personalCategory?.slug || 'about')}">${esc(home.heroPrimaryCta)} <span>↗</span></a><a class="link-arrow" href="#about">${esc(home.heroSecondaryCta)} <span>↗</span></a></div></div><figure class="hero-art"><img src="${esc(asset(home.heroImage))}" alt="${esc(home.heroImageAlt)}"></figure><span class="hero-side-note">${esc(home.heroSideNote)}</span><a class="hero-scroll" href="#featuredPreview">${esc(home.heroScrollLabel)}</a><span class="hero-orbit orbit-one" aria-hidden="true"></span><span class="hero-orbit orbit-two" aria-hidden="true"></span></section>${renderFeaturedCarousel()}<section class="home-selected" id="selectedWorks"><div class="home-selected-head reveal"><div><span class="eyebrow">${esc(home.spotlightEyebrow)}</span><h2>${titleMarkup(home.spotlightTitle, home.spotlightEmphasis)}</h2></div><p>${esc(home.spotlightDescription)}</p></div><div class="home-work-grid">${selectedProjects || `<p class="home-work-empty">${esc(portfolio.site.labels.noProjects)}</p>`}</div></section></div>`;
 }
 
 function renderArtworkCategory(category, categoryProjects) {
+  const background = backgroundRegion(category.id === 'personal' ? 'personalCategory' : 'gameArtCategory');
   const projectsForPage = categoryProjects;
   const selectedProjects = currentCategoryFilter === 'all' ? projectsForPage : projectsForPage.filter(project => project.id === currentCategoryFilter);
   const projectItems = selectedProjects.flatMap(project => (project.gallery || []).map((image, index) => ({ project, ...image, index })));
@@ -289,11 +331,12 @@ function renderArtworkCategory(category, categoryProjects) {
     .map((group, groupIndex) => `<section class="artwork-type-section" aria-labelledby="artwork-type-heading-${groupIndex}"><header class="artwork-type-heading"><div><span class="eyebrow">${String(groupIndex + 1).padStart(2, '0')} / ARTWORK TYPE</span><h2 id="artwork-type-heading-${groupIndex}">${esc(group.label)}</h2></div><span class="artwork-type-count">${String(group.items.length).padStart(2, '0')} ${esc(portfolio.site.labels.visuals)}</span></header><div class="artwork-type-grid">${group.items.map((item, index) => artworkCard(item, index, group.items.length)).join('')}</div></section>`)
     .join('') || '<p class="artwork-empty">Tidak ada karya pada jenis ini.</p>';
   const displayedItems = currentArtworkView === 'grid' ? gridGroupsMarkup : railItemsMarkup;
-  return `<div class="page artworks-page ${category.id === 'personal' ? 'personal-artwork-page' : 'game-art-page'}"><section class="artworks-intro"><div><span class="eyebrow">${esc(category.pageEyebrow)} · ${String(total).padStart(2, '0')} ${esc(portfolio.site.labels.visuals)}</span><h1>${titleMarkup(category.pageTitle, category.pageEmphasis)}</h1></div><p>${esc(category.pageDescription)}</p></section><div class="artwork-controls">${filterMarkup}${viewToggle}<span class="artwork-count"><b>${items.length}</b> / ${total} ${esc(portfolio.site.labels.visuals)}</span></div><section class="artwork-feature ${currentArtworkView === 'grid' ? 'is-grid' : ''}"><div class="artwork-feature-top"><span>${esc(category.collectionLabel || `${portfolio.site.labels.collection} / ${category.name.toUpperCase()}`)}</span><span>${esc(portfolio.site.labels.dragToExplore)}</span></div><div class="artwork-track-wrap"><div class="artwork-track ${currentArtworkView === 'grid' ? 'artwork-grid-groups' : ''}" id="artworkTrack">${displayedItems}</div></div><div class="artwork-track-bottom"><span>${esc(portfolio.site.labels.frameProgress)}</span><div class="artwork-progress"><span id="artProgress"></span></div><div class="art-track-nav"><button class="round-arrow" id="artPrev" aria-label="${esc(portfolio.site.labels.previous)}">←</button><button class="round-arrow" id="artNext" aria-label="${esc(portfolio.site.labels.next)}">→</button></div></div></section></div>`;
+  return `<div class="page artworks-page ${category.id === 'personal' ? 'personal-artwork-page' : 'game-art-page'}"><section class="artworks-intro ${background.className}">${background.layers}<div><span class="eyebrow">${esc(category.pageEyebrow)} · ${String(total).padStart(2, '0')} ${esc(portfolio.site.labels.visuals)}</span><h1>${titleMarkup(category.pageTitle, category.pageEmphasis)}</h1></div><p>${esc(category.pageDescription)}</p></section><div class="artwork-controls">${filterMarkup}${viewToggle}<span class="artwork-count"><b>${items.length}</b> / ${total} ${esc(portfolio.site.labels.visuals)}</span></div><section class="artwork-feature ${currentArtworkView === 'grid' ? 'is-grid' : ''}"><div class="artwork-feature-top"><span>${esc(category.collectionLabel || `${portfolio.site.labels.collection} / ${category.name.toUpperCase()}`)}</span><span>${esc(portfolio.site.labels.dragToExplore)}</span></div><div class="artwork-track-wrap"><div class="artwork-track ${currentArtworkView === 'grid' ? 'artwork-grid-groups' : ''}" id="artworkTrack">${displayedItems}</div></div><div class="artwork-track-bottom"><span>${esc(portfolio.site.labels.frameProgress)}</span><div class="artwork-progress"><span id="artProgress"></span></div><div class="art-track-nav"><button class="round-arrow" id="artPrev" aria-label="${esc(portfolio.site.labels.previous)}">←</button><button class="round-arrow" id="artNext" aria-label="${esc(portfolio.site.labels.next)}">→</button></div></div></section></div>`;
 }
 
 function renderProjectCategory(category, categoryProjects) {
-  return `<div class="page dev-page ${category.id === 'game-art' ? 'game-art-project-page' : ''}"><section class="dev-intro"><div><span class="eyebrow">${esc(category.pageEyebrow)}</span><h1>${titleMarkup(category.pageTitle, category.pageEmphasis)}</h1></div><p>${esc(category.pageDescription)}</p></section><div class="dev-project-stack">${categoryProjects.length ? categoryProjects.map((project, index) => {
+  const background = backgroundRegion(category.id === 'game-art' ? 'gameArtCategory' : 'developmentCategory');
+  return `<div class="page dev-page ${category.id === 'game-art' ? 'game-art-project-page' : ''}"><section class="dev-intro ${background.className}">${background.layers}<div><span class="eyebrow">${esc(category.pageEyebrow)}</span><h1>${titleMarkup(category.pageTitle, category.pageEmphasis)}</h1></div><p>${esc(category.pageDescription)}</p></section><div class="dev-project-stack">${categoryProjects.length ? categoryProjects.map((project, index) => {
     const cover = project.cover || project.gallery[0]?.image || '';
     const caption = project.shortTitle || project.title;
     const projectMeta = [project.year, project.role].filter(Boolean).join(' / ') || category.featuredLabel;
@@ -401,7 +444,8 @@ function renderAbout() {
   const about = portfolio.site.about;
   const skills = about.skills.map(skill => `<span>${esc(skill)}</span>`).join('');
   const contactItems = (about.contacts || []).map(contact => `<a href="${esc(safeHref(contact.href))}" ${contact.newWindow ? 'target="_blank" rel="noreferrer"' : ''}>${esc(contact.value || contact.label)} <span>↗</span></a>`).join('');
-  return `<div class="page about-page"><section class="about-opening"><figure class="about-image"><img src="${esc(asset(about.image))}" alt="${esc(about.imageAlt)}"><figcaption>${esc(portfolio.site.brandName)} / ${esc(portfolio.site.footerRole)}</figcaption></figure><div class="about-copy"><span class="eyebrow dark">${esc(about.eyebrow)}</span><h1>${titleMarkup(about.titleLine, about.titleEmphasis)}</h1><p class="lead">${esc(about.lead)}</p><p>${esc(about.paragraphOne)}</p><p>${esc(about.paragraphTwo)}</p></div></section><section class="skills-band"><h2>${esc(about.skillsTitle)}</h2><div class="skills-list">${skills}</div></section><section class="contact-band" id="contact"><div><span class="eyebrow dark">${esc(about.contactEyebrow)}</span><h2>${titleMarkup(about.contactTitle, about.contactEmphasis)}</h2></div><div class="contact-list">${contactItems}</div></section></div>`;
+  const background = backgroundRegion('aboutOpening');
+  return `<div class="page about-page"><section class="about-opening ${background.className}">${background.layers}<figure class="about-image"><img src="${esc(asset(about.image))}" alt="${esc(about.imageAlt)}"><figcaption>${esc(portfolio.site.brandName)} / ${esc(portfolio.site.footerRole)}</figcaption></figure><div class="about-copy"><span class="eyebrow dark">${esc(about.eyebrow)}</span><h1>${titleMarkup(about.titleLine, about.titleEmphasis)}</h1><p class="lead">${esc(about.lead)}</p><p>${esc(about.paragraphOne)}</p><p>${esc(about.paragraphTwo)}</p></div></section><section class="skills-band"><h2>${esc(about.skillsTitle)}</h2><div class="skills-list">${skills}</div></section><section class="contact-band" id="contact"><div><span class="eyebrow dark">${esc(about.contactEyebrow)}</span><h2>${titleMarkup(about.contactTitle, about.contactEmphasis)}</h2></div><div class="contact-list">${contactItems}</div></section></div>`;
 }
 
 function setNav(page, projectId = '') {

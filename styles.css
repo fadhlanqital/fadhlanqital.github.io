@@ -847,3 +847,13 @@ body{background:#090b10;color:var(--white)}
   .case-study-images.asset-grid{gap:var(--portfolio-gap-mobile-asset-grid,9px)}
   .polri-board-pair{gap:var(--portfolio-gap-mobile-pair,12px)}
 }
+
+/* Optional portfolio backgrounds: the image remains a subtle layer beneath existing content. */
+.portfolio-bg-region{position:relative;isolation:isolate;overflow:hidden}
+.portfolio-bg-image,.portfolio-bg-overlay{position:absolute;inset:0;pointer-events:none}
+.portfolio-bg-image{z-index:0;background-image:var(--region-bg-image,none);background-position:var(--region-bg-position,50% 50%);background-size:cover;background-repeat:no-repeat;opacity:var(--region-bg-opacity,.2);filter:blur(var(--region-bg-blur,0px)) saturate(var(--region-bg-saturation,100%));transform:scale(var(--region-bg-zoom,1));transform-origin:center}
+.portfolio-bg-overlay{z-index:1;background:rgba(5,7,12,var(--region-bg-overlay,0))}
+.home-hero.portfolio-bg-region:before{z-index:1}
+.home-hero.portfolio-bg-region .hero-copy{z-index:3}
+.home-hero.portfolio-bg-region .hero-art,.home-hero.portfolio-bg-region .hero-side-note,.home-hero.portfolio-bg-region .hero-scroll,.home-hero.portfolio-bg-region .hero-orbit{z-index:2}
+.artworks-intro.portfolio-bg-region>div,.artworks-intro.portfolio-bg-region>p,.dev-intro.portfolio-bg-region>div,.dev-intro.portfolio-bg-region>p,.about-opening.portfolio-bg-region>.about-image,.about-opening.portfolio-bg-region>.about-copy{position:relative;z-index:2}

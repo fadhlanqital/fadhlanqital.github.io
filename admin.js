@@ -17,11 +17,25 @@ let pendingUploads = [];
 let pendingDeletes = new Set();
 let localPreviewAssets = new Map();
 let previewTimer = 0;
+const BACKGROUND_DEFAULTS = {
+  homeHero: { image: 'assets/personal-02.webp', opacity: 24, overlay: 42, blur: 0, saturation: 70, positionX: 70, positionY: 50, zoom: 110 },
+  personalCategory: { image: 'assets/study-01.webp', opacity: 18, overlay: 57, blur: 0, saturation: 65, positionX: 70, positionY: 50, zoom: 112 },
+  gameArtCategory: { image: 'assets/polri-01.webp', opacity: 18, overlay: 58, blur: 0, saturation: 65, positionX: 70, positionY: 50, zoom: 112 },
+  developmentCategory: { image: 'assets/paranoia-03.webp', opacity: 17, overlay: 60, blur: 1, saturation: 60, positionX: 70, positionY: 50, zoom: 112 },
+  aboutOpening: { image: 'assets/anima-wide.webp', opacity: 14, overlay: 64, blur: 1, saturation: 55, positionX: 28, positionY: 50, zoom: 110 }
+};
+const BACKGROUND_LABELS = {
+  homeHero: ['Beranda · Hero', 'Layer gambar atmosferik di belakang teks dan gambar utama hero.'],
+  personalCategory: ['Kategori · Personal Artwork', 'Background hanya berada di area judul/pengantar, bukan di belakang grid karya.'],
+  gameArtCategory: ['Kategori · 2D Game Art', 'Background hanya berada di area judul/pengantar, bukan di belakang grid karya.'],
+  developmentCategory: ['Kategori · Game Development', 'Background hanya berada di area judul/pengantar proyek.'],
+  aboutOpening: ['About · Pembuka', 'Background berada di area pengantar About, di belakang foto dan teks.']
+};
 const APPEARANCE_DEFAULTS = {
   headingTextColor: '#f1f0f4', bodyTextColor: '#a7adbb', uiTextColor: '#e6e3ee', labelTextColor: '#b4acd8',
   captionTextColor: '#f5f3fb', captionBackgroundColor: '#080a10',
   headingTextScale: 100, featuredImageScale: 100, bodyTextSize: 13, uiTextSize: 12, labelTextSize: 10, captionTextSize: 11,
-  sectionSpacingScale: 100, contentGapScale: 100, pageGutterScale: 100
+  sectionSpacingScale: 100, contentGapScale: 100, pageGutterScale: 100, backgrounds: BACKGROUND_DEFAULTS
 };
 const DEFAULT_SITE_LABELS = {
   brandHome: 'home', contentLoadError: 'Portfolio content could not be loaded. Please reload the page in a moment.',
@@ -97,7 +111,11 @@ function setPath(object, path, value) {
 }
 
 function normalizeAppearance(site) {
-  site.appearance = { ...APPEARANCE_DEFAULTS, ...(site.appearance || {}) };
+  const savedAppearance = site.appearance || {};
+  site.appearance = { ...APPEARANCE_DEFAULTS, ...savedAppearance };
+  site.appearance.backgrounds = Object.fromEntries(Object.entries(BACKGROUND_DEFAULTS).map(([key, defaults]) => [
+    key, { ...defaults, ...(savedAppearance.backgrounds?.[key] || {}) }
+  ]));
   return site.appearance;
 }
 
@@ -110,6 +128,12 @@ function safeHexColor(value, fallback) {
   return /^#[0-9a-f]{6}$/i.test(String(value || '')) ? value : fallback;
 }
 
+function safeBackgroundCssUrl(value) {
+  const source = publicAsset(String(value || '').trim());
+  if (!source || !/^(https?:\/\/|blob:|data:image\/(?:png|jpeg|webp|gif);|\/|\.\/|assets\/)/i.test(source)) return 'none';
+  return `url("${encodeURI(source).replace(/["']/g, '%22')}")`;
+}
+
 function applyAppearance(site, target = document.documentElement) {
   const appearance = normalizeAppearance(site);
   const number = (key, fallback, min, max) => Math.max(min, Math.min(max, Number(appearance[key]) || fallback));
@@ -118,6 +142,40 @@ function applyAppearance(site, target = document.documentElement) {
   const gutterScale = number('pageGutterScale', 100, 75, 140) / 100;
   const px = (base, scale) => `${Number((base * scale).toFixed(1))}px`;
   const vw = (base, scale) => `${Number((base * scale).toFixed(2))}vw`;
+  const backgroundVariables = {};
+  Object.entries(BACKGROUND_DEFAULTS).forEach(([key, defaults]) => {
+    const config = { ...defaults, ...(appearance.backgrounds?.[key] || {}) };
+    const slug = key.replace(/[A-Z]/g, match => `-${match.toLowerCase()}`);
+    const clampValue = (value, min, max, fallback) => {
+      const numeric = Number(value);
+      return Math.max(min, Math.min(max, Number.isFinite(numeric) ? numeric : fallback));
+    };
+    backgroundVariables[`--portfolio-bg-${slug}-image`] = safeBackgroundCssUrl(config.image);
+    backgroundVariables[`--portfolio-bg-${slug}-opacity`] = String(clampValue(config.opacity, 0, 55, defaults.opacity) / 100);
+    backgroundVariables[`--portfolio-bg-${slug}-overlay`] = String(clampValue(config.overlay, 0, 90, defaults.overlay) / 100);
+    backgroundVariables[`--portfolio-bg-${slug}-blur`] = `${clampValue(config.blur, 0, 12, defaults.blur)}px`;
+    backgroundVariables[`--portfolio-bg-${slug}-saturation`] = `${clampValue(config.saturation, 0, 150, defaults.saturation)}%`;
+    backgroundVariables[`--portfolio-bg-${slug}-position`] = `${clampValue(config.positionX, 0, 100, defaults.positionX)}% ${clampValue(config.positionY, 0, 100, defaults.positionY)}%`;
+    backgroundVariables[`--portfolio-bg-${slug}-zoom`] = String(clampValue(config.zoom, 100, 160, defaults.zoom) / 100);
+  });
+  Object.entries(backgroundVariables).forEach(([property, value]) => target.style.setProperty(property, value));
+  const previewKey = target.dataset.backgroundPreview;
+  if (previewKey && BACKGROUND_DEFAULTS[previewKey]) {
+    const defaults = BACKGROUND_DEFAULTS[previewKey];
+    const config = { ...defaults, ...(appearance.backgrounds?.[previewKey] || {}) };
+    const slug = previewKey.replace(/[A-Z]/g, match => `-${match.toLowerCase()}`);
+    const clampValue = (value, min, max, fallback) => {
+      const numeric = Number(value);
+      return Math.max(min, Math.min(max, Number.isFinite(numeric) ? numeric : fallback));
+    };
+    target.style.setProperty('--admin-background-image', `var(--portfolio-bg-${slug}-image)`);
+    target.style.setProperty('--admin-background-opacity', String(clampValue(config.opacity, 0, 55, defaults.opacity) / 100));
+    target.style.setProperty('--admin-background-overlay', String(clampValue(config.overlay, 0, 90, defaults.overlay) / 100));
+    target.style.setProperty('--admin-background-blur', `${clampValue(config.blur, 0, 12, defaults.blur)}px`);
+    target.style.setProperty('--admin-background-saturation', `${clampValue(config.saturation, 0, 150, defaults.saturation)}%`);
+    target.style.setProperty('--admin-background-position', `${clampValue(config.positionX, 0, 100, defaults.positionX)}% ${clampValue(config.positionY, 0, 100, defaults.positionY)}%`);
+    target.style.setProperty('--admin-background-zoom', String(clampValue(config.zoom, 100, 160, defaults.zoom) / 100));
+  }
   const spacingVariables = {
     '--portfolio-preview-section-pad': px(24, sectionScale), '--portfolio-preview-content-gap': px(12, contentScale), '--portfolio-preview-side-pad': px(24, gutterScale), '--portfolio-preview-min-height': px(Math.max(245, 190 * sectionScale), 1),
     '--portfolio-page-gutter': `clamp(${px(22, gutterScale)}, ${vw(7, gutterScale)}, ${px(112, gutterScale)})`,
@@ -192,7 +250,22 @@ function renderAppearanceEditor() {
     ${appearanceRange('site.appearance.sectionSpacingScale', 'Jarak antar-section', 60, 160, 'Mengatur jarak antar-section, termasuk kelompok jenis pada Grid View Personal Artwork.', '%')}
     ${appearanceRange('site.appearance.contentGapScale', 'Jarak antar-konten', 60, 160, 'Atur jarak filter, kartu grid, metadata, dan kelompok gambar di halaman proyek.', '%')}
     ${appearanceRange('site.appearance.pageGutterScale', 'Padding sisi halaman', 75, 140, 'Atur lebar ruang di sisi kiri dan kanan halaman kategori dan detail proyek.', '%')}
-  </div></div><div class="appearance-preview" id="appearancePreview"><div class="appearance-preview-layout"><div class="appearance-preview-art"><span class="appearance-preview-kicker">CONTOH JUDUL BAGIAN</span><p class="appearance-preview-body">Contoh teks isi portofolio untuk melihat ukuran dan warnanya.</p><a class="appearance-preview-link" href="#">CONTOH TAUTAN / TOMBOL ↗</a><span class="appearance-preview-label">LABEL KATEGORI · METADATA</span><span class="appearance-preview-caption">PERSONAL ARTWORK / CONTOH CAPTION</span></div><div class="appearance-preview-image-example"><div class="appearance-preview-image-stage"><img class="appearance-preview-image" src="assets/personal-02.webp" alt="Contoh karya portrait di dalam panel landscape"></div><span class="appearance-preview-image-label">PREVIEW KARYA DALAM PANEL LANDSCAPE</span></div></div></div></section>`;
+  </div></div><div class="background-settings"><div class="group-heading"><div><h3>Background gambar</h3><p>Pilih karya sebagai background, lalu atur tampilannya. Preview kecil mengikuti perubahan saat itu juga; gunakan Pratinjau website untuk melihat penempatan di halaman sebenarnya.</p></div></div>${Object.keys(BACKGROUND_DEFAULTS).map(backgroundSettingEditor).join('')}</div><div class="appearance-preview" id="appearancePreview"><div class="appearance-preview-layout"><div class="appearance-preview-art"><span class="appearance-preview-kicker">CONTOH JUDUL BAGIAN</span><p class="appearance-preview-body">Contoh teks isi portofolio untuk melihat ukuran dan warnanya.</p><a class="appearance-preview-link" href="#">CONTOH TAUTAN / TOMBOL ↗</a><span class="appearance-preview-label">LABEL KATEGORI · METADATA</span><span class="appearance-preview-caption">PERSONAL ARTWORK / CONTOH CAPTION</span></div><div class="appearance-preview-image-example"><div class="appearance-preview-image-stage"><img class="appearance-preview-image" src="assets/personal-02.webp" alt="Contoh karya portrait di dalam panel landscape"></div><span class="appearance-preview-image-label">PREVIEW KARYA DALAM PANEL LANDSCAPE</span></div></div></div></section>`;
+}
+
+function backgroundSettingEditor(key) {
+  const [label, hint] = BACKGROUND_LABELS[key];
+  const base = `site.appearance.backgrounds.${key}`;
+  return `<details class="background-setting"><summary><span><strong>${escapeHtml(label)}</strong><small>${escapeHtml(hint)}</small></span><span class="background-setting-chevron" aria-hidden="true">⌄</span></summary><div class="background-setting-body"><div class="field-grid">
+    ${imageField(`${base}.image`, 'Gambar background', 'Pilih/upload gambar atau masukkan path/URL. Kosongkan path untuk menghapus background area ini.')}
+    ${appearanceRange(`${base}.opacity`, 'Transparansi gambar', 0, 55, 'Atur seberapa terlihat gambar background.', '%')}
+    ${appearanceRange(`${base}.overlay`, 'Gelap overlay', 0, 90, 'Lapisan gelap untuk menjaga teks tetap mudah dibaca.', '%')}
+    ${appearanceRange(`${base}.blur`, 'Blur gambar', 0, 12, 'Lembutkan detail background.', 'px')}
+    ${appearanceRange(`${base}.saturation`, 'Saturasi warna', 0, 150, 'Atur intensitas warna background.', '%')}
+    ${appearanceRange(`${base}.positionX`, 'Posisi horizontal', 0, 100, 'Geser fokus gambar ke kiri atau kanan.', '%')}
+    ${appearanceRange(`${base}.positionY`, 'Posisi vertikal', 0, 100, 'Geser fokus gambar ke atas atau bawah.', '%')}
+    ${appearanceRange(`${base}.zoom`, 'Zoom / ukuran gambar', 100, 160, 'Perbesar atau perkecil crop background.', '%')}
+  </div><div class="background-preview" data-background-preview="${escapeHtml(key)}"><div class="background-preview-image"></div><div class="background-preview-overlay"></div><div class="background-preview-copy"><span>PREVIEW BACKGROUND</span><strong>${escapeHtml(label)}</strong><small>Contoh teks di atas gambar</small></div></div></div></details>`;
 }
 
 function field(path, label, type = 'text', hint = '') {
@@ -464,6 +537,7 @@ function repositoryAssetPath(value) {
 function isAssetReferenced(path) {
   const matches = value => repositoryAssetPath(value) === path;
   const siteImages = [portfolio.site.home.heroImage, portfolio.site.about.image, portfolio.site.meta.openGraphImage];
+  Object.values(portfolio.site.appearance?.backgrounds || {}).forEach(config => siteImages.push(config?.image));
   if (siteImages.some(matches)) return true;
   return portfolio.projects.some(project => matches(project.cover) || project.gallery.some(image => matches(image.image)) || (project.detail?.sections || []).some(section => matches(section.video)));
 }
@@ -568,6 +642,7 @@ function updateAppearancePreview() {
   if (!portfolio?.site) return;
   const preview = $('#appearancePreview', editorContent);
   if (preview) applyAppearance(portfolio.site, preview);
+  $$('[data-background-preview]', editorContent).forEach(target => applyAppearance(portfolio.site, target));
 }
 
 function addCategory() {

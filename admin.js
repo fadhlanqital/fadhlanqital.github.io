@@ -387,7 +387,40 @@ const categoryTextFields = [
 
 function renderCategoriesEditor() {
   const cards = portfolio.categories.map((category, index) => `<article class="category-card"><div class="category-titlebar"><div><strong>${escapeHtml(category.name || 'Kategori baru')}</strong><small>ID internal: ${escapeHtml(category.id)}</small></div><div class="project-actions"><button class="icon-button" type="button" data-action="move-category" data-index="${index}" data-direction="-1" aria-label="Naikkan urutan kategori" ${index === 0 ? 'disabled' : ''}>↑</button><button class="icon-button" type="button" data-action="move-category" data-index="${index}" data-direction="1" aria-label="Turunkan urutan kategori" ${index === portfolio.categories.length - 1 ? 'disabled' : ''}>↓</button><button class="button button-danger button-small" type="button" data-action="delete-category" data-index="${index}">Hapus kategori</button></div></div><div class="category-fields"><div class="category-grid">${categoryTextFields.map(([key, label, type = 'text']) => fieldForCategory(index, key, label, type)).join('')}<label class="field"><span class="field-label">Tata letak halaman</span><select data-category-index="${index}" data-category-field="layout"><option value="artwork-rail" ${category.layout === 'artwork-rail' ? 'selected' : ''}>Galeri gambar horizontal</option><option value="project-list" ${category.layout === 'project-list' ? 'selected' : ''}>Daftar proyek</option></select><small>Kategori baru dapat memakai salah satu tata letak ini.</small></label></div></div></article>`).join('');
-  return `<div class="section-heading"><div><h2>Kategori website</h2><p>Nama, teks carousel, deskripsi, tautan, dan label navigasi setiap kategori dapat diubah di sini.</p></div><button class="button button-primary" type="button" data-action="add-category">+ Tambah kategori</button></div>${cards || '<div class="empty-card"><strong>Belum ada kategori</strong>Tambahkan kategori untuk mengelompokkan proyek.</div>'}${renderPersonalArtworkTypeOrder()}`;
+  return `<div class="section-heading"><div><h2>Kategori website</h2><p>Atur kategori umum di sini. Seluruh teks, jenis karya, dan gambar Personal Artwork kini dikelola dari tab Personal Artwork.</p></div><button class="button button-primary" type="button" data-action="add-category">+ Tambah kategori</button></div>${cards || '<div class="empty-card"><strong>Belum ada kategori</strong>Tambahkan kategori untuk mengelompokkan proyek.</div>'}`;
+}
+
+function renderPersonalArtworkEditor() {
+  const categoryIndex = portfolio.categories.findIndex(category => category.id === 'personal');
+  if (categoryIndex < 0) return '<div class="empty-card"><strong>Kategori Personal Artwork tidak ditemukan</strong>Periksa tab Kategori sebelum mengatur halaman ini.</div>';
+  const category = portfolio.categories[categoryIndex];
+  const personalProjects = portfolio.projects.filter(project => project.category === category.id);
+  const textFields = [
+    ['pageEyebrow', 'Label kecil di atas judul'], ['pageTitle', 'Judul halaman'], ['pageEmphasis', 'Bagian judul miring'],
+    ['pageDescription', 'Deskripsi halaman', 'textarea'], ['collectionLabel', 'Label koleksi karya'], ['filterLabel', 'Label filter proyek'],
+    ['allTypesLabel', 'Label filter semua jenis'], ['artworkTypeLabel', 'Label kecil di atas judul jenis karya']
+  ];
+  const projectCards = personalProjects.map(project => renderPersonalArtworkProject(project)).join('');
+  return `<div class="section-heading personal-editor-heading"><div><span class="eyebrow">PENGELOLAAN HALAMAN</span><h2>Personal Artwork</h2><p>Halaman publik ini mengambil teks dari kategori Personal Artwork dan gambar dari galeri proyek di bawah. Seksi cerita mengatur halaman detail proyek; menghapus seksi cerita tidak menghapus karya di halaman ini.</p></div><button class="button button-quiet" type="button" data-action="preview-personal">Pratinjau Personal Artwork</button></div><section class="settings-group personal-page-copy-editor"><div class="group-heading"><div><h3>Teks halaman Personal Artwork</h3><p>Perubahan teks langsung terlihat pada Pratinjau website dan diterbitkan saat Anda menekan tombol di bagian bawah.</p></div></div><div class="field-grid">${textFields.map(([key, label, type = 'text']) => {
+    const value = category[key] ?? '';
+    const control = type === 'textarea'
+      ? `<textarea data-personal-category-field="${escapeHtml(key)}">${escapeHtml(value)}</textarea>`
+      : `<input type="text" value="${escapeHtml(value)}" data-personal-category-field="${escapeHtml(key)}">`;
+    return `<label class="field"><span class="field-label">${escapeHtml(label)}</span>${control}</label>`;
+  }).join('')}</div></section>${renderPersonalArtworkTypeOrder()}<section class="settings-group personal-artwork-gallery-editor"><div class="group-heading"><div><h3>Karya dan gambar yang tampil</h3><p>Atur gambar, caption, jenis karya, dan urutan pada halaman Personal Artwork. Gunakan panah proyek di tab Proyek & galeri untuk mengurutkan beberapa koleksi.</p></div></div>${projectCards || '<div class="empty-card"><strong>Belum ada koleksi Personal Artwork</strong>Buat koleksi agar halaman ini dapat menampilkan karya.</div>'}<button class="button button-primary button-small" type="button" data-action="add-personal-project">+ Buat koleksi Personal Artwork</button></section>`;
+}
+
+function renderPersonalArtworkProject(project) {
+  const gallery = project.gallery || [];
+  const types = personalArtworkTypes();
+  const galleryMarkup = gallery.map((image, index) => {
+    const selected = String(image.type || '').trim();
+    const selectedExists = types.some(type => type.label.toLocaleLowerCase() === selected.toLocaleLowerCase());
+    const typeOptions = types.map(type => `<option value="${escapeHtml(type.label)}" ${type.label.toLocaleLowerCase() === selected.toLocaleLowerCase() ? 'selected' : ''}>${escapeHtml(type.label)}</option>`).join('');
+    const path = escapeHtml(image.image || '');
+    return `<div class="gallery-item personal-gallery-item"><img data-personal-gallery-preview src="${escapeHtml(publicAsset(image.image))}" alt="Pratinjau karya ${index + 1}" loading="lazy"><div class="gallery-image-path"><input type="text" class="gallery-path" value="${path}" data-original-image="${path}" data-personal-gallery-project-id="${escapeHtml(project.id)}" data-personal-gallery-index="${index}" data-personal-gallery-field="image" aria-label="Path gambar ${index + 1}"><button class="button button-quiet button-small media-pick-button" type="button" data-media-target="personal-gallery-image" data-project-id="${escapeHtml(project.id)}" data-index="${index}">Pilih</button></div><input type="text" value="${escapeHtml(image.caption || '')}" data-personal-gallery-project-id="${escapeHtml(project.id)}" data-personal-gallery-index="${index}" data-personal-gallery-field="caption" aria-label="Caption gambar ${index + 1}" placeholder="Caption / judul karya"><select data-personal-gallery-project-id="${escapeHtml(project.id)}" data-personal-gallery-index="${index}" data-personal-gallery-field="type" aria-label="Jenis karya gambar ${index + 1}"><option value="" ${!selected ? 'selected' : ''}>Belum dikategorikan</option>${!selectedExists && selected ? `<option value="${escapeHtml(selected)}" selected>${escapeHtml(selected)}</option>` : ''}${typeOptions}</select><div class="gallery-controls"><button class="icon-button" type="button" data-action="move-personal-gallery" data-project-id="${escapeHtml(project.id)}" data-index="${index}" data-direction="-1" aria-label="Naikkan urutan karya" ${index === 0 ? 'disabled' : ''}>↑</button><button class="icon-button" type="button" data-action="move-personal-gallery" data-project-id="${escapeHtml(project.id)}" data-index="${index}" data-direction="1" aria-label="Turunkan urutan karya" ${index === gallery.length - 1 ? 'disabled' : ''}>↓</button><button class="icon-button artwork-type-delete" type="button" data-action="remove-personal-gallery" data-project-id="${escapeHtml(project.id)}" data-index="${index}" aria-label="Hapus karya dari Personal Artwork">×</button></div></div>`;
+  }).join('');
+  return `<article class="personal-artwork-project"><div class="personal-artwork-project-heading"><div><span class="eyebrow">KOLEKSI PERSONAL</span><h3>${escapeHtml(project.title || 'Personal Artwork')}</h3><small>${gallery.length} karya${project.published === false ? ' · Draft, belum tampil publik' : ''}</small></div><div class="gallery-actions-heading"><button class="button button-quiet button-small" type="button" data-media-target="personal-gallery-add" data-project-id="${escapeHtml(project.id)}">+ Pilih dari website</button><label class="button button-primary button-small media-upload-button">+ Unggah karya<input type="file" accept="image/jpeg,image/png,image/webp,image/gif" data-upload-personal-gallery="${escapeHtml(project.id)}" multiple hidden></label></div></div><div class="gallery-list">${galleryMarkup || '<div class="empty-card">Belum ada gambar pada koleksi ini.</div>'}</div></article>`;
 }
 
 function personalArtworkTypes() {
@@ -561,13 +594,13 @@ function scheduleSitePreview() {
   previewTimer = setTimeout(sendSitePreview, 120);
 }
 
-function openSitePreview() {
+function openSitePreview(targetHash = '#home') {
   const overlay = $('#previewOverlay');
   const frame = $('#portfolioPreview');
   overlay.hidden = false;
   document.body.classList.add('preview-open');
-  if (!frame.getAttribute('src')) frame.src = new URL('index.html?adminPreview=1#home', location.href).href;
-  else scheduleSitePreview();
+  if (!frame.getAttribute('src')) frame.src = new URL(`index.html?adminPreview=1${targetHash}`, location.href).href;
+  else { frame.contentWindow.location.hash = targetHash; scheduleSitePreview(); }
   $('#closePreviewButton').focus();
 }
 
@@ -580,7 +613,7 @@ function closeSitePreview() {
 function renderEditor() {
   if (portfolio) normalizePersonalArtworkTypes(portfolio);
   $$('.editor-tab').forEach(button => button.classList.toggle('is-active', button.dataset.tab === activeTab));
-  editorContent.innerHTML = activeTab === 'site' ? renderSiteEditor() : activeTab === 'categories' ? renderCategoriesEditor() : renderProjectsEditor();
+  editorContent.innerHTML = activeTab === 'site' ? renderSiteEditor() : activeTab === 'personal' ? renderPersonalArtworkEditor() : activeTab === 'categories' ? renderCategoriesEditor() : renderProjectsEditor();
   const spacingPreview = $('#spacingPreview', editorContent);
   if (spacingPreview) spacingPreview.insertAdjacentHTML('beforeend', renderProjectSpacingPreview());
   enhanceMediaFields();
@@ -721,7 +754,7 @@ function closeMediaPicker() {
 
 function applyMediaSelection(path) {
   const target = mediaPickerTarget;
-  const project = getCurrentProject();
+  const project = target?.projectId ? portfolio.projects.find(item => item.id === target.projectId) : getCurrentProject();
   if (!target || !portfolio) return;
   if (target.type === 'path') {
     const oldValue = getPath(portfolio, target.path);
@@ -738,6 +771,15 @@ function applyMediaSelection(path) {
     image.image = path;
     queueUnusedAsset(oldValue);
   } else if (target.type === 'gallery-add' && project) {
+    const filename = path.split('/').pop().replace(/\.[^.]+$/, '').replace(/[-_]+/g, ' ');
+    project.gallery.push({ image: path, caption: filename, type: '' });
+  } else if (target.type === 'personal-gallery-image' && project) {
+    const image = project.gallery[Number(target.index)];
+    if (!image) return;
+    const oldValue = image.image;
+    image.image = path;
+    queueUnusedAsset(oldValue);
+  } else if (target.type === 'personal-gallery-add' && project) {
     const filename = path.split('/').pop().replace(/\.[^.]+$/, '').replace(/[-_]+/g, ' ');
     project.gallery.push({ image: path, caption: filename, type: '' });
   }
@@ -807,6 +849,29 @@ function updateFromInput(target, eventType = 'change') {
   if (target.dataset.contactIndex !== undefined) {
     const contact = portfolio.site.about.contacts[Number(target.dataset.contactIndex)];
     if (contact) contact[target.dataset.contactField] = target.type === 'checkbox' ? target.checked : target.value;
+    return;
+  }
+  if (target.dataset.personalCategoryField) {
+    const category = portfolio.categories.find(item => item.id === 'personal');
+    if (category) category[target.dataset.personalCategoryField] = target.value;
+    return;
+  }
+  if (target.dataset.personalGalleryProjectId !== undefined) {
+    const project = portfolio.projects.find(item => item.id === target.dataset.personalGalleryProjectId);
+    const image = project?.gallery?.[Number(target.dataset.personalGalleryIndex)];
+    if (!image) return;
+    const key = target.dataset.personalGalleryField;
+    const oldValue = image[key];
+    image[key] = target.value;
+    if (key === 'image') {
+      const preview = target.closest('.gallery-item')?.querySelector('[data-personal-gallery-preview]');
+      if (preview) { preview.src = publicAsset(target.value); preview.hidden = !target.value; }
+    }
+    if (key === 'image' && eventType === 'change') {
+      const originalValue = target.dataset.originalImage || oldValue;
+      if (originalValue !== target.value) queueUnusedAsset(originalValue);
+      target.dataset.originalImage = target.value;
+    }
     return;
   }
   if (target.dataset.projectField) {
@@ -914,6 +979,19 @@ function addProject() {
     published: true, gallery: [], detail: { narrativeTitle: 'Judul cerita proyek', narrative: 'Tulis cerita singkat proyek.', sections: [] }, _new: true
   };
   portfolio.projects.push(project); selectedProjectId = project.id; selectedProjectRef = project; activeTab = 'projects'; renderEditor();
+}
+
+function addPersonalArtworkProject() {
+  const category = portfolio.categories.find(item => item.id === 'personal');
+  if (!category) { status($('#saveStatus'), 'Kategori Personal Artwork tidak ditemukan.', 'error'); return; }
+  const nextSortOrder = Math.max(0, ...portfolio.projects.map(item => Number(item.sortOrder) || 0)) + 1;
+  portfolio.projects.push({
+    id: `personal-artwork-${Date.now().toString(36)}`, title: 'Personal Artwork', shortTitle: 'Personal Artwork', category: category.id,
+    year: '', role: '', contribution: '', subtitle: '', description: '', cover: '', sortOrder: nextSortOrder,
+    published: true, gallery: [], detail: { narrativeTitle: '', narrative: '', sections: [] }, _new: true
+  });
+  renderEditor();
+  status($('#saveStatus'), 'Koleksi Personal Artwork dibuat. Tambahkan karya atau gambar ke koleksi ini.', 'success');
 }
 
 function moveProjectOrder(projectId, direction) {
@@ -1119,6 +1197,11 @@ async function handleFileUpload(input) {
         const oldValue = getPath(portfolio, input.dataset.uploadPath);
         setPath(portfolio, input.dataset.uploadPath, path);
         queueUnusedAsset(oldValue);
+      } else if (input.dataset.uploadPersonalGallery !== undefined) {
+        const project = portfolio.projects.find(item => item.id === input.dataset.uploadPersonalGallery);
+        if (!project) throw new Error('Koleksi Personal Artwork tidak ditemukan.');
+        project.gallery ||= [];
+        project.gallery.push({ image: path, caption: file.name.replace(/\.[^.]+$/, ''), type: '' });
       } else {
         const project = getCurrentProject();
         if (!project) throw new Error('Pilih proyek terlebih dahulu.');
@@ -1178,13 +1261,15 @@ function handleEditorClick(event) {
   const mediaButton = event.target.closest('[data-media-target]');
   if (mediaButton) {
     event.preventDefault();
-    openMediaPicker({ type: mediaButton.dataset.mediaTarget, path: mediaButton.dataset.mediaPath, index: mediaButton.dataset.index });
+    openMediaPicker({ type: mediaButton.dataset.mediaTarget, path: mediaButton.dataset.mediaPath, index: mediaButton.dataset.index, projectId: mediaButton.dataset.projectId });
     return;
   }
   const tab = event.target.closest('[data-tab]');
   if (tab) { activeTab = tab.dataset.tab; renderEditor(); return; }
   const button = event.target.closest('[data-action]'); if (!button) return;
   const action = button.dataset.action;
+  if (action === 'preview-personal') { openSitePreview('#personal-artwork'); return; }
+  if (action === 'add-personal-project') { addPersonalArtworkProject(); return; }
   if (action === 'add-category') addCategory();
   if (action === 'delete-category') deleteCategory(Number(button.dataset.index));
   if (action === 'move-category') { const index = Number(button.dataset.index); const destination = index + Number(button.dataset.direction); if (destination >= 0 && destination < portfolio.categories.length) { [portfolio.categories[index], portfolio.categories[destination]] = [portfolio.categories[destination], portfolio.categories[index]]; renderEditor(); } }
@@ -1198,6 +1283,8 @@ function handleEditorClick(event) {
   if (action === 'delete-project') deleteProject();
   if (action === 'remove-gallery') { const project = getCurrentProject(); if (project) removeGalleryImage(project, Number(button.dataset.index)); }
   if (action === 'move-gallery') { const project = getCurrentProject(); if (project) moveGalleryImage(project, Number(button.dataset.index), Number(button.dataset.direction)); }
+  if (action === 'remove-personal-gallery') { const project = portfolio.projects.find(item => item.id === button.dataset.projectId); if (project) removeGalleryImage(project, Number(button.dataset.index)); }
+  if (action === 'move-personal-gallery') { const project = portfolio.projects.find(item => item.id === button.dataset.projectId); if (project) moveGalleryImage(project, Number(button.dataset.index), Number(button.dataset.direction)); }
   if (action === 'add-story') addStorySection();
   if (action === 'add-contact') { portfolio.site.about.contacts.push({ label: 'Tautan baru', value: 'Teks tautan', href: 'https://', newWindow: true }); renderEditor(); }
   if (action === 'remove-contact') { portfolio.site.about.contacts.splice(Number(button.dataset.index), 1); renderEditor(); }

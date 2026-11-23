@@ -187,5 +187,15 @@ body.preview-open{overflow:hidden}
 .artwork-type-order-main>small{display:block;margin-top:5px;color:var(--muted);font-size:9px}
 .artwork-type-delete{color:var(--danger)}
 .artwork-type-manager-note{display:block;margin-top:12px;color:var(--muted);font-size:10px;line-height:1.5}
+.personal-artwork-project{margin-top:14px;padding:14px;border:1px solid var(--line);border-radius:10px;background:rgba(7,10,16,.55)}
+.personal-artwork-project-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
+.personal-artwork-project-heading h3{margin:5px 0 3px;font-size:13px}
+.personal-artwork-project-heading small{color:var(--muted);font-size:10px}
+.personal-gallery-item{grid-template-columns:72px minmax(140px,1fr) minmax(140px,1.2fr) minmax(140px,1fr) auto}
+.personal-gallery-item .gallery-image-path{grid-column:auto}
+.personal-gallery-item .gallery-controls{grid-column:auto;grid-row:auto}
+.personal-artwork-gallery-editor>.button{margin-top:12px}
+.personal-editor-heading{align-items:flex-end}
+@media(max-width:700px){.personal-artwork-project-heading{align-items:flex-start;flex-direction:column}.personal-gallery-item{grid-template-columns:58px minmax(0,1fr) auto}.personal-gallery-item .gallery-image-path,.personal-gallery-item input[data-personal-gallery-field="caption"],.personal-gallery-item select[data-personal-gallery-field="type"]{grid-column:2}.personal-gallery-item img{grid-column:1;grid-row:1/4}.personal-gallery-item .gallery-controls{grid-column:3;grid-row:1/4;flex-direction:column}.personal-artwork-project-heading .gallery-actions-heading{justify-content:flex-start}}
 @media(max-width:600px){.gallery-item select[data-gallery-field="type"]{grid-column:2}}
 @media(max-width:420px){.artwork-type-add{grid-template-columns:1fr}.artwork-type-name-line{align-items:stretch;flex-direction:column}.artwork-type-name-line .button{width:100%}.artwork-type-order-row{grid-template-columns:30px minmax(0,1fr) auto}}

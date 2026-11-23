@@ -20,13 +20,13 @@
       "heroTitle": "Worlds beyond",
       "heroEmphasis": "the familiar.",
       "heroIntro": "I'm Fadhlan Qital. I create illustrations, 2D game assets and interactive experiences, drawn to surreal ideas, atmospheric spaces and expressive visual storytelling.",
-      "heroImage": "hero-portrait",
+      "heroImage": "polri-01",
       "heroImageAlt": "Original illustrated character artwork by Fadhlan Qital",
       "heroSideNote": "A PERSONAL COLLECTION OF ART & INTERACTIVE WORLDS",
       "heroPrimaryCta": "Explore personal artwork",
       "heroSecondaryCta": "Meet the artist",
       "heroScrollLabel": "SCROLL TO EXPLORE",
-      "spotlightProjectId": "anima",
+      "spotlightProjectId": "polri-quiz",
       "spotlightEyebrow": "CURATED PROJECTS",
       "spotlightTitle": "Selected",
       "spotlightEmphasis": "artworks.",
@@ -452,7 +452,7 @@
       "contribution": "",
       "subtitle": "Company project · Prototype",
       "description": "Visual and animation asset contributions for the POLRI Quiz Game prototype, presented through character artwork and animation asset boards.",
-      "cover": "polri-01",
+      "cover": "polri-02",
       "sortOrder": 2,
       "published": true,
       "gallery": [
@@ -506,7 +506,6 @@
             "subtitle": "POLRI QUIZ GAME · PROTOTYPE",
             "layout": "paired",
             "images": [
-              0,
               1
             ]
           },

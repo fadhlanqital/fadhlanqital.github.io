@@ -7,8 +7,8 @@
   <meta name="theme-color" content="#090b10">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob: https:; media-src 'self' blob: https:; frame-src 'self' https://www.youtube-nocookie.com https://player.vimeo.com; connect-src 'self' https://api.github.com; font-src 'self'; form-action 'self'; object-src 'none'; base-uri 'none'">
   <title>Admin Portfolio — Fadhlan Qital</title>
-  <link rel="stylesheet" href="admin.css?v=20261123-background-controls">
-  <script src="admin.js?v=20261123-background-controls" defer></script>
+  <link rel="stylesheet" href="admin.css?v=20261123-hero-media">
+  <script src="admin.js?v=20261123-hero-media" defer></script>
 </head>
 <body>
   <main class="admin-shell">
@@ -70,6 +70,17 @@
         </div>
       </div>
       <div class="preview-frame-wrap"><iframe id="portfolioPreview" title="Pratinjau portofolio" loading="lazy"></iframe></div>
+    </section>
+  </div>
+  <div class="media-picker-overlay" id="mediaPicker" hidden>
+    <section class="media-picker-dialog" role="dialog" aria-modal="true" aria-labelledby="mediaPickerTitle">
+      <header class="media-picker-header">
+        <div><span class="eyebrow">ASSET WEBSITE</span><h2 id="mediaPickerTitle">Pilih gambar yang sudah ada</h2><p>Gambar dipilih dari berkas di repositori. Untuk menambahkan file baru, tutup jendela ini lalu pilih Upload baru.</p></div>
+        <button class="button button-quiet button-small" id="mediaPickerClose" type="button">Tutup</button>
+      </header>
+      <label class="media-picker-search"><span>Cari nama file</span><input id="mediaPickerSearch" type="search" placeholder="Contoh: anima, polri, personal…" autocomplete="off"></label>
+      <p class="media-picker-status" id="mediaPickerStatus" role="status" aria-live="polite"></p>
+      <div class="media-picker-grid" id="mediaPickerGrid"></div>
     </section>
   </div>
 </body>

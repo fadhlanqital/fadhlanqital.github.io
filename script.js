@@ -14,7 +14,7 @@ const DEFAULT_APPEARANCE = {
   headingTextColor: '#f1f0f4', bodyTextColor: '#a7adbb', uiTextColor: '#e6e3ee', labelTextColor: '#b4acd8',
   captionTextColor: '#f5f3fb', captionBackgroundColor: '#080a10',
   headingTextScale: 100, featuredImageScale: 100, bodyTextSize: 13, uiTextSize: 12, labelTextSize: 10, captionTextSize: 11,
-  sectionSpacingScale: 100, contentGapScale: 100, pageGutterScale: 100,
+  sectionSpacingScale: 100, contentGapScale: 100, pageGutterScale: 100, heroImageScale: 100,
   backgrounds: {
     homeHero: { image: 'assets/personal-02.webp', opacity: 24, overlay: 42, blur: 0, saturation: 70, positionX: 70, positionY: 50, zoom: 110 },
     personalCategory: { image: 'assets/study-01.webp', opacity: 18, overlay: 57, blur: 0, saturation: 65, positionX: 70, positionY: 50, zoom: 112 },
@@ -64,6 +64,7 @@ function applyAppearance(site) {
   root.setProperty('--portfolio-caption-background', color(appearance.captionBackgroundColor, DEFAULT_APPEARANCE.captionBackgroundColor));
   root.setProperty('--portfolio-heading-scale', String(Math.max(.85, Math.min(1.2, Number(appearance.headingTextScale) / 100 || 1))));
   root.setProperty('--portfolio-featured-image-scale', String(Math.max(.4, Math.min(1, Number(appearance.featuredImageScale) / 100 || 1))));
+  root.setProperty('--portfolio-hero-image-scale', String(Math.max(.5, Math.min(1.45, Number(appearance.heroImageScale) / 100 || 1))));
   root.setProperty('--portfolio-body-size', size(appearance.bodyTextSize, 13, 12, 18));
   root.setProperty('--portfolio-ui-size', size(appearance.uiTextSize, 12, 10, 18));
   root.setProperty('--portfolio-label-size', size(appearance.labelTextSize, 10, 9, 15));
@@ -76,7 +77,7 @@ function applyAppearance(site) {
       return Math.max(min, Math.min(max, Number.isFinite(numeric) ? numeric : fallback));
     };
     const source = asset(config.image || '');
-    const safeSource = /^(https?:\/\/|blob:|data:image\/(?:png|jpeg|webp|gif);|\/|\.\/|assets\/)/i.test(source)
+    const safeSource = /^(https?:\/\/|blob:|data:image\/(?:png|jpeg|webp|gif);|\/|\.\/|assets\/|[a-z0-9_.-]+\.(?:jpe?g|png|webp|gif|avif|svg|ico|bmp|tiff?)(?:[?#].*)?$)/i.test(source)
       ? `url("${source.replace(/[\\"\n\r]/g, char => `\\${char}`)}")`
       : 'none';
     root.setProperty(`--portfolio-bg-${slug}-image`, safeSource);

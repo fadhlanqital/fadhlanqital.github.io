@@ -17,6 +17,9 @@ let pendingUploads = [];
 let pendingDeletes = new Set();
 let localPreviewAssets = new Map();
 let previewTimer = 0;
+let mediaLibraryFiles = [];
+let mediaLibraryError = '';
+let mediaPickerTarget = null;
 const BACKGROUND_DEFAULTS = {
   homeHero: { image: 'assets/personal-02.webp', opacity: 24, overlay: 42, blur: 0, saturation: 70, positionX: 70, positionY: 50, zoom: 110 },
   personalCategory: { image: 'assets/study-01.webp', opacity: 18, overlay: 57, blur: 0, saturation: 65, positionX: 70, positionY: 50, zoom: 112 },
@@ -35,7 +38,7 @@ const APPEARANCE_DEFAULTS = {
   headingTextColor: '#f1f0f4', bodyTextColor: '#a7adbb', uiTextColor: '#e6e3ee', labelTextColor: '#b4acd8',
   captionTextColor: '#f5f3fb', captionBackgroundColor: '#080a10',
   headingTextScale: 100, featuredImageScale: 100, bodyTextSize: 13, uiTextSize: 12, labelTextSize: 10, captionTextSize: 11,
-  sectionSpacingScale: 100, contentGapScale: 100, pageGutterScale: 100, backgrounds: BACKGROUND_DEFAULTS
+  sectionSpacingScale: 100, contentGapScale: 100, pageGutterScale: 100, heroImageScale: 100, backgrounds: BACKGROUND_DEFAULTS
 };
 const DEFAULT_SITE_LABELS = {
   brandHome: 'home', contentLoadError: 'Portfolio content could not be loaded. Please reload the page in a moment.',
@@ -50,6 +53,7 @@ const ARTWORK_TYPE_SUGGESTIONS = [
   'Character Concept', 'Character Animation', 'Game Asset', 'Environment Art',
   'Cutscene Illustration', 'Gameplay Capture', 'Game UI / Interface', 'Study / Experiment', 'Other'
 ];
+const MEDIA_IMAGE_PATTERN = /\.(?:jpe?g|png|webp|gif|avif|svg|ico|bmp|tiff?)$/i;
 
 function escapeHtml(value = '') {
   return String(value).replace(/[&<>"']/g, char => ({
@@ -130,7 +134,7 @@ function safeHexColor(value, fallback) {
 
 function safeBackgroundCssUrl(value) {
   const source = publicAsset(String(value || '').trim());
-  if (!source || !/^(https?:\/\/|blob:|data:image\/(?:png|jpeg|webp|gif);|\/|\.\/|assets\/)/i.test(source)) return 'none';
+  if (!source || !/^(https?:\/\/|blob:|data:image\/(?:png|jpeg|webp|gif);|\/|\.\/|assets\/|[a-z0-9_.-]+\.(?:jpe?g|png|webp|gif|avif|svg|ico|bmp|tiff?)(?:[?#].*)?$)/i.test(source)) return 'none';
   return `url("${encodeURI(source).replace(/["']/g, '%22')}")`;
 }
 
@@ -221,6 +225,7 @@ function applyAppearance(site, target = document.documentElement) {
   target.style.setProperty('--portfolio-caption-background', safeHexColor(appearance.captionBackgroundColor, APPEARANCE_DEFAULTS.captionBackgroundColor));
   target.style.setProperty('--portfolio-heading-scale', String(number('headingTextScale', 100, 85, 120) / 100));
   target.style.setProperty('--portfolio-featured-image-scale', String(number('featuredImageScale', 100, 40, 100) / 100));
+  target.style.setProperty('--portfolio-hero-image-scale', String(number('heroImageScale', 100, 50, 145) / 100));
   target.style.setProperty('--portfolio-body-size', `${number('bodyTextSize', 13, 12, 18)}px`);
   target.style.setProperty('--portfolio-ui-size', `${number('uiTextSize', 12, 10, 18)}px`);
   target.style.setProperty('--portfolio-label-size', `${number('labelTextSize', 10, 9, 15)}px`);
@@ -242,11 +247,12 @@ function renderAppearanceEditor() {
     ${field('site.appearance.captionBackgroundColor', 'Warna latar caption gambar', 'color')}
     ${appearanceRange('site.appearance.headingTextScale', 'Ukuran judul', 85, 120, 'Skala semua judul utama. 100% adalah ukuran awal.', '%')}
     ${appearanceRange('site.appearance.featuredImageScale', 'Ukuran gambar Featured Disciplines', 40, 100, 'Atur skala karya di dalam panel landscape. Background panel tetap.', '%')}
+    ${appearanceRange('site.appearance.heroImageScale', 'Ukuran gambar Hero', 50, 145, 'Perbesar atau perkecil gambar utama di bagian Hero beranda.', '%')}
     ${appearanceRange('site.appearance.bodyTextSize', 'Ukuran teks isi', 12, 18, 'Berlaku untuk paragraf dan deskripsi.')}
     ${appearanceRange('site.appearance.uiTextSize', 'Ukuran navbar, tautan, filter, dan tombol', 10, 18, 'Berlaku pada menu utama, tab kategori, filter karya, tautan, dan tombol.')}
     ${appearanceRange('site.appearance.labelTextSize', 'Ukuran label dan metadata', 9, 15, 'Berlaku untuk label kecil, metadata, dan catatan kategori.')}
     ${appearanceRange('site.appearance.captionTextSize', 'Ukuran caption gambar', 10, 16, 'Berlaku untuk judul kecil pada gambar portofolio.')}
-  </div><div class="appearance-spacing"><div class="group-heading"><div><h3>Ruang dan jarak</h3><p>Atur jarak antar-section, jarak antar-konten, dan ruang di sisi halaman. Panel contoh di bawah ikut berubah; buka Pratinjau website untuk melihat seluruh halaman.</p></div></div><div class="field-grid">
+  </div><div class="hero-size-preview" id="heroImageSizePreview"><div class="hero-size-preview-copy"><span>HOME · HERO</span><strong data-hero-preview-title>${escapeHtml(portfolio.site.home.heroTitle)}</strong><em data-hero-preview-emphasis>${escapeHtml(portfolio.site.home.heroEmphasis)}</em><small>Preview skala gambar utama</small></div><div class="hero-size-preview-art"><img data-hero-preview-image src="${escapeHtml(publicAsset(portfolio.site.home.heroImage))}" alt="Preview gambar utama Hero"></div></div><div class="appearance-spacing"><div class="group-heading"><div><h3>Ruang dan jarak</h3><p>Atur jarak antar-section, jarak antar-konten, dan ruang di sisi halaman. Panel contoh di bawah ikut berubah; buka Pratinjau website untuk melihat seluruh halaman.</p></div></div><div class="field-grid">
     ${appearanceRange('site.appearance.sectionSpacingScale', 'Jarak antar-section', 60, 160, 'Mengatur jarak antar-section, termasuk kelompok jenis pada Grid View Personal Artwork.', '%')}
     ${appearanceRange('site.appearance.contentGapScale', 'Jarak antar-konten', 60, 160, 'Atur jarak filter, kartu grid, metadata, dan kelompok gambar di halaman proyek.', '%')}
     ${appearanceRange('site.appearance.pageGutterScale', 'Padding sisi halaman', 75, 140, 'Atur lebar ruang di sisi kiri dan kanan halaman kategori dan detail proyek.', '%')}
@@ -279,8 +285,8 @@ function field(path, label, type = 'text', hint = '') {
 
 function imageField(path, label, hint = '') {
   const value = String(getPath(portfolio, path) || '');
-  const preview = value ? (value.startsWith('http') || value.startsWith('/') ? value : value.startsWith('assets/') ? value : `assets/${value}.webp`) : '';
-  return `<div class="field"><span class="field-label">${escapeHtml(label)}</span><div class="image-control"><div><input type="text" data-path="${escapeHtml(path)}" data-original-asset="${escapeHtml(value)}" value="${escapeHtml(value)}" placeholder="Nama file atau URL"><input type="file" accept="image/jpeg,image/png,image/webp,image/gif" data-upload-path="${escapeHtml(path)}" aria-label="Unggah ${escapeHtml(label)}"></div><img class="image-preview" src="${escapeHtml(preview)}" alt="Pratinjau ${escapeHtml(label)}" ${preview ? '' : 'hidden'}></div>${hint ? `<small>${escapeHtml(hint)}</small>` : ''}</div>`;
+  const preview = value ? publicAsset(value) : '';
+  return `<div class="field"><span class="field-label">${escapeHtml(label)}</span><div class="image-control"><div><input type="text" data-path="${escapeHtml(path)}" data-original-asset="${escapeHtml(value)}" value="${escapeHtml(value)}" placeholder="Path atau URL gambar"><div class="media-field-actions"><button class="button button-quiet button-small" type="button" data-media-target="path" data-media-path="${escapeHtml(path)}">Pilih dari website</button><label class="button button-quiet button-small media-upload-button">Upload baru<input type="file" accept="image/jpeg,image/png,image/webp,image/gif" data-upload-path="${escapeHtml(path)}" aria-label="Unggah ${escapeHtml(label)}"></label></div></div><img class="image-preview" src="${escapeHtml(preview)}" alt="Pratinjau ${escapeHtml(label)}" ${preview ? '' : 'hidden'}></div>${hint ? `<small>${escapeHtml(hint)}</small>` : ''}</div>`;
 }
 
 function renderSiteEditor() {
@@ -288,7 +294,7 @@ function renderSiteEditor() {
     { title: 'Identitas dan metadata', fields: [
       ['site.title', 'Judul website / tab browser'], ['site.description', 'Deskripsi website', 'textarea'], ['site.language', 'Kode bahasa website (contoh: en atau id)'],
       ['site.brandName', 'Nama brand'], ['site.brandMonogram', 'Monogram logo'],
-      ['site.meta.openGraphImage', 'Gambar pratinjau tautan', 'image'], ['site.meta.favicon', 'File favicon', 'text']
+      ['site.meta.openGraphImage', 'Gambar pratinjau tautan', 'image'], ['site.meta.favicon', 'File favicon', 'image']
     ] },
     { title: 'Navigasi dan footer', fields: [
       ['site.navigation.home', 'Label Beranda'], ['site.about.navLabel', 'Label About'], ['site.navigation.contact', 'Label tombol kontak'],
@@ -504,12 +510,15 @@ function closeSitePreview() {
 function renderEditor() {
   $$('.editor-tab').forEach(button => button.classList.toggle('is-active', button.dataset.tab === activeTab));
   editorContent.innerHTML = activeTab === 'site' ? renderSiteEditor() : activeTab === 'categories' ? renderCategoriesEditor() : renderProjectsEditor();
+  enhanceMediaFields();
   updateAppearancePreview();
   scheduleSitePreview();
 }
 
 async function connect(token) {
   githubToken = token;
+  mediaLibraryFiles = [];
+  mediaLibraryError = '';
   const response = await githubRequest(`/contents/${apiPath(CONTENT_PATH)}?ref=${encodeURIComponent(BRANCH)}`);
   const parsed = JSON.parse(decodeBase64Utf8(response.content));
   if (!Array.isArray(parsed.categories) || !Array.isArray(parsed.projects) || !parsed.site) throw new Error('Struktur portfolio-content.json belum sesuai.');
@@ -520,6 +529,144 @@ async function connect(token) {
   pendingDeletes = new Set();
   selectedProjectId = portfolio.projects[0]?.id || '';
   selectedProjectRef = portfolio.projects[0] || null;
+  try { await loadMediaLibrary(); }
+  catch (error) { mediaLibraryError = error.message; }
+}
+
+async function loadMediaLibrary() {
+  mediaLibraryError = '';
+  const ref = await githubRequest(`/git/ref/heads/${encodeURIComponent(BRANCH)}`);
+  const commit = await githubRequest(`/git/commits/${ref.object.sha}`);
+  const tree = await githubRequest(`/git/trees/${commit.tree.sha}?recursive=1`);
+  if (tree.truncated) throw new Error('Repositori terlalu besar untuk dipindai sekaligus. Anda masih bisa mengunggah file baru.');
+  mediaLibraryFiles = tree.tree
+    .filter(entry => entry.type === 'blob' && MEDIA_IMAGE_PATTERN.test(entry.path))
+    .map(entry => ({ path: entry.path, name: entry.path.split('/').pop() }));
+}
+
+function mediaPathFromValue(value) {
+  const source = String(value || '').trim();
+  if (!source || /^(https?:|data:|blob:|\/\/)/i.test(source)) return '';
+  if (source.startsWith('/assets/')) return source.slice(1);
+  if (source.startsWith('./')) return source.slice(2);
+  if (source.startsWith('assets/') || MEDIA_IMAGE_PATTERN.test(source)) return source;
+  if (!source.includes('/') && !source.includes('.')) return `assets/${source}.webp`;
+  return '';
+}
+
+function availableMediaFiles() {
+  const files = new Map(mediaLibraryFiles.map(file => [file.path, file]));
+  const referenced = [portfolio.site.home.heroImage, portfolio.site.about.image, portfolio.site.meta.openGraphImage, portfolio.site.meta.favicon];
+  Object.values(portfolio.site.appearance?.backgrounds || {}).forEach(config => referenced.push(config?.image));
+  portfolio.projects.forEach(project => {
+    referenced.push(project.cover);
+    (project.gallery || []).forEach(image => referenced.push(image.image));
+  });
+  referenced.map(mediaPathFromValue).filter(Boolean).forEach(path => {
+    if (!files.has(path)) files.set(path, { path, name: path.split('/').pop() });
+  });
+  pendingUploads.filter(upload => MEDIA_IMAGE_PATTERN.test(upload.path)).forEach(upload => {
+    if (!files.has(upload.path)) files.set(upload.path, { path: upload.path, name: upload.path.split('/').pop() });
+  });
+  return [...files.values()].filter(file => !pendingDeletes.has(file.path)).sort((a, b) => a.path.localeCompare(b.path));
+}
+
+function enhanceMediaFields() {
+  const makeButton = (label, target, extra = {}) => {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'button button-quiet button-small media-pick-button';
+    button.textContent = label;
+    button.dataset.mediaTarget = target;
+    Object.entries(extra).forEach(([key, value]) => { button.dataset[key] = String(value); });
+    return button;
+  };
+  const coverInput = $('[data-project-field="cover"]', editorContent);
+  if (coverInput && !coverInput.closest('.media-field-actions')) {
+    const field = coverInput.closest('.field');
+    const fileInput = $('[data-upload-project-cover]', field);
+    const actions = document.createElement('div');
+    actions.className = 'media-field-actions';
+    const uploadLabel = document.createElement('label');
+    uploadLabel.className = 'button button-quiet button-small media-upload-button';
+    uploadLabel.append('Upload baru');
+    if (fileInput) uploadLabel.append(fileInput);
+    coverInput.before(actions);
+    actions.append(coverInput, makeButton('Pilih dari website', 'cover'), uploadLabel);
+  }
+  $$('[data-gallery-field="image"]', editorContent).forEach(input => {
+    if (input.closest('.gallery-image-path')) return;
+    const wrapper = document.createElement('div');
+    wrapper.className = 'gallery-image-path';
+    input.before(wrapper);
+    wrapper.append(input, makeButton('Pilih', 'gallery-image', { index: input.dataset.galleryIndex }));
+  });
+  const uploadInput = $('[data-upload-gallery]', editorContent);
+  const heading = uploadInput?.closest('.subsection-heading');
+  if (heading && !heading.querySelector('[data-media-target="gallery-add"]')) {
+    heading.classList.add('gallery-actions-heading');
+    heading.insertBefore(makeButton('+ Pilih dari website', 'gallery-add'), uploadInput.closest('label'));
+  }
+}
+
+function renderMediaPicker() {
+  const query = ($('#mediaPickerSearch')?.value || '').trim().toLocaleLowerCase();
+  const files = availableMediaFiles().filter(file => `${file.name} ${file.path}`.toLocaleLowerCase().includes(query));
+  const statusLine = $('#mediaPickerStatus');
+  const grid = $('#mediaPickerGrid');
+  if (mediaLibraryError) {
+    statusLine.innerHTML = `Daftar repositori belum dapat dimuat: ${escapeHtml(mediaLibraryError)} <button class="button button-quiet button-small" type="button" data-media-reload>Muat ulang</button>`;
+  } else {
+    statusLine.textContent = `${files.length} gambar tersedia${pendingUploads.some(upload => MEDIA_IMAGE_PATTERN.test(upload.path)) ? ' · file yang baru diunggah juga muncul di sini' : ''}.`;
+  }
+  grid.innerHTML = files.map(file => {
+    const isPending = pendingUploads.some(upload => upload.path === file.path);
+    return `<button class="media-choice-card" type="button" data-media-choice="${escapeHtml(file.path)}"><span class="media-choice-image"><img src="${escapeHtml(publicAsset(file.path))}" alt="" loading="lazy"></span><strong title="${escapeHtml(file.name)}">${escapeHtml(file.name)}</strong><small>${isPending ? 'Belum diterbitkan' : escapeHtml(file.path)}</small></button>`;
+  }).join('') || `<div class="media-picker-empty">${query ? 'Tidak ada file yang cocok dengan pencarian.' : 'Belum ada gambar di repositori. Anda tetap dapat mengunggah file baru.'}</div>`;
+}
+
+function openMediaPicker(target) {
+  mediaPickerTarget = target;
+  const modal = $('#mediaPicker');
+  $('#mediaPickerSearch').value = '';
+  renderMediaPicker();
+  modal.hidden = false;
+  document.body.classList.add('media-picker-open');
+  $('#mediaPickerSearch').focus();
+}
+
+function closeMediaPicker() {
+  $('#mediaPicker').hidden = true;
+  document.body.classList.remove('media-picker-open');
+  mediaPickerTarget = null;
+}
+
+function applyMediaSelection(path) {
+  const target = mediaPickerTarget;
+  const project = getCurrentProject();
+  if (!target || !portfolio) return;
+  if (target.type === 'path') {
+    const oldValue = getPath(portfolio, target.path);
+    setPath(portfolio, target.path, path);
+    queueUnusedAsset(oldValue);
+  } else if (target.type === 'cover' && project) {
+    const oldValue = project.cover;
+    project.cover = path;
+    queueUnusedAsset(oldValue);
+  } else if (target.type === 'gallery-image' && project) {
+    const image = project.gallery[Number(target.index)];
+    if (!image) return;
+    const oldValue = image.image;
+    image.image = path;
+    queueUnusedAsset(oldValue);
+  } else if (target.type === 'gallery-add' && project) {
+    const filename = path.split('/').pop().replace(/\.[^.]+$/, '').replace(/[-_]+/g, ' ');
+    project.gallery.push({ image: path, caption: filename, type: '' });
+  }
+  closeMediaPicker();
+  renderEditor();
+  scheduleSitePreview();
+  status($('#saveStatus'), 'Gambar dipilih. Terbitkan perubahan untuk menampilkannya di website.', 'success');
 }
 
 function getCurrentProject() {
@@ -536,7 +683,7 @@ function repositoryAssetPath(value) {
 
 function isAssetReferenced(path) {
   const matches = value => repositoryAssetPath(value) === path;
-  const siteImages = [portfolio.site.home.heroImage, portfolio.site.about.image, portfolio.site.meta.openGraphImage];
+  const siteImages = [portfolio.site.home.heroImage, portfolio.site.about.image, portfolio.site.meta.openGraphImage, portfolio.site.meta.favicon];
   Object.values(portfolio.site.appearance?.backgrounds || {}).forEach(config => siteImages.push(config?.image));
   if (siteImages.some(matches)) return true;
   return portfolio.projects.some(project => matches(project.cover) || project.gallery.some(image => matches(image.image)) || (project.detail?.sections || []).some(section => matches(section.video)));
@@ -562,7 +709,7 @@ function updateFromInput(target, eventType = 'change') {
       const output = $$('[data-range-output]', editorContent).find(item => item.dataset.rangeOutput === path);
       if (output) output.textContent = `${value}${target.dataset.unit || 'px'}`;
     }
-    if (path.startsWith('site.appearance.')) updateAppearancePreview();
+    if (path.startsWith('site.appearance.') || ['site.home.heroImage', 'site.home.heroTitle', 'site.home.heroEmphasis'].includes(path)) updateAppearancePreview();
     if (target.closest('.image-control') && eventType === 'change') {
       const originalValue = target.dataset.originalAsset || oldValue;
       if (originalValue !== value) queueUnusedAsset(originalValue);
@@ -643,6 +790,17 @@ function updateAppearancePreview() {
   const preview = $('#appearancePreview', editorContent);
   if (preview) applyAppearance(portfolio.site, preview);
   $$('[data-background-preview]', editorContent).forEach(target => applyAppearance(portfolio.site, target));
+  const heroPreview = $('#heroImageSizePreview', editorContent);
+  if (heroPreview) {
+    applyAppearance(portfolio.site, heroPreview);
+    const image = $('[data-hero-preview-image]', heroPreview);
+    const title = $('[data-hero-preview-title]', heroPreview);
+    const emphasis = $('[data-hero-preview-emphasis]', heroPreview);
+    const source = portfolio.site.home.heroImage;
+    if (image) { image.src = publicAsset(source); image.hidden = !source; }
+    if (title) title.textContent = portfolio.site.home.heroTitle || '';
+    if (emphasis) emphasis.textContent = portfolio.site.home.heroEmphasis || '';
+  }
 }
 
 function addCategory() {
@@ -852,6 +1010,12 @@ function validatePortfolio() {
 }
 
 function handleEditorClick(event) {
+  const mediaButton = event.target.closest('[data-media-target]');
+  if (mediaButton) {
+    event.preventDefault();
+    openMediaPicker({ type: mediaButton.dataset.mediaTarget, path: mediaButton.dataset.mediaPath, index: mediaButton.dataset.index });
+    return;
+  }
   const tab = event.target.closest('[data-tab]');
   if (tab) { activeTab = tab.dataset.tab; renderEditor(); return; }
   const button = event.target.closest('[data-action]'); if (!button) return;
@@ -888,16 +1052,24 @@ async function publishChanges() {
     const contentBytes = new TextEncoder().encode(`${contentJson}\n`);
     const contentBlob = await githubRequest('/git/blobs', { method: 'POST', body: JSON.stringify({ content: encodeBase64(contentBytes), encoding: 'base64' }) });
     entries.push({ path: CONTENT_PATH, mode: '100644', type: 'blob', sha: contentBlob.sha });
+    const deletedPaths = new Set();
     for (const upload of pendingUploads) {
       const blob = await githubRequest('/git/blobs', { method: 'POST', body: JSON.stringify({ content: upload.content, encoding: 'base64' }) });
       entries.push({ path: upload.path, mode: '100644', type: 'blob', sha: blob.sha });
     }
     for (const path of pendingDeletes) {
-      if (existingPaths.has(path) && !isAssetReferenced(path) && !pendingUploads.some(upload => upload.path === path)) entries.push({ path, mode: '100644', type: 'blob', sha: null });
+      if (existingPaths.has(path) && !isAssetReferenced(path) && !pendingUploads.some(upload => upload.path === path)) {
+        entries.push({ path, mode: '100644', type: 'blob', sha: null });
+        deletedPaths.add(path);
+      }
     }
     const tree = await githubRequest('/git/trees', { method: 'POST', body: JSON.stringify({ base_tree: parent.tree.sha, tree: entries }) });
     const commit = await githubRequest('/git/commits', { method: 'POST', body: JSON.stringify({ message: 'Update portfolio content from admin editor', tree: tree.sha, parents: [parentSha] }) });
     await githubRequest(`/git/refs/heads/${encodeURIComponent(BRANCH)}`, { method: 'PATCH', body: JSON.stringify({ sha: commit.sha, force: false }) });
+    mediaLibraryFiles = mediaLibraryFiles.filter(file => !deletedPaths.has(file.path));
+    pendingUploads.filter(upload => MEDIA_IMAGE_PATTERN.test(upload.path)).forEach(upload => {
+      if (!mediaLibraryFiles.some(file => file.path === upload.path)) mediaLibraryFiles.push({ path: upload.path, name: upload.path.split('/').pop() });
+    });
     pendingUploads = []; pendingDeletes = new Set();
     portfolio.projects.forEach(project => { delete project._new; });
     status(saveStatus, 'Perubahan berhasil disimpan. GitHub Pages sedang menerbitkan website; prosesnya biasanya memerlukan beberapa menit.', 'success');
@@ -939,6 +1111,16 @@ editor.addEventListener('click', handleEditorClick);
 $('#publishButton').addEventListener('click', publishChanges);
 $('#previewButton').addEventListener('click', openSitePreview);
 $('#closePreviewButton').addEventListener('click', closeSitePreview);
+$('#mediaPickerClose').addEventListener('click', closeMediaPicker);
+$('#mediaPickerSearch').addEventListener('input', renderMediaPicker);
+$('#mediaPicker').addEventListener('click', event => {
+  if (event.target.id === 'mediaPicker') { closeMediaPicker(); return; }
+  const choice = event.target.closest('[data-media-choice]');
+  if (choice) { applyMediaSelection(choice.dataset.mediaChoice); return; }
+  if (event.target.closest('[data-media-reload]')) {
+    loadMediaLibrary().then(renderMediaPicker).catch(error => { mediaLibraryError = error.message; renderMediaPicker(); });
+  }
+});
 $('#portfolioPreview').addEventListener('load', event => {
   event.currentTarget.dataset.ready = 'true';
   sendSitePreview();
@@ -953,9 +1135,14 @@ $$('[data-preview-size]').forEach(button => button.addEventListener('click', () 
   });
 }));
 $('#previewOverlay').addEventListener('click', event => { if (event.target.id === 'previewOverlay') closeSitePreview(); });
-document.addEventListener('keydown', event => { if (event.key === 'Escape' && !$('#previewOverlay').hidden) closeSitePreview(); });
+document.addEventListener('keydown', event => {
+  if (event.key !== 'Escape') return;
+  if (!$('#mediaPicker').hidden) closeMediaPicker();
+  else if (!$('#previewOverlay').hidden) closeSitePreview();
+});
 $('#logoutButton').addEventListener('click', () => {
   githubToken = ''; portfolio = null; pendingUploads = []; pendingDeletes.clear();
+  mediaLibraryFiles = []; mediaLibraryError = '';
   localPreviewAssets.forEach(url => URL.revokeObjectURL(url)); localPreviewAssets.clear();
   $('#previewOverlay').hidden = true; document.body.classList.remove('preview-open');
   selectedProjectRef = null; selectedProjectId = '';

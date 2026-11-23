@@ -20,7 +20,7 @@
       "heroTitle": "Worlds beyond",
       "heroEmphasis": "the familiar.",
       "heroIntro": "I'm Fadhlan Qital. I create illustrations, 2D game assets and interactive experiences, drawn to surreal ideas, atmospheric spaces and expressive visual storytelling.",
-      "heroImage": "assets/engkongarwah-mwsw5d64-j.webp",
+      "heroImage": "anima-character",
       "heroImageAlt": "Original illustrated character artwork by Fadhlan Qital",
       "heroSideNote": "A PERSONAL COLLECTION OF ART & INTERACTIVE WORLDS",
       "heroPrimaryCta": "Explore personal artwork",
@@ -138,16 +138,15 @@
       "uiTextSize": 12,
       "labelTextSize": 13,
       "captionTextSize": 11,
-      "sectionSpacingScale": 140,
-      "contentGapScale": 70,
-      "pageGutterScale": 85,
-      "personalArtworkSectionGap": 80,
+      "sectionSpacingScale": 112,
+      "contentGapScale": 100,
+      "pageGutterScale": 100,
       "heroImageScale": 145,
       "backgrounds": {
         "homeHero": {
-          "image": "assets/cutscene1-mwsykcwc-6.webp",
+          "image": "personal-01",
           "opacity": 20,
-          "overlay": 15,
+          "overlay": 28,
           "blur": 0,
           "saturation": 70,
           "positionX": 31,
@@ -216,14 +215,7 @@
       "pageDescription": "Personal illustrations, sketchbook explorations and selected environment studies from the Independent Study Program. A collection of visual experiments and worlds shaped by personal curiosity.",
       "collectionLabel": "COLLECTION / PERSONAL ARTWORK",
       "filterLabel": "PERSONAL ARTWORK",
-      "secondaryFilterLabel": "INDEPENDENT STUDY INCLUDED",
-      "artworkTypes": [
-        "Digital Illustration",
-        "Study / Experiment",
-        "Comic / Manga",
-        "Traditional Drawing",
-        "Character Animation"
-      ]
+      "secondaryFilterLabel": "INDEPENDENT STUDY INCLUDED"
     },
     {
       "id": "game-art",
@@ -278,14 +270,19 @@
       "published": true,
       "gallery": [
         {
-          "image": "personal-03",
-          "caption": "Personal Artwork 03",
-          "type": "Digital Illustration"
-        },
-        {
           "image": "personal-02",
           "caption": "Personal Artwork 02",
           "type": "Traditional Drawing"
+        },
+        {
+          "image": "personal-01",
+          "caption": "Personal Artwork 01",
+          "type": "Digital Illustration"
+        },
+        {
+          "image": "personal-03",
+          "caption": "Personal Artwork 03",
+          "type": "Digital Illustration"
         },
         {
           "image": "assets/walker-mwsvp1qw-d.webp",
@@ -391,11 +388,6 @@
           "image": "assets/fadhlan-ikhtiari-10121398-tugas-2-2d-animation-mwswo63d-15.gif",
           "caption": "Fadhlan Ikhtiari - 10121398 - TUGAS 2 2D ANIMATION",
           "type": "Character Animation"
-        },
-        {
-          "image": "assets/obitomadara-mwsyissd-1.webp",
-          "caption": "obitomadara",
-          "type": ""
         }
       ],
       "detail": {
@@ -409,9 +401,10 @@
             "images": [
               1,
               0,
-              4,
+              2,
               5,
-              6
+              6,
+              7
             ]
           }
         ]
@@ -427,10 +420,40 @@
       "contribution": "",
       "subtitle": "Character concept · Sprite assets · Gameplay · Cutscenes",
       "description": "Selected visual work for Anima: The Fallen Heroes & Mystic Forest, including character concept art, sprite character assets, gameplay visuals and cutscene illustrations.",
-      "cover": "assets/engkongarwah-mwsw5d64-j.webp",
+      "cover": "anima-divider",
       "sortOrder": 1,
       "published": true,
       "gallery": [
+        {
+          "image": "anima-divider",
+          "caption": "Game visual artwork",
+          "type": ""
+        },
+        {
+          "image": "anima-cutscene-01",
+          "caption": "Cutscene illustration",
+          "type": "Cutscene Illustration"
+        },
+        {
+          "image": "anima-cutscene-02",
+          "caption": "Cutscene illustration",
+          "type": "Cutscene Illustration"
+        },
+        {
+          "image": "anima-cutscene-03",
+          "caption": "Cutscene illustration",
+          "type": "Cutscene Illustration"
+        },
+        {
+          "image": "anima-cutscene-04",
+          "caption": "Cutscene illustration",
+          "type": "Cutscene Illustration"
+        },
+        {
+          "image": "anima-cutscene-05",
+          "caption": "Cutscene illustration",
+          "type": "Cutscene Illustration"
+        },
         {
           "image": "assets/engkongarwah-mwsw5d64-j.webp",
           "caption": "engkongArwah",
@@ -505,31 +528,6 @@
           "image": "assets/player-running-mwsw5dwi-u.gif",
           "caption": "Player_Running",
           "type": "Character Animation"
-        },
-        {
-          "image": "assets/cutscene5-mwsykcgh-2.webp",
-          "caption": "cutscene5",
-          "type": "Cutscene Illustration"
-        },
-        {
-          "image": "assets/cutscene4-mwsykck4-3.webp",
-          "caption": "cutscene4",
-          "type": "Cutscene Illustration"
-        },
-        {
-          "image": "assets/cutscene3-mwsykcnx-4.webp",
-          "caption": "cutscene3",
-          "type": "Cutscene Illustration"
-        },
-        {
-          "image": "assets/cutscene2-mwsykcs1-5.webp",
-          "caption": "cutscene2",
-          "type": "Cutscene Illustration"
-        },
-        {
-          "image": "assets/cutscene1-mwsykcwc-6.webp",
-          "caption": "cutscene1",
-          "type": "Cutscene Illustration"
         }
       ],
       "detail": {
@@ -548,25 +546,25 @@
           {
             "title": "CHARACTER CONCEPT",
             "subtitle": "ANIMA / THE FALLEN HEROES & MYSTIC FOREST",
-            "layout": "asset-strip",
+            "layout": "wide",
             "images": [
-              0,
-              1
+              6,
+              7
             ]
           },
           {
             "title": "CHARACTER ANIMATION",
             "subtitle": "ANIMA / THE FALLEN HEROES & MYSTIC FOREST",
-            "layout": "asset-grid",
+            "layout": "wide",
             "videoSource": "local",
             "images": [
-              8,
-              9,
-              10,
-              11,
-              12,
-              13,
-              14
+              14,
+              15,
+              16,
+              17,
+              18,
+              19,
+              20
             ]
           },
           {
@@ -574,19 +572,25 @@
             "subtitle": "ANIMA / THE FALLEN HEROES & MYSTIC FOREST",
             "layout": "asset-grid",
             "images": [
-              2,
-              3,
-              4,
-              5,
-              6,
-              7
+              8,
+              9,
+              10,
+              11,
+              12,
+              13
             ]
           },
           {
             "title": "CINEMATIC STORY SEQUENCE",
             "subtitle": "Five cutscene illustrations presented in portfolio order.",
             "layout": "sequence",
-            "images": []
+            "images": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ]
           }
         ]
       }
@@ -755,7 +759,7 @@
           {
             "title": "01 / FEATURED VISUAL",
             "subtitle": "PARANOIA ACTIVITY",
-            "layout": "asset-grid",
+            "layout": "wide",
             "images": [
               1
             ]
@@ -763,7 +767,7 @@
           {
             "title": "GAME SHOWCASE / 02",
             "subtitle": "PARANOIA ACTIVITY",
-            "layout": "asset-grid",
+            "layout": "wide",
             "images": [
               2,
               0,
@@ -823,7 +827,7 @@
           {
             "title": "01 / FEATURED VISUAL",
             "subtitle": "DIGTRIX",
-            "layout": "asset-grid",
+            "layout": "wide",
             "images": [
               0
             ]
@@ -831,7 +835,7 @@
           {
             "title": "GAME SHOWCASE / 02",
             "subtitle": "DIGTRIX",
-            "layout": "asset-grid",
+            "layout": "wide",
             "images": [
               1,
               2,
@@ -889,7 +893,7 @@
           {
             "title": "01 / FEATURED VISUAL",
             "subtitle": "MATAKATA",
-            "layout": "asset-grid",
+            "layout": "wide",
             "images": [
               0
             ]
@@ -897,7 +901,7 @@
           {
             "title": "GAME SHOWCASE / 02",
             "subtitle": "MATAKATA",
-            "layout": "asset-grid",
+            "layout": "wide",
             "images": [
               1,
               2,

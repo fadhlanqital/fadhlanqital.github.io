@@ -584,9 +584,15 @@
           },
           {
             "title": "CINEMATIC STORY SEQUENCE",
-            "subtitle": "Five cutscene illustrations presented in portfolio order.",
+            "subtitle": "GAME CUTSCENES",
             "layout": "sequence",
-            "images": []
+            "images": [
+              0,
+              16,
+              17,
+              18,
+              19
+            ]
           }
         ]
       }

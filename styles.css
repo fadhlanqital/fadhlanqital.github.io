@@ -736,6 +736,15 @@ body{background:#090b10;color:var(--white)}
   .filter-note{font-size:7px}
 }
 
+/* Per-artwork type filters and labels */
+.artwork-filter-groups{display:grid;gap:8px;min-width:0}
+.artwork-filter-groups .filter-list{align-items:center}
+.type-filter-list .filter-btn{border-color:rgba(184,173,217,.28)}
+.artwork-type-label,.story-image-type{position:absolute;z-index:2;top:12px;left:12px;max-width:calc(100% - 24px);padding:7px 9px;border:1px solid rgba(230,231,245,.2);background:rgba(7,10,16,.82);color:var(--portfolio-label-color,#b4acd8);font:var(--portfolio-label-size,10px) var(--mono);letter-spacing:.1em;text-transform:uppercase;line-height:1.35;pointer-events:none;text-align:left}
+.artwork-type-label{top:18px;left:20px}
+.artwork-empty{flex:1 0 100%;padding:40px 15px;color:var(--portfolio-body-color,#a7adbb);text-align:center}
+@media(max-width:700px){.artwork-filter-groups{width:100%}.artwork-type-label{top:11px;left:11px;font-size:9px}.story-image-type{top:9px;left:9px;font-size:9px}}
+
 /* Home: curated works across the three disciplines */
 .home-selected{position:relative;overflow:hidden;padding:clamp(72px,9vw,126px) 0;background:radial-gradient(ellipse at 78% 0,rgba(111,97,163,.12),transparent 42%),#0d1119;color:#f1f0f4}
 .home-selected-head{width:min(calc(100% - 2*clamp(22px,5vw,78px)),var(--max));margin:0 auto 38px;display:flex;align-items:end;justify-content:space-between;gap:28px}

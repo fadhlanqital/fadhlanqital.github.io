@@ -215,51 +215,63 @@
       "gallery": [
         {
           "image": "personal-02",
-          "caption": "Personal Artwork 02"
+          "caption": "Personal Artwork 02",
+          "type": "Traditional Drawing"
         },
         {
           "image": "personal-01",
-          "caption": "Personal Artwork 01"
+          "caption": "Personal Artwork 01",
+          "type": "Digital Illustration"
         },
         {
           "image": "personal-03",
-          "caption": "Personal Artwork 03"
+          "caption": "Personal Artwork 03",
+          "type": "Digital Illustration"
         },
         {
           "image": "personal-04",
-          "caption": "Personal Artwork 04"
+          "caption": "Personal Artwork 04",
+          "type": "Traditional Drawing"
         },
         {
           "image": "personal-05",
-          "caption": "Personal Artwork 05"
+          "caption": "Personal Artwork 05",
+          "type": "Traditional Drawing"
         },
         {
           "image": "personal-06",
-          "caption": "Personal Artwork 06"
+          "caption": "Personal Artwork 06",
+          "type": "Traditional Drawing"
         },
         {
           "image": "personal-07",
-          "caption": "Personal Artwork 07"
+          "caption": "Personal Artwork 07",
+          "type": "Traditional Drawing"
         },
         {
           "image": "personal-08",
-          "caption": "Personal Artwork 08"
+          "caption": "Personal Artwork 08",
+          "type": "Traditional Drawing"
         },
         {
           "image": "study-01",
-          "caption": "Independent Study — Forest Study 01"
+          "caption": "Independent Study — Forest Study 01",
+          "type": "Environment Study"
         },
         {
           "image": "study-03",
-          "caption": "Independent Study — Forest Study 03"
+          "caption": "Independent Study — Forest Study 03",
+          "type": "Environment Study"
         },
         {
           "image": "study-04",
-          "caption": "Independent Study — Forest Study 04"
+          "caption": "Independent Study — Forest Study 04",
+          "type": "Environment Study"
         },
         {
           "image": "study-05",
-          "caption": "Independent Study — Forest Study 05"
+          "caption": "Independent Study — Forest Study 05",
+          "type": "Environment Study"
         }
       ],
       "detail": {
@@ -311,63 +323,78 @@
       "gallery": [
         {
           "image": "anima-divider",
-          "caption": "Game visual artwork"
+          "caption": "Game visual artwork",
+          "type": "Game Key Art"
         },
         {
           "image": "anima-character",
-          "caption": "Character concept"
+          "caption": "Character concept",
+          "type": "Character Concept"
         },
         {
           "image": "anima-sprite-01",
-          "caption": "Sprite character asset"
+          "caption": "Sprite character asset",
+          "type": "Character Game Asset"
         },
         {
           "image": "anima-sprite-02",
-          "caption": "Sprite character asset"
+          "caption": "Sprite character asset",
+          "type": "Character Game Asset"
         },
         {
           "image": "anima-sprite-03",
-          "caption": "Sprite animation sheet"
+          "caption": "Sprite animation sheet",
+          "type": "Sprite Sheet / Animation"
         },
         {
           "image": "anima-sprite-04",
-          "caption": "Sprite animation sheet"
+          "caption": "Sprite animation sheet",
+          "type": "Sprite Sheet / Animation"
         },
         {
           "image": "anima-sprite-05",
-          "caption": "Character sprite"
+          "caption": "Character sprite",
+          "type": "Character Sprite Animation"
         },
         {
           "image": "anima-sprite-06",
-          "caption": "Character sprite"
+          "caption": "Character sprite",
+          "type": "Character Sprite Animation"
         },
         {
           "image": "anima-sprite-07",
-          "caption": "Character sprite"
+          "caption": "Character sprite",
+          "type": "Character Sprite Animation"
         },
         {
           "image": "anima-gameplay",
-          "caption": "Gameplay"
+          "caption": "Gameplay",
+          "type": "Gameplay Capture"
         },
         {
           "image": "anima-cutscene-01",
-          "caption": "Cutscene illustration"
+          "caption": "Cutscene illustration",
+          "type": "Cutscene Illustration"
         },
         {
           "image": "anima-cutscene-02",
-          "caption": "Cutscene illustration"
+          "caption": "Cutscene illustration",
+          "type": "Cutscene Illustration"
         },
         {
           "image": "anima-cutscene-03",
-          "caption": "Cutscene illustration"
+          "caption": "Cutscene illustration",
+          "type": "Cutscene Illustration"
         },
         {
           "image": "anima-cutscene-04",
-          "caption": "Cutscene illustration"
+          "caption": "Cutscene illustration",
+          "type": "Cutscene Illustration"
         },
         {
           "image": "anima-cutscene-05",
-          "caption": "Cutscene illustration"
+          "caption": "Cutscene illustration",
+          "type": "Cutscene Illustration"
         }
       ],
       "detail": {
@@ -438,35 +465,43 @@
       "gallery": [
         {
           "image": "polri-01",
-          "caption": "Character animation asset"
+          "caption": "Character animation asset",
+          "type": "Character Animation"
         },
         {
           "image": "polri-02",
-          "caption": "Character animation asset"
+          "caption": "Character animation asset",
+          "type": "Character Animation"
         },
         {
           "image": "polri-03",
-          "caption": "Animation sprite sheet"
+          "caption": "Animation sprite sheet",
+          "type": "Sprite Sheet / Animation"
         },
         {
           "image": "polri-04",
-          "caption": "Animation sprite sheet"
+          "caption": "Animation sprite sheet",
+          "type": "Sprite Sheet / Animation"
         },
         {
           "image": "polri-05",
-          "caption": "Character animation asset"
+          "caption": "Character animation asset",
+          "type": "Character Animation"
         },
         {
           "image": "polri-06",
-          "caption": "Character animation asset"
+          "caption": "Character animation asset",
+          "type": "Character Animation"
         },
         {
           "image": "polri-07",
-          "caption": "Animation sprite sheet"
+          "caption": "Animation sprite sheet",
+          "type": "Sprite Sheet / Animation"
         },
         {
           "image": "polri-08",
-          "caption": "Animation sprite sheet"
+          "caption": "Animation sprite sheet",
+          "type": "Sprite Sheet / Animation"
         }
       ],
       "detail": {
@@ -528,31 +563,38 @@
       "gallery": [
         {
           "image": "paranoia-03",
-          "caption": "Game title screen"
+          "caption": "Game title screen",
+          "type": "Game UI / Interface"
         },
         {
           "image": "paranoia-01",
-          "caption": "Gameplay environment"
+          "caption": "Gameplay environment",
+          "type": "Gameplay Capture"
         },
         {
           "image": "paranoia-02",
-          "caption": "Gameplay screen"
+          "caption": "Gameplay screen",
+          "type": "Gameplay Capture"
         },
         {
           "image": "paranoia-04",
-          "caption": "Game environment"
+          "caption": "Game environment",
+          "type": "Gameplay Capture"
         },
         {
           "image": "paranoia-05",
-          "caption": "Gameplay detail"
+          "caption": "Gameplay detail",
+          "type": "Gameplay Capture"
         },
         {
           "image": "paranoia-06",
-          "caption": "Gameplay detail"
+          "caption": "Gameplay detail",
+          "type": "Gameplay Capture"
         },
         {
           "image": "paranoia-07",
-          "caption": "Game visual"
+          "caption": "Game visual",
+          "type": "Game Key Art"
         }
       ],
       "detail": {
@@ -599,23 +641,28 @@
       "gallery": [
         {
           "image": "digitrix-01",
-          "caption": "Game screen"
+          "caption": "Game screen",
+          "type": "Gameplay Capture"
         },
         {
           "image": "digitrix-02",
-          "caption": "Game screen"
+          "caption": "Game screen",
+          "type": "Gameplay Capture"
         },
         {
           "image": "digitrix-03",
-          "caption": "Game screen"
+          "caption": "Game screen",
+          "type": "Gameplay Capture"
         },
         {
           "image": "digitrix-04",
-          "caption": "Game logo and interface"
+          "caption": "Game logo and interface",
+          "type": "Game UI / Interface"
         },
         {
           "image": "digitrix-05",
-          "caption": "Game interface overview"
+          "caption": "Game interface overview",
+          "type": "Game UI / Interface"
         }
       ],
       "detail": {
@@ -660,23 +707,28 @@
       "gallery": [
         {
           "image": "matakata-01",
-          "caption": "Game logo"
+          "caption": "Game logo",
+          "type": "Game UI / Interface"
         },
         {
           "image": "matakata-02",
-          "caption": "Gameplay interface"
+          "caption": "Gameplay interface",
+          "type": "Gameplay Capture"
         },
         {
           "image": "matakata-03",
-          "caption": "Game title screen"
+          "caption": "Game title screen",
+          "type": "Game UI / Interface"
         },
         {
           "image": "matakata-04",
-          "caption": "Game interface overview"
+          "caption": "Game interface overview",
+          "type": "Game UI / Interface"
         },
         {
           "image": "matakata-05",
-          "caption": "Gameplay screen"
+          "caption": "Gameplay screen",
+          "type": "Gameplay Capture"
         }
       ],
       "detail": {

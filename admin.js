@@ -674,11 +674,12 @@ function imageSlug(name) {
     .toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 48) || 'gambar';
 }
 
-function classifyUpload(file) {
+async function classifyUpload(file) {
   const extension = file.name.split('.').pop().toLowerCase();
   if (extension === 'mp4' || file.type === 'video/mp4') return { kind: 'video', extension: 'mp4' };
   if (extension === 'webm' || file.type === 'video/webm') return { kind: 'video', extension: 'webm' };
-  if (extension === 'gif' || file.type === 'image/gif') return { kind: 'gif', extension: 'gif' };
+  const signature = await file.slice(0, 6).text();
+  if (extension === 'gif' || file.type === 'image/gif' || signature === 'GIF87a' || signature === 'GIF89a') return { kind: 'gif', extension: 'gif' };
   if (['jpg', 'jpeg', 'png', 'webp'].includes(extension) || ['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) return { kind: 'image', extension: 'webp' };
   throw new Error(`Format “.${extension}” belum didukung. Gunakan JPG, PNG, WebP, GIF, MP4, atau WebM.`);
 }
@@ -699,7 +700,7 @@ async function handleFileUpload(input) {
   const button = $('#publishButton'); button.disabled = true;
   const saveStatus = $('#saveStatus');
   try {
-    const classified = files.map(file => ({ file, type: classifyUpload(file) }));
+    const classified = await Promise.all(files.map(async file => ({ file, type: await classifyUpload(file) })));
     const oversized = classified.find(({ file }) => file.size > 40 * 1024 * 1024);
     if (oversized) throw new Error(`“${oversized.file.name}” lebih dari batas 40 MB per berkas. Kompres video atau GIF lalu coba lagi.`);
     if (classified.some(({ type }) => isVideoSlot ? type.kind !== 'video' : type.kind === 'video')) {

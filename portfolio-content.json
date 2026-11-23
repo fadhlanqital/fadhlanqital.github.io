@@ -547,13 +547,38 @@
             "title": "CHARACTER CONCEPT",
             "subtitle": "ANIMA / THE FALLEN HEROES & MYSTIC FOREST",
             "layout": "wide",
-            "images": []
+            "images": [
+              6,
+              7
+            ]
+          },
+          {
+            "title": "CHARACTER ANIMATION",
+            "subtitle": "ANIMA / THE FALLEN HEROES & MYSTIC FOREST",
+            "layout": "wide",
+            "videoSource": "local",
+            "images": [
+              14,
+              15,
+              16,
+              17,
+              18,
+              19,
+              20
+            ]
           },
           {
             "title": "SPRITE CHARACTER ASSETS",
             "subtitle": "ANIMA / THE FALLEN HEROES & MYSTIC FOREST",
             "layout": "asset-grid",
-            "images": []
+            "images": [
+              8,
+              9,
+              10,
+              11,
+              12,
+              13
+            ]
           },
           {
             "title": "CINEMATIC STORY SEQUENCE",
@@ -572,7 +597,7 @@
     },
     {
       "id": "polri-quiz",
-      "title": "POLRI Quiz Game",
+      "title": "Garbha character for POLRI Quiz Game",
       "shortTitle": "POLRI Quiz Game",
       "category": "game-art",
       "year": "2025",
@@ -617,7 +642,7 @@
         {
           "image": "assets/spritesheetgameplay-1-mwswvjm9-17.webp",
           "caption": "SpritesheetGameplay (1)",
-          "type": ""
+          "type": "Sprite / Sprite Sheet"
         },
         {
           "image": "assets/illustration9-5-mwssdck2-1.gif",
@@ -650,28 +675,29 @@
         "narrative": "Visual and animation asset contributions for the POLRI Quiz Game prototype. The boards are presented as still images because separate playable animation files are not part of the portfolio assets.",
         "sections": [
           {
-            "title": "01 / CHARACTER IN MOTION",
+            "title": "CHARACTER IN MOTION",
             "subtitle": "POLRI QUIZ GAME · PROTOTYPE",
             "layout": "paired",
-            "images": []
+            "images": [
+              7,
+              8,
+              9,
+              10,
+              11
+            ]
           },
           {
-            "title": "02 / ANIMATION ASSET BOARD",
+            "title": "SPRITE SHEET",
             "subtitle": "POLRI QUIZ GAME · PROTOTYPE",
             "layout": "paired",
-            "images": []
-          },
-          {
-            "title": "03 / CHARACTER ANIMATION",
-            "subtitle": "POLRI QUIZ GAME · PROTOTYPE",
-            "layout": "paired",
-            "images": []
-          },
-          {
-            "title": "04 / SPRITE SHEET",
-            "subtitle": "POLRI QUIZ GAME · PROTOTYPE",
-            "layout": "paired",
-            "images": []
+            "images": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6
+            ]
           }
         ]
       }

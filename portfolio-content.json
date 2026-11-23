@@ -427,38 +427,13 @@
       "contribution": "",
       "subtitle": "Character concept · Sprite assets · Gameplay · Cutscenes",
       "description": "Selected visual work for Anima: The Fallen Heroes & Mystic Forest, including character concept art, sprite character assets, gameplay visuals and cutscene illustrations.",
-      "cover": "anima-divider",
+      "cover": "assets/cutscene1-mwsykcwc-6.webp",
       "sortOrder": 1,
       "published": true,
       "gallery": [
         {
-          "image": "anima-divider",
-          "caption": "Game visual artwork",
-          "type": ""
-        },
-        {
-          "image": "anima-cutscene-01",
-          "caption": "Cutscene illustration",
-          "type": "Cutscene Illustration"
-        },
-        {
-          "image": "anima-cutscene-02",
-          "caption": "Cutscene illustration",
-          "type": "Cutscene Illustration"
-        },
-        {
-          "image": "anima-cutscene-03",
-          "caption": "Cutscene illustration",
-          "type": "Cutscene Illustration"
-        },
-        {
-          "image": "anima-cutscene-04",
-          "caption": "Cutscene illustration",
-          "type": "Cutscene Illustration"
-        },
-        {
-          "image": "anima-cutscene-05",
-          "caption": "Cutscene illustration",
+          "image": "assets/cutscene1-mwszfpfh-5.webp",
+          "caption": "cutscene1",
           "type": "Cutscene Illustration"
         },
         {
@@ -535,6 +510,26 @@
           "image": "assets/player-running-mwsw5dwi-u.gif",
           "caption": "Player_Running",
           "type": "Character Animation"
+        },
+        {
+          "image": "assets/cutscene5-mwszfp03-1.webp",
+          "caption": "cutscene5",
+          "type": "Cutscene Illustration"
+        },
+        {
+          "image": "assets/cutscene4-mwszfp3r-2.webp",
+          "caption": "cutscene4",
+          "type": "Cutscene Illustration"
+        },
+        {
+          "image": "assets/cutscene3-mwszfp7d-3.webp",
+          "caption": "cutscene3",
+          "type": "Cutscene Illustration"
+        },
+        {
+          "image": "assets/cutscene2-mwszfpbg-4.webp",
+          "caption": "cutscene2",
+          "type": "Cutscene Illustration"
         }
       ],
       "detail": {
@@ -553,25 +548,25 @@
           {
             "title": "CHARACTER CONCEPT",
             "subtitle": "ANIMA / THE FALLEN HEROES & MYSTIC FOREST",
-            "layout": "wide",
+            "layout": "paired",
             "images": [
-              6,
-              7
+              1,
+              2
             ]
           },
           {
             "title": "CHARACTER ANIMATION",
             "subtitle": "ANIMA / THE FALLEN HEROES & MYSTIC FOREST",
-            "layout": "wide",
+            "layout": "asset-grid",
             "videoSource": "local",
             "images": [
+              9,
+              10,
+              11,
+              12,
+              13,
               14,
-              15,
-              16,
-              17,
-              18,
-              19,
-              20
+              15
             ]
           },
           {
@@ -579,25 +574,19 @@
             "subtitle": "ANIMA / THE FALLEN HEROES & MYSTIC FOREST",
             "layout": "asset-grid",
             "images": [
-              8,
-              9,
-              10,
-              11,
-              12,
-              13
+              3,
+              4,
+              5,
+              6,
+              7,
+              8
             ]
           },
           {
             "title": "CINEMATIC STORY SEQUENCE",
             "subtitle": "Five cutscene illustrations presented in portfolio order.",
             "layout": "sequence",
-            "images": [
-              1,
-              2,
-              3,
-              4,
-              5
-            ]
+            "images": []
           }
         ]
       }

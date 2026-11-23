@@ -553,7 +553,7 @@
           {
             "title": "CHARACTER CONCEPT",
             "subtitle": "ANIMA / THE FALLEN HEROES & MYSTIC FOREST",
-            "layout": "wide",
+            "layout": "asset-grid",
             "images": [
               6,
               7
@@ -562,7 +562,7 @@
           {
             "title": "CHARACTER ANIMATION",
             "subtitle": "ANIMA / THE FALLEN HEROES & MYSTIC FOREST",
-            "layout": "wide",
+            "layout": "asset-grid",
             "videoSource": "local",
             "images": [
               14,

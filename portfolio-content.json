@@ -553,7 +553,7 @@
           {
             "title": "CHARACTER CONCEPT",
             "subtitle": "ANIMA / THE FALLEN HEROES & MYSTIC FOREST",
-            "layout": "asset-grid",
+            "layout": "asset-strip",
             "images": [
               6,
               7
@@ -766,7 +766,7 @@
           {
             "title": "01 / FEATURED VISUAL",
             "subtitle": "PARANOIA ACTIVITY",
-            "layout": "wide",
+            "layout": "asset-grid",
             "images": [
               1
             ]
@@ -774,7 +774,7 @@
           {
             "title": "GAME SHOWCASE / 02",
             "subtitle": "PARANOIA ACTIVITY",
-            "layout": "wide",
+            "layout": "asset-grid",
             "images": [
               2,
               0,
@@ -834,7 +834,7 @@
           {
             "title": "01 / FEATURED VISUAL",
             "subtitle": "DIGTRIX",
-            "layout": "wide",
+            "layout": "asset-grid",
             "images": [
               0
             ]
@@ -842,7 +842,7 @@
           {
             "title": "GAME SHOWCASE / 02",
             "subtitle": "DIGTRIX",
-            "layout": "wide",
+            "layout": "asset-grid",
             "images": [
               1,
               2,
@@ -900,7 +900,7 @@
           {
             "title": "01 / FEATURED VISUAL",
             "subtitle": "MATAKATA",
-            "layout": "wide",
+            "layout": "asset-grid",
             "images": [
               0
             ]
@@ -908,7 +908,7 @@
           {
             "title": "GAME SHOWCASE / 02",
             "subtitle": "MATAKATA",
-            "layout": "wide",
+            "layout": "asset-grid",
             "images": [
               1,
               2,

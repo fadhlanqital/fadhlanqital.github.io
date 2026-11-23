@@ -141,8 +141,7 @@
       "sectionSpacingScale": 140,
       "contentGapScale": 70,
       "pageGutterScale": 85,
-      "artworkGroupGap": 80,
-      "projectSectionGap": 24,
+      "personalArtworkSectionGap": 80,
       "heroImageScale": 145,
       "backgrounds": {
         "homeHero": {

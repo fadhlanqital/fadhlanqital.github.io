@@ -14,7 +14,7 @@ const DEFAULT_APPEARANCE = {
   headingTextColor: '#f1f0f4', bodyTextColor: '#a7adbb', uiTextColor: '#e6e3ee', labelTextColor: '#b4acd8',
   captionTextColor: '#f5f3fb', captionBackgroundColor: '#080a10',
   headingTextScale: 100, featuredImageScale: 100, bodyTextSize: 13, uiTextSize: 12, labelTextSize: 10, captionTextSize: 11,
-  sectionSpacingScale: 100, contentGapScale: 100, pageGutterScale: 100, artworkGroupGap: 80, projectSectionGap: 24, heroImageScale: 100,
+  sectionSpacingScale: 100, contentGapScale: 100, pageGutterScale: 100, personalArtworkSectionGap: 80, heroImageScale: 100,
   backgrounds: {
     homeHero: { image: 'assets/personal-02.webp', opacity: 24, overlay: 42, blur: 0, saturation: 70, positionX: 70, positionY: 50, zoom: 110 },
     personalCategory: { image: 'assets/study-01.webp', opacity: 18, overlay: 57, blur: 0, saturation: 65, positionX: 70, positionY: 50, zoom: 112 },
@@ -124,12 +124,9 @@ function applyAppearance(site) {
     '--portfolio-gap-mobile-controls': px(20, contentScale), '--portfolio-gap-mobile-rail': px(12, contentScale), '--portfolio-gap-mobile-grid': px(10, contentScale), '--portfolio-gap-mobile-story-pair': px(25, contentScale)
   };
   Object.entries(spacingVariables).forEach(([property, value]) => root.setProperty(property, value));
-  const artworkGroupGap = pixelValue('artworkGroupGap', 80, 24, 180);
-  const projectSectionGap = pixelValue('projectSectionGap', 24, 0, 120);
-  root.setProperty('--portfolio-artwork-group-gap', px(artworkGroupGap, 1));
-  root.setProperty('--portfolio-artwork-group-gap-mobile', px(artworkGroupGap * .72, 1));
-  root.setProperty('--portfolio-project-section-gap', px(projectSectionGap, 1));
-  root.setProperty('--portfolio-project-section-gap-mobile', px(projectSectionGap * .8, 1));
+  const personalArtworkSectionGap = pixelValue('personalArtworkSectionGap', 80, 24, 180);
+  root.setProperty('--portfolio-personal-artwork-section-gap', px(personalArtworkSectionGap, 1));
+  root.setProperty('--portfolio-personal-artwork-section-gap-mobile', px(personalArtworkSectionGap * .72, 1));
 }
 
 function esc(value = '') {

@@ -749,7 +749,7 @@ body{background:#090b10;color:var(--white)}
 .artwork-feature.is-grid .artwork-track.artwork-grid-groups{display:block;overflow:visible;padding:0;scroll-snap-type:none;cursor:default}
 .artwork-grid-groups{display:grid;gap:clamp(34px,5vw,64px)}
 .artwork-type-section{min-width:0}
-.artwork-feature.is-grid .artwork-track.artwork-grid-groups{display:grid;grid-auto-flow:row;grid-auto-rows:max-content;gap:var(--portfolio-artwork-group-gap,80px)}
+.personal-artwork-page .artwork-type-section+.artwork-type-section{margin-top:var(--portfolio-personal-artwork-section-gap,80px)}
 .artwork-type-heading{display:flex;justify-content:space-between;align-items:end;gap:20px;margin-bottom:17px;padding-bottom:13px;border-bottom:1px solid rgba(230,231,245,.18)}
 .artwork-type-heading .eyebrow{display:block;font:9px var(--mono);letter-spacing:.16em;color:var(--portfolio-label-color,#b4acd8)}
 .artwork-type-heading h2{margin:9px 0 0;color:var(--portfolio-heading-color,#f1f0f4);font-size:clamp(26px,3.5vw,42px);line-height:1;letter-spacing:-.055em}
@@ -799,7 +799,6 @@ body{background:#090b10;color:var(--white)}
 .artwork-feature{padding:var(--portfolio-art-feature-top,44px) var(--portfolio-page-gutter,clamp(22px,7vw,112px)) var(--portfolio-art-feature-bottom,26px)}
 .artwork-track{gap:var(--portfolio-gap-rail,20px)}
 .artwork-grid-groups{gap:clamp(var(--portfolio-artwork-group-gap-min,34px),var(--portfolio-artwork-group-gap-fluid,5vw),var(--portfolio-artwork-group-gap-max,64px))}
-.artwork-feature.is-grid .artwork-track.artwork-grid-groups{gap:var(--portfolio-artwork-group-gap,80px)}
 .artwork-type-heading{margin-bottom:var(--portfolio-type-heading-gap,17px)}
 .artwork-feature.is-grid .artwork-type-grid{gap:var(--portfolio-gap-grid,18px)}
 .dev-page{padding-bottom:var(--portfolio-dev-page-bottom,90px)}
@@ -821,7 +820,6 @@ body{background:#090b10;color:var(--white)}
 .cutscene-heading{margin-bottom:clamp(var(--portfolio-cutscene-heading-gap-min,32px),var(--portfolio-cutscene-heading-gap-fluid,5vw),var(--portfolio-cutscene-heading-gap-max,70px))}
 .cutscene-frame{margin-bottom:clamp(var(--portfolio-cutscene-frame-gap-min,34px),var(--portfolio-cutscene-frame-gap-fluid,5vw),var(--portfolio-cutscene-frame-gap-max,68px))}
 .project-end{gap:var(--portfolio-gap-controls,20px);padding-inline:var(--portfolio-page-gutter,clamp(22px,7vw,110px))}
-.project-page>.story-plate+.story-plate,.project-page>.story-plate+.cutscene-sequence,.project-page>.cutscene-sequence+.story-plate,.project-page>.cutscene-sequence+.cutscene-sequence{margin-top:var(--portfolio-project-section-gap,24px)}
 
 @media(max-width:700px){
   .artworks-intro{padding:var(--portfolio-art-intro-top-mobile,58px) var(--portfolio-page-gutter-mobile,22px) var(--portfolio-art-intro-bottom-mobile,32px);gap:var(--portfolio-gap-mobile-intro,21px)}
@@ -831,7 +829,7 @@ body{background:#090b10;color:var(--white)}
   .artwork-feature{padding:var(--portfolio-art-feature-top-mobile,28px) var(--portfolio-page-gutter-mobile,22px) var(--portfolio-art-feature-bottom-mobile,18px)}
   .artwork-track{gap:var(--portfolio-gap-mobile-rail,12px)}
   .artwork-feature.is-grid .artwork-type-grid{gap:var(--portfolio-gap-mobile-grid,10px)}
-  .artwork-feature.is-grid .artwork-track.artwork-grid-groups{gap:var(--portfolio-artwork-group-gap-mobile,58px)}
+  .personal-artwork-page .artwork-type-section+.artwork-type-section{margin-top:var(--portfolio-personal-artwork-section-gap-mobile,58px)}
   .artwork-type-heading{margin-bottom:var(--portfolio-gap-mobile-type-heading,12px)}
   .dev-intro{padding:var(--portfolio-dev-intro-top-mobile,58px) var(--portfolio-page-gutter-mobile,22px) var(--portfolio-dev-intro-bottom-mobile,32px);gap:var(--portfolio-gap-mobile-dev-intro,22px)}
   .dev-intro p{margin-top:var(--portfolio-gap-mobile-dev-intro,22px)}
@@ -843,7 +841,6 @@ body{background:#090b10;color:var(--white)}
   .story-pair{padding:var(--portfolio-story-pair-space-mobile,30px) var(--portfolio-pair-gutter-mobile,18px);gap:var(--portfolio-gap-mobile-story-pair,25px)}
   .cutscene-sequence{padding-inline:var(--portfolio-page-gutter-mobile,22px)}
   .project-end{padding-inline:var(--portfolio-page-gutter-mobile,22px)}
-  .project-page>.story-plate+.story-plate,.project-page>.story-plate+.cutscene-sequence,.project-page>.cutscene-sequence+.story-plate,.project-page>.cutscene-sequence+.cutscene-sequence{margin-top:var(--portfolio-project-section-gap-mobile,19px)}
 }
 @media(min-width:701px) and (max-width:900px){.artwork-feature.is-grid .artwork-type-grid{gap:var(--portfolio-gap-grid-tablet,14px)}}
 @media(max-width:700px){

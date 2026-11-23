@@ -152,7 +152,7 @@ body.preview-open{overflow:hidden}
 .spacing-preview-legend .legend-content{background:linear-gradient(90deg,transparent 0 35%,rgba(230,189,132,.65) 35% 65%,transparent 65%)}
 .spacing-preview-legend .legend-gutter{border-style:dashed;border-color:#b6a6d2}
 @media(max-width:520px){.spacing-preview-viewport{padding:8px}.spacing-preview-page{padding-block:var(--portfolio-preview-section-pad,24px)}.spacing-preview-section{padding:8px}.spacing-preview-content{grid-template-columns:repeat(2,minmax(0,1fr))}.spacing-preview-tile:last-child:nth-child(odd){display:none}}
-.spacing-project-gap-previews{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px;padding-top:12px;border-top:1px solid rgba(225,230,241,.09)}
+.spacing-project-gap-previews{display:grid;grid-template-columns:minmax(0,1fr);gap:10px;margin-top:12px;padding-top:12px;border-top:1px solid rgba(225,230,241,.09)}
 .spacing-project-gap-demo{display:grid;align-content:start;gap:0;min-width:0;padding:11px;border:1px solid rgba(225,230,241,.14);border-radius:7px;background:rgba(12,15,22,.78)}
 .spacing-preview-heading-label{margin-bottom:9px;color:#e8bc83;font-size:8px;font-weight:800;letter-spacing:.12em}
 .spacing-project-gap-card{display:grid;gap:7px;padding:9px;border:1px solid rgba(225,230,241,.14);border-radius:5px;background:linear-gradient(135deg,rgba(28,33,47,.92),rgba(12,15,22,.94))}
@@ -160,8 +160,7 @@ body.preview-open{overflow:hidden}
 .spacing-project-gap-card>strong{color:#f1f0f4;font-size:12px}
 .spacing-project-gap-placeholder{height:33px;border-radius:3px;background:linear-gradient(120deg,rgba(145,132,186,.29),rgba(76,104,134,.16),rgba(30,34,46,.58))}
 .spacing-project-gap-placeholder.is-wide{height:23px}
-.artwork-gap-demo .spacing-project-gap-card+.spacing-project-gap-card{margin-top:var(--portfolio-artwork-group-gap,80px)}
-.detail-gap-demo .spacing-project-gap-card+.spacing-project-gap-card{margin-top:var(--portfolio-project-section-gap,24px)}
+.artwork-gap-demo .spacing-project-gap-card+.spacing-project-gap-card{margin-top:var(--portfolio-personal-artwork-section-gap,80px)}
 @media(max-width:600px){.spacing-project-gap-previews{grid-template-columns:1fr}.spacing-project-gap-demo{padding:9px}}
 
 .artwork-type-order-editor{padding:20px}

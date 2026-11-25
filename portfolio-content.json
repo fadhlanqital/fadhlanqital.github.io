@@ -748,7 +748,7 @@
           {
             "title": "GAME SHOWCASE / 02",
             "subtitle": "PARANOIA ACTIVITY",
-            "layout": "wide",
+            "layout": "paired",
             "images": [
               2,
               0,
@@ -816,7 +816,7 @@
           {
             "title": "GAME SHOWCASE / 02",
             "subtitle": "DIGTRIX",
-            "layout": "wide",
+            "layout": "asset-grid",
             "images": [
               1,
               2,
@@ -882,7 +882,7 @@
           {
             "title": "GAME SHOWCASE / 02",
             "subtitle": "MATAKATA",
-            "layout": "wide",
+            "layout": "asset-grid",
             "images": [
               1,
               2,

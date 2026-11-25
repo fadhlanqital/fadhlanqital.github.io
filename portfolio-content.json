@@ -592,62 +592,62 @@
       "gallery": [
         {
           "image": "assets/illustration9-mwsukri3-2.webp",
-          "caption": "Illustration9",
+          "caption": "character-concept",
           "type": "Character Concept"
         },
         {
           "image": "assets/finish2-mwswlk38-12.webp",
-          "caption": "finish2",
+          "caption": "finish2-sprite",
           "type": "Sprite / Sprite Sheet"
         },
         {
           "image": "assets/finishspritecomp-mwswezv2-x.webp",
-          "caption": "finishSpriteComp",
+          "caption": "finish-sprite",
           "type": "Sprite / Sprite Sheet"
         },
         {
           "image": "assets/wrongspritecomp-mwswdzr8-v.webp",
-          "caption": "wrongSpriteComp",
+          "caption": "wrong-sprite",
           "type": "Sprite / Sprite Sheet"
         },
         {
           "image": "assets/correctspritecomp-mwswe9by-w.webp",
-          "caption": "CorrectSpriteComp",
+          "caption": "correct-sprite",
           "type": "Sprite / Sprite Sheet"
         },
         {
           "image": "assets/spritesheetopening-1-mwswpslo-16.webp",
-          "caption": "SpritesheetOpening (1)",
+          "caption": "opening-sprite",
           "type": "Sprite / Sprite Sheet"
         },
         {
           "image": "assets/spritesheetgameplay-1-mwswvjm9-17.webp",
-          "caption": "SpritesheetGameplay (1)",
+          "caption": "idle-sprite",
           "type": "Sprite / Sprite Sheet"
         },
         {
           "image": "assets/illustration9-5-mwssdck2-1.gif",
-          "caption": "Illustration9.5",
+          "caption": "finish2-anim",
           "type": "Character Animation"
         },
         {
           "image": "assets/illustration922-mwswfqhw-y.gif",
-          "caption": "Illustration922",
+          "caption": "finish-anim",
           "type": "Character Animation"
         },
         {
           "image": "assets/garbhaanim2-mwswfqim-z.gif",
-          "caption": "GarbhaAnim2",
+          "caption": "opening-anim",
           "type": "Character Animation"
         },
         {
           "image": "assets/illustration7-copy-mwswgx1f-10.gif",
-          "caption": "Illustration7 - Copy",
+          "caption": "wrong-anime",
           "type": "Character Animation"
         },
         {
           "image": "assets/illustration7-mwswgx1u-11.gif",
-          "caption": "Illustration7",
+          "caption": "correct-anim",
           "type": "Character Animation"
         }
       ],

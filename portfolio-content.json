@@ -259,8 +259,8 @@
       "featuredDescription": "Selected gameplay screens and interface previews from Paranoia Activity, Digtrix and MataKata.",
       "featuredCta": "EXPLORE GAME PROJECTS",
       "pageEyebrow": "03 / INTERACTIVE PROJECTS",
-      "pageTitle": "From idea",
-      "pageEmphasis": "to play.",
+      "pageTitle": "Concept",
+      "pageEmphasis": "to Console.",
       "pageDescription": "Personal and company game projects developed by Fadhlan. Each case study presents selected game screens, gameplay views and interface visuals."
     }
   ],
@@ -281,17 +281,17 @@
       "gallery": [
         {
           "image": "personal-02",
-          "caption": "Personal Artwork 02",
+          "caption": "The Perfect Susano'o ",
           "type": "Traditional Drawing"
         },
         {
           "image": "personal-03",
-          "caption": "Personal Artwork 03",
+          "caption": "Lesson from The Expert",
           "type": "Digital Illustration"
         },
         {
           "image": "assets/walker-mwsvp1qw-d.webp",
-          "caption": "walker",
+          "caption": "Walker",
           "type": "Digital Illustration"
         },
         {
@@ -301,77 +301,77 @@
         },
         {
           "image": "personal-06",
-          "caption": "Personal Artwork 06",
+          "caption": "Ash",
           "type": "Traditional Drawing"
         },
         {
           "image": "personal-07",
-          "caption": "Personal Artwork 07",
+          "caption": "Uchiha Madara",
           "type": "Traditional Drawing"
         },
         {
           "image": "personal-08",
-          "caption": "Personal Artwork 08",
+          "caption": "Back to Home",
           "type": "Traditional Drawing"
         },
         {
           "image": "assets/12-7-a-stobo-la-versi-a-1-mwsvozq6-1.webp",
-          "caption": "12-7-A Stobo_LA (Versi A)(1)",
+          "caption": "Panel A-1",
           "type": "Comic / Manga"
         },
         {
           "image": "assets/12-7-a-stobo-la-versi-a-2-mwsvozwo-2.webp",
-          "caption": "12-7-A Stobo_LA (Versi A)(2)",
+          "caption": "Panel A-2",
           "type": "Comic / Manga"
         },
         {
           "image": "assets/12-7-a-stobo-la-versi-a-3-mwsvp01h-3.webp",
-          "caption": "12-7-A Stobo_LA (Versi A)(3)",
+          "caption": "Panel A-3",
           "type": "Comic / Manga"
         },
         {
           "image": "assets/13-2b-stobo-la-versi-a-1-mwsvp0cu-5.webp",
-          "caption": "13-2b Stobo_LA (Versi A)(1)",
+          "caption": "Panel B-1",
           "type": "Comic / Manga"
         },
         {
           "image": "assets/13-2b-stobo-la-versi-a-2-mwsvp0h5-6.webp",
-          "caption": "13-2b Stobo_LA (Versi A)(2)",
+          "caption": "Panel B-2",
           "type": "Comic / Manga"
         },
         {
           "image": "assets/13-2b-stobo-la-versi-a-3-mwsvp0lx-7.webp",
-          "caption": "13-2b Stobo_LA (Versi A)(3)",
+          "caption": "Panel B-3",
           "type": "Comic / Manga"
         },
         {
           "image": "assets/13-2b-stobo-la-versi-a-4-mwsvp0q0-8.webp",
-          "caption": "13-2b Stobo_LA (Versi A)(4)",
+          "caption": "Panel B-4",
           "type": "Comic / Manga"
         },
         {
           "image": "assets/ilusforest-mwsvp1pl-c.webp",
-          "caption": "ilusForest",
+          "caption": "The Odyssey",
           "type": "Study / Experiment"
         },
         {
           "image": "assets/ilusforest-copy-2-mwsvr072-f.webp",
-          "caption": "ilusForest - Copy (2)",
+          "caption": "The Odyssey (Colored)",
           "type": "Study / Experiment"
         },
         {
           "image": "assets/envi-mwsvp1fr-b.webp",
-          "caption": "envi",
+          "caption": "The Nightmare",
           "type": "Study / Experiment"
         },
         {
           "image": "assets/envi-colored-mwsvqzxo-e.webp",
-          "caption": "envi - colored",
+          "caption": "The Nightmare (Colored)",
           "type": "Study / Experiment"
         },
         {
           "image": "assets/untitled-2powerup-mwswo638-13.gif",
-          "caption": "Untitled-2powerup",
+          "caption": "Aura",
           "type": "Character Animation"
         },
         {
@@ -386,7 +386,7 @@
         },
         {
           "image": "assets/obitomadara-mwszavhl-1.webp",
-          "caption": "obitomadara",
+          "caption": "The Villains of The Great War",
           "type": "Digital Illustration"
         }
       ],
@@ -412,32 +412,32 @@
       "gallery": [
         {
           "image": "assets/cutscene1-mwszfpfh-5.webp",
-          "caption": "cutscene1",
+          "caption": "cutscene-1",
           "type": "Cutscene Illustration"
         },
         {
           "image": "assets/engkongarwah-mwsw5d64-j.webp",
-          "caption": "engkongArwah",
+          "caption": "Ghost",
           "type": "Character Concept"
         },
         {
           "image": "assets/engkong2-mwsw5d8a-k.webp",
-          "caption": "engkong2",
+          "caption": "Ghost (Base)",
           "type": "Character Concept"
         },
         {
           "image": "assets/ultsprite2-mwsw5cmj-h.webp",
-          "caption": "ultsprite2",
+          "caption": "ult-sprite",
           "type": "Sprite / Sprite Sheet"
         },
         {
           "image": "assets/spriteskl2-mwsw5d0v-i.webp",
-          "caption": "spriteskl2",
+          "caption": "skill-sprite",
           "type": "Sprite / Sprite Sheet"
         },
         {
           "image": "assets/spritebscatk-mwsw5dkm-l.webp",
-          "caption": "spritebscatk",
+          "caption": "basicatk-sprite",
           "type": "Sprite / Sprite Sheet"
         },
         {
@@ -447,7 +447,7 @@
         },
         {
           "image": "assets/spritejump-mwsw5do9-q.webp",
-          "caption": "spriteJump",
+          "caption": "jump-sprite",
           "type": "Sprite / Sprite Sheet"
         },
         {
@@ -457,37 +457,37 @@
         },
         {
           "image": "assets/player-atk-copy-3-mwsw5c5i-g.gif",
-          "caption": "Player_atk - Copy (3)",
+          "caption": "ult-anim",
           "type": "Character Animation"
         },
         {
           "image": "assets/player-atk-copy-mwsw5dks-m.gif",
-          "caption": "Player_atk - Copy",
+          "caption": "skill-anim",
           "type": "Character Animation"
         },
         {
           "image": "assets/player-atk4-mwsw5dkv-n.gif",
-          "caption": "Player_atk4",
+          "caption": "basicatk2-anim",
           "type": "Character Animation"
         },
         {
           "image": "assets/player-atk2-mwsw5dkz-o.gif",
-          "caption": "Player_atk2",
+          "caption": "basicatk-anim",
           "type": "Character Animation"
         },
         {
           "image": "assets/jump-mwsw5dl1-p.gif",
-          "caption": "jump",
+          "caption": "jump-anim",
           "type": "Character Animation"
         },
         {
           "image": "assets/idle-mwsw5dsd-s.gif",
-          "caption": "idle",
+          "caption": "idle-anim",
           "type": "Character Animation"
         },
         {
           "image": "assets/player-running-mwsw5dwi-u.gif",
-          "caption": "Player_Running",
+          "caption": "run-anim",
           "type": "Character Animation"
         },
         {

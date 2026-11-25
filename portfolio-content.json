@@ -1,8 +1,8 @@
 {
   "site": {
-    "title": "Fadhlan Qital — 2D Artist & Game Developer",
+    "title": "Fadhlan Qital - 2D Artist & Game Developer",
     "language": "en",
-    "description": "Fadhlan Qital — 2D Artist and Game Developer portfolio.",
+    "description": "Fadhlan Qital - 2D Artist and Game Developer portfolio.",
     "brandName": "FADHLAN QITAL",
     "brandMonogram": "FQ.",
     "navigation": {
@@ -12,10 +12,10 @@
       "footerTop": "BACK TO TOP ↑",
       "viewerHelp": "← → NAVIGATE · ESC CLOSE"
     },
-    "footerRole": "2D ARTIST · GAME DEVELOPER",
+    "footerRole": "ILLUSTRATOR · 2D GAME ARTIST · GAME DEVELOPER",
     "copyright": "© 2026 FADHLAN QITAL",
     "home": {
-      "heroIndex": "PORTFOLIO 2025—2026 · INDONESIA",
+      "heroIndex": "PORTOFOLIO",
       "heroKicker": "2D ARTIST & GAME DEVELOPER",
       "heroTitle": "Worlds beyond",
       "heroEmphasis": "the familiar.",
@@ -271,10 +271,10 @@
       "shortTitle": "Personal Artwork",
       "category": "personal",
       "year": "",
-      "role": "Personal Artwork",
-      "contribution": "",
-      "subtitle": "Personal illustration · Independent Study · Visual exploration",
-      "description": "A combined collection of personal projects and environment illustrations from the Independent Study Program under the Kampus Merdeka Initiative.",
+      "role": "Illustrator / 2D Artist",
+      "contribution": "Digital & traditional illustration · Comics · Character animation",
+      "subtitle": "Personal collection · Illustration · Visual studies",
+      "description": "My personal collection of digital and traditional illustration, comic and manga pages, visual studies, and character animation. Selected works were developed during the 2024 Merdeka Campus Independent Study Program in game art and also in my free-time explorations .",
       "cover": "personal-02",
       "sortOrder": 1,
       "published": true,
@@ -381,7 +381,7 @@
         },
         {
           "image": "assets/fadhlan-ikhtiari-10121398-tugas-2-2d-animation-mwswo63d-15.gif",
-          "caption": "Fadhlan Ikhtiari - 10121398 - TUGAS 2 2D ANIMATION",
+          "caption": "golem",
           "type": "Character Animation"
         },
         {
@@ -391,8 +391,8 @@
         }
       ],
       "detail": {
-        "narrativeTitle": "Personal collection.",
-        "narrative": "This collection brings together personal projects and illustrations from the Independent Study Program under the Kampus Merdeka Initiative.",
+        "narrativeTitle": "A practice in visual storytelling",
+        "narrative": "This collection brings together independent explorations and selected work from my 2024 game-art study program. Across drawing, comics, illustration, and animation, each piece is an opportunity to study character, movement, mood, and the way an image can suggest a larger story.",
         "sections": []
       }
     },
@@ -403,9 +403,9 @@
       "category": "game-art",
       "year": "2024",
       "role": "Game Artist / Illustrator",
-      "contribution": "",
-      "subtitle": "Character concept · Sprite assets · Gameplay · Cutscenes",
-      "description": "Selected visual work for Anima: The Fallen Heroes & Mystic Forest, including character concept art, sprite character assets, gameplay visuals and cutscene illustrations.",
+      "contribution": "Character concepts · Sprite and animation assets · Cutscene illustration",
+      "subtitle": "Character concept · Sprite assets · Animation · Cutscenes",
+      "description": "A portfolio selection from Anima: The Fallen Heroes & Mystic Forest, documenting visual development from character concepts to in-game sprites, animation, gameplay imagery, and cinematic story illustrations. The work shows how character design and motion support the game's atmosphere and narrative.",
       "cover": "assets/cutscene1-mwsykcwc-6.webp",
       "sortOrder": 1,
       "published": true,
@@ -512,8 +512,8 @@
         }
       ],
       "detail": {
-        "narrativeTitle": "Visual contributions.",
-        "narrative": "Selected visual work for Anima: The Fallen Heroes & Mystic Forest, presented through character concepts, sprite assets, gameplay visuals and cutscene illustrations.",
+        "narrativeTitle": "From character concept to game asset",
+        "narrative": "This case study follows selected art contributions to Anima: The Fallen Heroes & Mystic Forest. It brings together character exploration, gameplay imagery, sprite and animation assets, and illustrated cutscenes. ",
         "sections": [
           {
             "title": "GAMEPLAY VISUAL",
@@ -578,14 +578,14 @@
     },
     {
       "id": "polri-quiz",
-      "title": "Garbha character for POLRI Quiz Game",
-      "shortTitle": "POLRI Quiz Game",
+      "title": "Garbha Character for POLRI Quiz Game",
+      "shortTitle": "Garbha for POLRI Quiz Game",
       "category": "game-art",
       "year": "2025",
       "role": "Game Artist / Illustrator / Animator",
-      "contribution": "",
+      "contribution": "Character illustration · Sprite sheets · Animation assets",
       "subtitle": "Company project · Prototype",
-      "description": "Visual and animation asset contributions for the POLRI Quiz Game prototype, presented through character artwork and animation asset boards.",
+      "description": "My visual contribution includes character illustrations, sprite sheets, and animation assets created with the game team. This case study presents selected work-in-progress boards rather than a playable build.",
       "cover": "assets/illustration9-mwsukri3-2.webp",
       "sortOrder": 2,
       "published": true,
@@ -653,7 +653,7 @@
       ],
       "detail": {
         "narrativeTitle": "Animation assets.",
-        "narrative": "Visual and animation asset contributions for the POLRI Quiz Game prototype. The boards are presented as still images because separate playable animation files are not part of the portfolio assets.",
+        "narrative": "The visual work centers on Garbha, bringing character illustrations into sprite sheets and animated states. These selected boards show how the character and its motion were developed for an interactive quiz experience.",
         "sections": [
           {
             "title": "CHARACTER IN MOTION",
@@ -685,14 +685,14 @@
     },
     {
       "id": "paranoia",
-      "title": "Paranoia Activity",
-      "shortTitle": "Paranoia Activity",
+      "title": "Paranoia Activated",
+      "shortTitle": "Paranoia Activated",
       "category": "development",
       "year": "2024",
       "role": "Game Developer",
-      "contribution": "Overall game development",
-      "subtitle": "Personal project",
-      "description": "A personal game development project. Fadhlan’s role covered overall game development. The portfolio presents the title screen and selected first-person gameplay views.",
+      "contribution": "Unity and C# · Gameplay systems · Level design",
+      "subtitle": "Personal project · First-person survival horror",
+      "description": "A first-person survival horror game developed in Unity. I built gameplay systems in C#, including player controls, enemy AI, inventory, and environmental interactions, while shaping the experience through level design, scene management, and story-driven horror. The selected screens show the atmosphere and gameplay spaces created for the project.",
       "cover": "paranoia-03",
       "sortOrder": 3,
       "published": true,
@@ -734,24 +734,24 @@
         }
       ],
       "detail": {
-        "narrativeTitle": "Game development.",
-        "narrative": "A personal game development project presented through its title screen and selected first-person gameplay views.",
+        "narrativeTitle": "Designing tension through play",
+        "narrative": "Paranoia Activity is a personal first-person survival horror project developed in Unity. Player controls, enemy AI, inventory, and environmental interactions form its gameplay foundation, while level design and scene direction build the atmosphere. The project explores how space, pacing, and horror elements can shape a player's sense of danger.",
         "sections": [
           {
-            "title": "01 / FEATURED VISUAL",
-            "subtitle": "PARANOIA ACTIVITY",
+            "title": "KEY ART AND TITLE SCREEN",
+            "subtitle": "PARANOIA ACTIVATED",
             "layout": "wide",
             "images": [
-              1
+              0
             ]
           },
           {
-            "title": "GAME SHOWCASE / 02",
-            "subtitle": "PARANOIA ACTIVITY",
+            "title": "GAMEPLAY & LEVEL DESIGN",
+            "subtitle": "PARANOIA ACTIVATED",
             "layout": "paired",
             "images": [
+              1,
               2,
-              0,
               3,
               4,
               5,
@@ -768,9 +768,9 @@
       "category": "development",
       "year": "2025",
       "role": "Game Developer",
-      "contribution": "Overall game development",
-      "subtitle": "Company project · Available on Play Store",
-      "description": "A company game project presented in the portfolio as available on the Play Store. Fadhlan contributed to the overall game development. The showcase includes the game identity, menu and selected numerical puzzle gameplay screens.",
+      "contribution": "Game development · Unity and C# · Game Design",
+      "subtitle": "Company project · Mobile math puzzle · Google Play",
+      "description": "Digtrix is a mobile math-based crossword puzzle game developed with Unity and C#. I engineered the game as part of the company team, contributing from the initial concept through deployment. The game is available on Google Play.",
       "cover": "assets/chatgpt-image-apr-21-2026-10-31-13-am-mwvhe2or-1.webp",
       "sortOrder": 4,
       "published": true,
@@ -797,11 +797,11 @@
         }
       ],
       "detail": {
-        "narrativeTitle": "Game development.",
-        "narrative": "A company game project available on the Play Store. The portfolio presents the game identity, menu and selected numerical puzzle gameplay screens.",
+        "narrativeTitle": "A math puzzle, grid by grid",
+        "narrative": "Digtrix brings number-based problem solving into a crossword-style mobile game. This showcase pairs the game's identity and interface with selected gameplay screens, offering a look at the experience delivered to players.",
         "sections": [
           {
-            "title": "01 / FEATURED VISUAL",
+            "title": "FEATURED VISUAL",
             "subtitle": "DIGTRIX",
             "layout": "wide",
             "images": [
@@ -809,7 +809,7 @@
             ]
           },
           {
-            "title": "GAME SHOWCASE / 02",
+            "title": "GAME SHOWCASE",
             "subtitle": "DIGTRIX",
             "layout": "wide",
             "images": [
@@ -827,9 +827,9 @@
       "category": "development",
       "year": "2025",
       "role": "Game Developer",
-      "contribution": "Overall game development",
-      "subtitle": "Company project · Available on Play Store",
-      "description": "A company game project listed in the original portfolio as available on the Play Store. Fadhlan contributed to the overall game development. The showcase includes the game identity, menu and selected word puzzle gameplay screens.",
+      "contribution": "Game development · Unity and C# · Game Design",
+      "subtitle": "Company project · Mobile word puzzle · Google Play",
+      "description": "MataKata is a classic crossword-style word game for mobile. As part of the company team, I completed the game's mechanics using Unity and C#. The showcase brings together the game's interface and selected word-puzzle gameplay screens. Available on Google Play.",
       "cover": "matakata-04",
       "sortOrder": 5,
       "published": true,
@@ -861,11 +861,11 @@
         }
       ],
       "detail": {
-        "narrativeTitle": "Game development.",
-        "narrative": "A company game project available on the Play Store. The portfolio presents the game identity, menu and selected word puzzle gameplay screens.",
+        "narrativeTitle": "Classic wordplay for mobile",
+        "narrative": "MataKata adapts familiar crossword-style word play for a mobile experience. This showcase presents the interface alongside selected gameplay screens, highlighting how the core mechanics guide players from one word challenge to the next.",
         "sections": [
           {
-            "title": "01 / FEATURED VISUAL",
+            "title": "FEATURED VISUAL",
             "subtitle": "MATAKATA",
             "layout": "wide",
             "images": [
@@ -873,7 +873,7 @@
             ]
           },
           {
-            "title": "GAME SHOWCASE / 02",
+            "title": "GAME SHOWCASE",
             "subtitle": "MATAKATA",
             "layout": "asset-grid",
             "images": [

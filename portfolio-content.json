@@ -771,34 +771,29 @@
       "contribution": "Overall game development",
       "subtitle": "Company project · Available on Play Store",
       "description": "A company game project presented in the portfolio as available on the Play Store. Fadhlan contributed to the overall game development. The showcase includes the game identity, menu and selected numerical puzzle gameplay screens.",
-      "cover": "digitrix-05",
+      "cover": "assets/chatgpt-image-apr-21-2026-10-31-13-am-mwvhe2or-1.webp",
       "sortOrder": 4,
       "published": true,
       "gallery": [
         {
-          "image": "digitrix-01",
-          "caption": "Game screen",
+          "image": "assets/chatgpt-image-apr-21-2026-10-31-13-am-mwvhe2or-1.webp",
+          "caption": "ChatGPT Image Apr 21, 2026, 10_31_13 AM",
           "type": "Gameplay Capture"
         },
         {
-          "image": "digitrix-02",
-          "caption": "Game screen",
+          "image": "assets/digitrix-smartphone-game-showcase-mwvhs6ud-2.webp",
+          "caption": "Digitrix Smartphone Game Showcase",
           "type": "Gameplay Capture"
         },
         {
-          "image": "digitrix-03",
-          "caption": "Game screen",
+          "image": "assets/digitrix-smartphone-game-showcase-1-mwvht89z-3.webp",
+          "caption": "Digitrix Smartphone Game Showcase (1)",
           "type": "Gameplay Capture"
         },
         {
-          "image": "digitrix-04",
-          "caption": "Game logo and interface",
-          "type": "Game UI / Interface"
-        },
-        {
-          "image": "digitrix-05",
-          "caption": "Game interface overview",
-          "type": "Game UI / Interface"
+          "image": "assets/digitrix-game-board-adventure-mwvi2zfx-4.webp",
+          "caption": "DigiTrix Game Board Adventure",
+          "type": "Gameplay Capture"
         }
       ],
       "detail": {
@@ -810,18 +805,16 @@
             "subtitle": "DIGTRIX",
             "layout": "wide",
             "images": [
-              0
+              3
             ]
           },
           {
             "title": "GAME SHOWCASE / 02",
             "subtitle": "DIGTRIX",
-            "layout": "asset-grid",
+            "layout": "wide",
             "images": [
               1,
-              2,
-              3,
-              4
+              2
             ]
           }
         ]
